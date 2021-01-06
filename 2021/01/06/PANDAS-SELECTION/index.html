@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>[PANDAS] Series &amp; DataFrame Indexer - BAEM1N</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="BAEM1N"><meta name="msapplication-TileImage" content="/image/favicon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="BAEM1N"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta description="Pandas는 Python 프로그래밍 언어를 기반으로 구축된 빠르고 강력하며 유연하고 사용하기 쉬운 오픈 소스 데이터 분석 및 조작 도구입니다. Pandas에서는 Series와 DataFrame 객체를 이용하여 데이터를 분석 및 조작할 수 있습니다. 본 글에서는 Series와 DataFrame에서 데이터를 선택하는 방법에 대해 알아봅니다."><meta property="og:type" content="blog"><meta property="og:title" content="[PANDAS] Series &amp; DataFrame Indexer"><meta property="og:url" content="https://baem1n.dev/2021/01/06/PANDAS-SELECTION/"><meta property="og:site_name" content="BAEM1N"><meta property="og:description" content="Pandas는 Python 프로그래밍 언어를 기반으로 구축된 빠르고 강력하며 유연하고 사용하기 쉬운 오픈 소스 데이터 분석 및 조작 도구입니다. Pandas에서는 Series와 DataFrame 객체를 이용하여 데이터를 분석 및 조작할 수 있습니다. 본 글에서는 Series와 DataFrame에서 데이터를 선택하는 방법에 대해 알아봅니다."><meta property="og:locale" content="ko_KR"><meta property="og:image" content="https://baem1n.dev/image/pandas-01-00.png"><meta property="article:published_time" content="2021-01-05T23:26:11.000Z"><meta property="article:modified_time" content="2021-01-06T00:24:22.746Z"><meta property="article:author" content="BAEM1N"><meta property="article:tag" content="Pandas"><meta property="article:tag" content="Series"><meta property="article:tag" content="DataFrame"><meta property="twitter:card" content="summary"><meta property="twitter:image" content="/image/pandas-01-00.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://baem1n.dev/2021/01/06/PANDAS-SELECTION/"},"headline":"BAEM1N","image":["https://baem1n.dev/image/pandas-01-00.png"],"datePublished":"2021-01-05T23:26:11.000Z","dateModified":"2021-01-06T00:24:22.746Z","author":{"@type":"Person","name":"BAEM1N"},"description":"Pandas는 Python 프로그래밍 언어를 기반으로 구축된 빠르고 강력하며 유연하고 사용하기 쉬운 오픈 소스 데이터 분석 및 조작 도구입니다. Pandas에서는 Series와 DataFrame 객체를 이용하여 데이터를 분석 및 조작할 수 있습니다. 본 글에서는 Series와 DataFrame에서 데이터를 선택하는 방법에 대해 알아봅니다."}</script><link rel="canonical" href="https://baem1n.dev/2021/01/06/PANDAS-SELECTION/"><link rel="icon" href="/image/favicon.png"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css"><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script><!--!--><!--!--><meta name="generator" content="Hexo 5.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/image/logo.png" alt="BAEM1N" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item is-hidden-tablet catalogue" title="카탈로그" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="검색" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-9-widescreen"><div class="card"><div class="card-image"><span class="image is-7by3"><img class="fill" src="/image/pandas-01-00.png" alt="[PANDAS] Series &amp; DataFrame Indexer"></span></div><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2021-01-05T23:26:11.000Z" title="2021. 1. 6. 오전 8:26:11">2021-01-06</time>&nbsp;게시 됨</span><span class="level-item"><time dateTime="2021-01-06T00:24:22.746Z" title="2021. 1. 6. 오전 9:24:22">2021-01-06</time>&nbsp;업데이트 됨</span><span class="level-item"><a class="link-muted" href="/categories/Python/">Python</a><span> / </span><a class="link-muted" href="/categories/Python/Pandas/">Pandas</a></span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>회 방문</span></div></div><h1 class="title is-3 is-size-4-mobile">[PANDAS] Series &amp; DataFrame Indexer</h1><div class="content"><p>Pandas는 Python 프로그래밍 언어를 기반으로 구축된 빠르고 강력하며 유연하고 사용하기 쉬운 오픈 소스 데이터 분석 및 조작 도구입니다.</p>
+<p>Pandas에서는 Series와 DataFrame 객체를 이용하여 데이터를 분석 및 조작할 수 있습니다.</p>
+<p>본 글에서는 Series와 DataFrame에서 데이터를 선택하는 방법에 대해 알아봅니다.</p>
+<a id="more"></a>
+
+<h2 id="인덱서의-사용-이유"><a href="#인덱서의-사용-이유" class="headerlink" title="인덱서의 사용 이유"></a>인덱서의 사용 이유</h2><p>Pandas의 Series와 DataFrame 모두 대괄호(<code>[인덱스]</code>)를 이용하여 데이터를 가지고 올 수 있습니다.</p>
+<p>하지만 Series의 경우 Indexing과 Slicing 모두 행을 대상으로 데이터를 가지고 오지만 DataFrame의 경우 Indexing은 열, Slicing은 행을 대상으로 동작합니다.</p>
+<p>Numpy Array와 통일성 있게 데이터를 가지고 오기 위해서는 인덱서(Indexer)를 이용합니다.</p>
+<p>Pandas에는 loc, iloc, at, iat 인덱서가 존재합니다.</p>
+<h2 id="loc-인덱서"><a href="#loc-인덱서" class="headerlink" title="loc 인덱서"></a>loc 인덱서</h2><p>loc 인덱서는 labels 즉 이름(문자열)을 기반으로 데이터에 접근할 수 있는 인덱서입니다.</p>
+<p>loc 인덱서는 다음과 같이 사용합니다.</p>
+<p><code>데이터프레임변수이름.loc[행 인덱스, 열 인덱스]</code></p>
+<p>loc 인덱서를 사용하는 경우 행 또는 열 인덱스에는 다음과 같은 형식만 올 수 있습니다.</p>
+<ul>
+<li>행 또는 열 이름(문자열)</li>
+<li>행 또는 열 이름(문자열)의 리스트</li>
+<li>행 또는 열 이름(문자열)의 슬라이싱<ul>
+<li>마지막 인덱스를 포함</li>
+</ul>
+</li>
+<li>Boolean List, 1D Array, Series<ul>
+<li>DataFrame 불가</li>
+</ul>
+</li>
+</ul>
+<p>행을 대상으로만 데이터를 선택하고자 하는 경우 열 인덱스는 생략할 수 있습니다.</p>
+<h3 id="데이터-프레임-생성"><a href="#데이터-프레임-생성" class="headerlink" title="데이터 프레임 생성"></a>데이터 프레임 생성</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line">df = pd.DataFrame(np.arange(<span class="number">9</span>).reshape(<span class="number">3</span>, <span class="number">3</span>), index=[<span class="string">&#x27;A&#x27;</span>, <span class="string">&#x27;B&#x27;</span>, <span class="string">&#x27;C&#x27;</span>], columns=[<span class="string">&#x27;X1&#x27;</span>, <span class="string">&#x27;X2&#x27;</span>, <span class="string">&#x27;X3&#x27;</span>])</span><br><span class="line">df</span><br></pre></td></tr></table></figure>
+
+<h3 id="단일-선택"><a href="#단일-선택" class="headerlink" title="단일 선택"></a>단일 선택</h3><p>문자열을 이용하여 단일 행에 접근할 수 있습니다.</p>
+<figure class="highlight python"><figcaption><span>단일 행 접근</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.loc[<span class="string">&#x27;A&#x27;</span>]</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><figcaption><span>단일 열 접근</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.loc[:, <span class="string">&#x27;A&#x27;</span>]</span><br></pre></td></tr></table></figure>
+
+<h3 id="범위-선택"><a href="#범위-선택" class="headerlink" title="범위 선택"></a>범위 선택</h3><p>슬라이싱을 이용하여 순차적인 다중 행에 접근할 수 있습니다. 마지막 인덱스를 포함합니다.</p>
+<figure class="highlight python"><figcaption><span>범위 행 접근</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.loc[<span class="string">&#x27;A&#x27;</span>:<span class="string">&#x27;C&#x27;</span>]</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><figcaption><span>범위 열 접근</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.loc[:, <span class="string">&#x27;X1&#x27;</span>:<span class="string">&#x27;X3&#x27;</span>]</span><br></pre></td></tr></table></figure>
+
+<h3 id="다중-선택"><a href="#다중-선택" class="headerlink" title="다중 선택"></a>다중 선택</h3><p>리스트 형태로 행 인덱스를 지정하여 비순차적인 다중 행에 접근할 수 있습니다.</p>
+<figure class="highlight python"><figcaption><span>다중 행 접근</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.loc[[<span class="string">&#x27;A&#x27;</span>, <span class="string">&#x27;C&#x27;</span>]]</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><figcaption><span>다중 열 접근</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.loc[:, [<span class="string">&#x27;X1&#x27;</span>, <span class="string">&#x27;X3&#x27;</span>]]</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="조건-선택"><a href="#조건-선택" class="headerlink" title="조건 선택"></a>조건 선택</h3><p>Boolean Series를 이용하여 True 값을 가지는 Index만 선택할 수 있습니다.</p>
+<figure class="highlight python"><figcaption><span>행 인덱스를 가지는 Boolean Sereis 이용</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.loc[ df[<span class="string">&#x27;A&#x27;</span>] % <span class="number">2</span> == <span class="number">0</span> ]</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><figcaption><span>행 인덱스를 가지는 Boolean Sereis 이용</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.loc[:, df.columns != <span class="string">&#x27;X2&#x27;</span>]</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="값-수정"><a href="#값-수정" class="headerlink" title="값 수정"></a>값 수정</h3><p>인덱서를 이용하여 특정 데이터에 접근한다는 의미는 데이터를 조회할 수 있지만 데이터를 수정할 수도 있습니다.</p>
+<p>인덱서를 이용하여 데이터를 선택 후 값을 대입하면 데이터가 수정이 됩니다.</p>
+<p>대입하는 값이 1개인 경우 선택된 위치에 모두 같은 값이 대입됩니다.</p>
+<figure class="highlight python"><figcaption><span>단일 값 대입</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">df.loc[<span class="string">&#x27;C&#x27;</span>] = -<span class="number">1</span></span><br><span class="line">df</span><br></pre></td></tr></table></figure>
+
+<p>대입하는 값이 선택된 데이터와 개수가 같은 경우 위치대로 대입됩니다.  단, 대입되는 값이 Sereis인 경우 인덱스 별로 대입됩니다.</p>
+<figure class="highlight python"><figcaption><span>다중 값 대입</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">df.loc[<span class="string">&#x27;C&#x27;</span>] = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line">df</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><figcaption><span>다중 값 대입</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">df.loc[:, <span class="string">&#x27;X3&#x27;</span>] = pd.Series([<span class="number">10</span>, <span class="number">10</span>, <span class="number">10</span>], index=[<span class="string">&#x27;B&#x27;</span>, <span class="string">&#x27;C&#x27;</span>, <span class="string">&#x27;D&#x27;</span>])</span><br><span class="line">df</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="iloc-인덱서"><a href="#iloc-인덱서" class="headerlink" title="iloc 인덱서"></a>iloc 인덱서</h2><p>iloc 인덱서는 integer 즉 위치(숫자)를 기반으로 데이터에 접근할 수 있는 인덱서입니다.</p>
+<p>iloc 인덱서는 다음과 같이 사용합니다.</p>
+<p><code>데이터프레임변수이름.iloc[행 인덱스, 열 인덱스]</code></p>
+<p>loc 인덱서를 사용하는 경우 행 또는 열 인덱스에는 다음과 같은 형식만 올 수 있습니다.</p>
+<ul>
+<li>행 또는 열 위치(정수)</li>
+<li>행 또는 열 위치(정수)의 리스트</li>
+<li>행 또는 열 위치(정수)의 슬라이싱<ul>
+<li>마지막 인덱스를 미포함</li>
+</ul>
+</li>
+<li>Boolean List, 1D Array<ul>
+<li>Sereis 불가</li>
+</ul>
+</li>
+</ul>
+<p>행을 대상으로만 데이터를 선택하고자 하는 경우 열 인덱스는 생략할 수 있습니다.</p>
+<h3 id="데이터-프레임-생성-1"><a href="#데이터-프레임-생성-1" class="headerlink" title="데이터 프레임 생성"></a>데이터 프레임 생성</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line">df = pd.DataFrame(np.arange(<span class="number">9</span>).reshape(<span class="number">3</span>, <span class="number">3</span>), index=[<span class="string">&#x27;A&#x27;</span>, <span class="string">&#x27;B&#x27;</span>, <span class="string">&#x27;C&#x27;</span>], columns=[<span class="string">&#x27;X1&#x27;</span>, <span class="string">&#x27;X2&#x27;</span>, <span class="string">&#x27;X3&#x27;</span>])</span><br><span class="line">df</span><br></pre></td></tr></table></figure>
+
+<h3 id="단일-선택-1"><a href="#단일-선택-1" class="headerlink" title="단일 선택"></a>단일 선택</h3><p>문자열을 이용하여 단일 행에 접근할 수 있습니다.</p>
+<figure class="highlight python"><figcaption><span>단일 행 접근</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.iloc[<span class="number">0</span>]</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><figcaption><span>단일 열 접근</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.iloc[:, -<span class="number">1</span>]</span><br></pre></td></tr></table></figure>
+
+<h3 id="범위-선택-1"><a href="#범위-선택-1" class="headerlink" title="범위 선택"></a>범위 선택</h3><p>슬라이싱을 이용하여 순차적인 다중 행에 접근할 수 있습니다. 마지막 인덱스를 미포함합니다.</p>
+<figure class="highlight python"><figcaption><span>범위 행 접근</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.iloc[<span class="number">1</span>:]</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><figcaption><span>범위 열 접근</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.iloc[:, <span class="number">1</span>:]</span><br></pre></td></tr></table></figure>
+
+<h3 id="다중-선택-1"><a href="#다중-선택-1" class="headerlink" title="다중 선택"></a>다중 선택</h3><p>리스트 형태로 행 인덱스를 지정하여 비순차적인 다중 행에 접근할 수 있습니다.</p>
+<figure class="highlight python"><figcaption><span>다중 행 접근</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.iloc[[<span class="number">0</span>, <span class="number">2</span>]]</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><figcaption><span>다중 열 접근</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.iloc[[<span class="number">0</span>, <span class="number">2</span>], [<span class="number">1</span>, <span class="number">2</span>]]</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="조건-선택-1"><a href="#조건-선택-1" class="headerlink" title="조건 선택"></a>조건 선택</h3><p>Boolean Series를 이용하여 True 값을 가지는 Index만 선택할 수 있습니다.</p>
+<figure class="highlight python"><figcaption><span>행 인덱스를 가지는 Boolean List 이용</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.iloc[[<span class="literal">True</span>, <span class="literal">False</span>, <span class="literal">True</span>]]</span><br></pre></td></tr></table></figure>
+
+
+<figure class="highlight python"><figcaption><span>행 인덱스를 가지는 Boolean List 이용</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.iloc[:, [<span class="literal">True</span>, <span class="literal">False</span>, <span class="literal">True</span>]]</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="값-수정-1"><a href="#값-수정-1" class="headerlink" title="값 수정"></a>값 수정</h3><p>인덱서를 이용하여 특정 데이터에 접근한다는 의미는 데이터를 조회할 수 있지만 데이터를 수정할 수도 있습니다.</p>
+<p>인덱서를 이용하여 데이터를 선택 후 값을 대입하면 데이터가 수정이 됩니다.</p>
+<p>대입하는 값이 1개인 경우 선택된 위치에 모두 같은 값이 대입됩니다.</p>
+<figure class="highlight python"><figcaption><span>단일 값 대입</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">df.iloc[-<span class="number">1</span>] = -<span class="number">1</span></span><br><span class="line">df</span><br></pre></td></tr></table></figure>
+
+<p>대입하는 값이 선택된 데이터와 형태가 같은 경우 위치대로 대입됩니다.</p>
+<figure class="highlight python"><figcaption><span>다중 값 대입</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.iloc[:<span class="number">2</span>, :<span class="number">2</span>] = [[<span class="number">1</span>, <span class="number">2</span>], [<span class="number">3</span>, <span class="number">4</span>]]</span><br></pre></td></tr></table></figure>
+
+<p>단, 대입되는 값이 Sereis인 경우 인덱스 별로 대입됩니다.</p>
+<figure class="highlight python"><figcaption><span>다중 값 대입</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">df.iloc[-<span class="number">1</span>] = pd.Series([<span class="number">10</span>, <span class="number">10</span>, <span class="number">10</span>], index=[<span class="string">&#x27;X2&#x27;</span>, <span class="string">&#x27;X3&#x27;</span>, <span class="string">&#x27;X4&#x27;</span>])</span><br><span class="line">df</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="at-iat-인덱서"><a href="#at-iat-인덱서" class="headerlink" title="at, iat 인덱서"></a>at, iat 인덱서</h2><p>at 인덱서는 loc 인덱서와 동일하게 이름(문자열)을 기반으로 동작하며 iat 인덱서 iloc 인덱서와 동일하기 위치(정수)를 기반으로 데이터에 접근할 수 인덱서입니다.</p>
+<p>loc, iloc 인덱서는 복수개의 데이터에 접근할 수 있지만 at, iat 인덱서는 1개의 데이터에 접근할 수 있다는 차이점이 존재합니다.</p>
+<p>규모가 큰 데이터 프레임에서 at 또는 iat 인덱서를 사용하는 경우 loc 또는 iloc 인덱서를 사용하는 경우보다 빠르게 데이터를 접근할 수 있습니다.</p>
+<h3 id="데이터-생성"><a href="#데이터-생성" class="headerlink" title="데이터 생성"></a>데이터 생성</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line">df = pd.DataFrame(np.arange(<span class="number">9</span>).reshape(<span class="number">3</span>, <span class="number">3</span>), index=[<span class="string">&#x27;A&#x27;</span>, <span class="string">&#x27;B&#x27;</span>, <span class="string">&#x27;C&#x27;</span>], columns=[<span class="string">&#x27;X1&#x27;</span>, <span class="string">&#x27;X2&#x27;</span>, <span class="string">&#x27;X3&#x27;</span>])</span><br><span class="line">df</span><br></pre></td></tr></table></figure>
+
+<h3 id="성능-비교"><a href="#성능-비교" class="headerlink" title="성능 비교"></a>성능 비교</h3><figure class="highlight python"><figcaption><span>loc 단일 값 접근 속도</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">%timeit df.loc[<span class="string">&#x27;index100&#x27;</span>, <span class="string">&#x27;columns100&#x27;</span>]</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><figcaption><span>at 단일 값 접근 속도</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">%timeit df.at[<span class="string">&#x27;index100&#x27;</span>, <span class="string">&#x27;columns100&#x27;</span>]</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><figcaption><span>iloc 단일 값 접근 속도</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">%timeit df.iloc[<span class="number">100</span>, <span class="number">100</span>]</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><figcaption><span>iat 단일 값 접근 속도</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">%timeit df.iat[<span class="number">100</span>, <span class="number">100</span>]</span><br></pre></td></tr></table></figure>
+
+<h2 id="실습"><a href="#실습" class="headerlink" title="실습"></a>실습</h2><p>loc, iloc 인덱서를 이용하여 데이터를 선택하고 수정하는 작업은 데이터 분석 과정에서 필수적이다고 할 수 있습니다.</p>
+<p>그중에서도 loc 인덱서의 사용법을 제대로 숙지하고 있다면 데이터 처리에 많은 이점이 있습니다.</p>
+<p> 아래의 링크를 클릭하여 loc 인덱서의 사용법과 학습 정도를 평가해볼 수 있습니다.</p>
+<p><a target="_blank" rel="noopener" href="https://colab.research.google.com/drive/1haRBFFf8koeY01CHDNig5rQE5hu7Cw6g?usp=sharing">실습하러가기</a></p>
+</div><div class="article-licensing box"><div class="licensing-title"><p>[PANDAS] Series &amp; DataFrame Indexer</p><p><a href="https://baem1n.dev/2021/01/06/PANDAS-SELECTION/">https://baem1n.dev/2021/01/06/PANDAS-SELECTION/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>Author</h6><p>BAEM1N</p></div></div><div class="level-item is-narrow"><div><h6>Posted on</h6><p>2021-01-06</p></div></div><div class="level-item is-narrow"><div><h6>Updated on</h6><p>2021-01-06</p></div></div><div class="level-item is-narrow"><div><h6>Licensed under</h6><p><a class="icon" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a><a class="icon" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a><a class="icon" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="fab fa-creative-commons-nc"></i></a><a class="icon" rel="noopener" target="_blank" title="NoDerivatives" href="https://creativecommons.org/licenses/by-nd/4.0/"><i class="fab fa-creative-commons-nd"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/Pandas/">Pandas</a><a class="link-muted mr-2" rel="tag" href="/tags/Series/">Series</a><a class="link-muted mr-2" rel="tag" href="/tags/DataFrame/">DataFrame</a></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2021/01/06/PANDAS-SELECTION-LAB-SOL/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">PANDAS-SELECTION-LAB-SOL</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2021/01/06/TensorFlow-Certificate/"><span class="level-item">[TensorFlow] Certificate 준비 및 시험 과정</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card"><div class="card-content"><h3 class="title is-5">댓글</h3><div id="disqus_thread"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></div><script>var disqus_config = function () {
+            this.page.url = 'https://baem1n.dev/2021/01/06/PANDAS-SELECTION/';
+            this.page.identifier = '2021/01/06/PANDAS-SELECTION/';
+        };
+        (function() {
+            var d = document, s = d.createElement('script');  
+            s.src = '//' + 'baem1n' + '.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();</script></div></div></div><!--!--><div class="column column-right is-4-tablet is-4-desktop is-3-widescreen  order-3 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">카탈로그</h3><ul class="menu-list"><li><a class="level is-mobile" href="#인덱서의-사용-이유"><span class="level-left"><span class="level-item">1</span><span class="level-item">인덱서의 사용 이유</span></span></a></li><li><a class="level is-mobile" href="#loc-인덱서"><span class="level-left"><span class="level-item">2</span><span class="level-item">loc 인덱서</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#데이터-프레임-생성"><span class="level-left"><span class="level-item">2.1</span><span class="level-item">데이터 프레임 생성</span></span></a></li><li><a class="level is-mobile" href="#단일-선택"><span class="level-left"><span class="level-item">2.2</span><span class="level-item">단일 선택</span></span></a></li><li><a class="level is-mobile" href="#범위-선택"><span class="level-left"><span class="level-item">2.3</span><span class="level-item">범위 선택</span></span></a></li><li><a class="level is-mobile" href="#다중-선택"><span class="level-left"><span class="level-item">2.4</span><span class="level-item">다중 선택</span></span></a></li><li><a class="level is-mobile" href="#조건-선택"><span class="level-left"><span class="level-item">2.5</span><span class="level-item">조건 선택</span></span></a></li><li><a class="level is-mobile" href="#값-수정"><span class="level-left"><span class="level-item">2.6</span><span class="level-item">값 수정</span></span></a></li></ul></li><li><a class="level is-mobile" href="#iloc-인덱서"><span class="level-left"><span class="level-item">3</span><span class="level-item">iloc 인덱서</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#데이터-프레임-생성-1"><span class="level-left"><span class="level-item">3.1</span><span class="level-item">데이터 프레임 생성</span></span></a></li><li><a class="level is-mobile" href="#단일-선택-1"><span class="level-left"><span class="level-item">3.2</span><span class="level-item">단일 선택</span></span></a></li><li><a class="level is-mobile" href="#범위-선택-1"><span class="level-left"><span class="level-item">3.3</span><span class="level-item">범위 선택</span></span></a></li><li><a class="level is-mobile" href="#다중-선택-1"><span class="level-left"><span class="level-item">3.4</span><span class="level-item">다중 선택</span></span></a></li><li><a class="level is-mobile" href="#조건-선택-1"><span class="level-left"><span class="level-item">3.5</span><span class="level-item">조건 선택</span></span></a></li><li><a class="level is-mobile" href="#값-수정-1"><span class="level-left"><span class="level-item">3.6</span><span class="level-item">값 수정</span></span></a></li></ul></li><li><a class="level is-mobile" href="#at-iat-인덱서"><span class="level-left"><span class="level-item">4</span><span class="level-item">at, iat 인덱서</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#데이터-생성"><span class="level-left"><span class="level-item">4.1</span><span class="level-item">데이터 생성</span></span></a></li><li><a class="level is-mobile" href="#성능-비교"><span class="level-left"><span class="level-item">4.2</span><span class="level-item">성능 비교</span></span></a></li></ul></li><li><a class="level is-mobile" href="#실습"><span class="level-left"><span class="level-item">5</span><span class="level-item">실습</span></span></a></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">카테고리</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/Deep-Learning/"><span class="level-start"><span class="level-item">Deep Learning</span></span><span class="level-end"><span class="level-item tag">1</span></span></a><ul><li><a class="level is-mobile" href="/categories/Deep-Learning/TensorFlow/"><span class="level-start"><span class="level-item">TensorFlow</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></li><li><a class="level is-mobile" href="/categories/Python/"><span class="level-start"><span class="level-item">Python</span></span><span class="level-end"><span class="level-item tag">3</span></span></a><ul><li><a class="level is-mobile" href="/categories/Python/Pandas/"><span class="level-start"><span class="level-item">Pandas</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li></ul></li><li><a class="level is-mobile" href="/categories/%EB%8D%B0%EC%9D%B4%ED%84%B0-%EB%B6%84%EC%84%9D/"><span class="level-start"><span class="level-item">데이터 분석</span></span><span class="level-end"><span class="level-item tag">3</span></span></a><ul><li><a class="level is-mobile" href="/categories/%EB%8D%B0%EC%9D%B4%ED%84%B0-%EB%B6%84%EC%84%9D/%EC%BD%94%EB%A1%9C%EB%82%98-19-%EA%B0%90%EC%97%BC-%ED%98%84%ED%99%A9-%EB%B6%84%EC%84%9D/"><span class="level-start"><span class="level-item">코로나 19 감염 현황 분석</span></span><span class="level-end"><span class="level-item tag">3</span></span></a></li></ul></li><li><a class="level is-mobile" href="/categories/%ED%99%98%EA%B2%BD-%EC%84%A4%EC%A0%95/"><span class="level-start"><span class="level-item">환경 설정</span></span><span class="level-end"><span class="level-item tag">1</span></span></a><ul><li><a class="level is-mobile" href="/categories/%ED%99%98%EA%B2%BD-%EC%84%A4%EC%A0%95/Apple-Silicon/"><span class="level-start"><span class="level-item">Apple Silicon</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></li></ul></div></div></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/image/logo.png" alt="BAEM1N" height="28"></a><p class="is-size-7"><span>&copy; 2021 BAEM1N</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><br>0</p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0" href="https://creativecommons.org/licenses/by-nc-nd/4.0/"><i class="fab fa-creative-commons"></i> <i class="fab fa-creative-commons-by"></i> <i class="fab fa-creative-commons-nc"></i> <i class="fab fa-creative-commons-nd"></i> </a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" async></script><script>moment.locale("ko");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="맨 위로" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "이 웹 사이트는 귀하의 경험을 향상시키기 위해 Cookie를 사용합니다.",
+          dismiss: "무시",
+          allow: "허용",
+          deny: "거부",
+          link: "더 알아보기",
+          policy: "Cookie 정책",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="입력 하세요..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"입력 하세요...","untitled":"(제목 없음)","posts":"포스트","pages":"페이지","categories":"카테고리","tags":"태그"});
+        });</script></body></html>
