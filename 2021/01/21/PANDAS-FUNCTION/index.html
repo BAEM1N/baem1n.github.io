@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>Function - BAEM1N</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="BAEM1N"><meta name="msapplication-TileImage" content="/image/favicon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="BAEM1N"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta description="Pandas는 Python 프로그래밍 언어를 기반으로 구축된 빠르고 강력하며 유연하고 사용하기 쉬운 오픈 소스 데이터 분석 및 조작 도구입니다. Pandas에서는 Series와 DataFrame 객체를 이용하여 데이터를 분석 및 조작할 수 있습니다. 본 글에서는 Pandas에서 제공하는 함수들의 사용 방법에 대해 알아봅니다."><meta property="og:type" content="blog"><meta property="og:title" content="Function"><meta property="og:url" content="https://baem1n.dev/2021/01/21/PANDAS-FUNCTION/"><meta property="og:site_name" content="BAEM1N"><meta property="og:description" content="Pandas는 Python 프로그래밍 언어를 기반으로 구축된 빠르고 강력하며 유연하고 사용하기 쉬운 오픈 소스 데이터 분석 및 조작 도구입니다. Pandas에서는 Series와 DataFrame 객체를 이용하여 데이터를 분석 및 조작할 수 있습니다. 본 글에서는 Pandas에서 제공하는 함수들의 사용 방법에 대해 알아봅니다."><meta property="og:locale" content="ko_KR"><meta property="og:image" content="https://baem1n.dev/image/pandas-05-00.png"><meta property="article:published_time" content="2021-01-21T10:23:18.000Z"><meta property="article:modified_time" content="2021-01-27T14:59:25.770Z"><meta property="article:author" content="BAEM1N"><meta property="article:tag" content="Pandas"><meta property="twitter:card" content="summary"><meta property="twitter:image" content="/image/pandas-05-00.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://baem1n.dev/2021/01/21/PANDAS-FUNCTION/"},"headline":"BAEM1N","image":["https://baem1n.dev/image/pandas-05-00.png"],"datePublished":"2021-01-21T10:23:18.000Z","dateModified":"2021-01-27T14:59:25.770Z","author":{"@type":"Person","name":"BAEM1N"},"description":"Pandas는 Python 프로그래밍 언어를 기반으로 구축된 빠르고 강력하며 유연하고 사용하기 쉬운 오픈 소스 데이터 분석 및 조작 도구입니다. Pandas에서는 Series와 DataFrame 객체를 이용하여 데이터를 분석 및 조작할 수 있습니다. 본 글에서는 Pandas에서 제공하는 함수들의 사용 방법에 대해 알아봅니다."}</script><link rel="canonical" href="https://baem1n.dev/2021/01/21/PANDAS-FUNCTION/"><link rel="icon" href="/image/favicon.png"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css"><script src="https://www.googletagmanager.com/gtag/js?id=G-6NFDR4885H" async></script><script>window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+    
+        gtag('config', 'G-6NFDR4885H');</script><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script><!--!--><!--!--><meta name="generator" content="Hexo 5.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/image/logo.png" alt="BAEM1N" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item is-hidden-tablet catalogue" title="카탈로그" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="검색" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-9-widescreen"><div class="card"><div class="card-image"><span class="image is-7by3"><img class="fill" src="/image/pandas-05-00.png" alt="Function"></span></div><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2021-01-21T10:23:18.000Z" title="2021. 1. 21. 오후 7:23:18">2021-01-21</time>&nbsp;게시 됨</span><span class="level-item"><time dateTime="2021-01-27T14:59:25.770Z" title="2021. 1. 27. 오후 11:59:25">2021-01-27</time>&nbsp;업데이트 됨</span><span class="level-item"><a class="link-muted" href="/categories/Python/">Python</a><span> / </span><a class="link-muted" href="/categories/Python/Pandas/">Pandas</a></span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>회 방문</span></div></div><h1 class="title is-3 is-size-4-mobile">Function</h1><div class="content"><p>Pandas는 Python 프로그래밍 언어를 기반으로 구축된 빠르고 강력하며 유연하고 사용하기 쉬운 오픈 소스 데이터 분석 및 조작 도구입니다. Pandas에서는 Series와 DataFrame 객체를 이용하여 데이터를 분석 및 조작할 수 있습니다.</p>
+<p>본 글에서는 Pandas에서 제공하는 함수들의 사용 방법에 대해 알아봅니다.</p>
+<a id="more"></a>
+
+<figure class="highlight python"><figcaption><span>데이터 생성</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line">np.random.seed(<span class="number">2021</span>)</span><br><span class="line"></span><br><span class="line">df = pd.DataFrame( np.random.randint(<span class="number">1000</span>, <span class="number">2000</span>, <span class="number">36</span>).reshape(-<span class="number">1</span>, <span class="number">3</span>),</span><br><span class="line">                 index=pd.date_range(<span class="string">&#x27;20200101&#x27;</span>,periods=<span class="number">12</span>), columns=[<span class="string">&#x27;A&#x27;</span>, <span class="string">&#x27;B&#x27;</span>, <span class="string">&#x27;C&#x27;</span>])</span><br><span class="line">df</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="선택"><a href="#선택" class="headerlink" title="선택"></a>선택</h2><h3 id="head"><a href="#head" class="headerlink" title="head"></a>head</h3><ul>
+<li>head(n=5)<br>Series 또는 DataFrame의 처음 행부터 n개의 행(상위)을 조회한 결과를 반환합니다.</li>
+</ul>
+<figure class="highlight python"><figcaption><span>상위 5개 조회 (DataFrame)</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.head()</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><figcaption><span>상위 3개 조회 (DataFrame)</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.head(<span class="number">3</span>)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><figcaption><span>상위 5개 조회 (Series)</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df[<span class="string">&#x27;A&#x27;</span>].head()</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><figcaption><span>상위 5개 조회 (Series)</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df[<span class="string">&#x27;A&#x27;</span>].head(<span class="number">3</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="tail"><a href="#tail" class="headerlink" title="tail"></a>tail</h3><ul>
+<li>tail(n=5)<br>Series 또는 DataFrame의 마지막 행부터 n개의 행(하위)을 조회한 결과를 반환합니다.</li>
+</ul>
+<figure class="highlight python"><figcaption><span>하위 5개 조회 (DataFrame)</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.tail()</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><figcaption><span>상위 3개 조회 (DataFrame)</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.tail(<span class="number">3</span>)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><figcaption><span>상위 5개 조회 (Series)</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df[<span class="string">&#x27;A&#x27;</span>].tail()</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><figcaption><span>상위 5개 조회 (Series)</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df[<span class="string">&#x27;A&#x27;</span>].tail(<span class="number">3</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="sample"><a href="#sample" class="headerlink" title="sample"></a>sample</h3><ul>
+<li>sample(n=1, frac=None)<br>Series 또는 DataFrame에서 랜덤하게 행을 조회한 결과를 반환합니다. 특정한 개수를 지정하고 싶은 경우 n 파라미터를 비율을 지정하고 싶은 경우 frac 파라미터를 지정합니다.</li>
+</ul>
+<figure class="highlight python"><figcaption><span>1개 행 조회 (DataFrame)</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.sample()</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><figcaption><span>5개 행 조회 (DataFrame)</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.sample(n=<span class="number">5</span>)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><figcaption><span>30% 행 조회 (DataFrame)</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.sample(frac=<span class="number">0.3</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="select-dtypes"><a href="#select-dtypes" class="headerlink" title="select_dtypes"></a>select_dtypes</h3><ul>
+<li>select_dtypes(include=None, exclude=None)<br>DataFrame에서 특정 자료형의 컬럼만 선택하거나 제외한 결과를 반환합니다.<figure class="highlight python"><figcaption><span>정수형 컬럼 선택</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.select_dtypes(include=[<span class="string">&#x27;int64&#x27;</span>])</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<figure class="highlight python"><figcaption><span>정수형 컬럼 제외 선택</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.select_dtypes(exclude=[<span class="string">&#x27;int64&#x27;</span>])</span><br></pre></td></tr></table></figure>
+
+<h3 id="pop"><a href="#pop" class="headerlink" title="pop"></a>pop</h3><ul>
+<li>pop(item)<br>item 매개변수로 전달된 컬럼을 반환합니다. 반환된 컬럼은 제거됩니다.<figure class="highlight python"><figcaption><span>pop 함수 적용</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">df_c = df.pop(<span class="string">&#x27;C&#x27;</span>)</span><br><span class="line">df_c</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<figure class="highlight python"><figcaption><span>pop 결과 확인</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df</span><br></pre></td></tr></table></figure>
+
+<h3 id="query"><a href="#query" class="headerlink" title="query"></a>query</h3><ul>
+<li>query(expr)<br>조건의 결과가 True인 행을 반환합니다.<figure class="highlight python"><figcaption><span>A컬럼의 값이 B컬럼의 값보다 큰 경우 반환</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.query(<span class="string">&#x27;A &gt; B&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>또한 다음과 같이 사용할 수 있습니다.</p>
+<figure class="highlight python"><figcaption><span>A컬럼의 값이 B컬럼의 값보다 큰 경우 반환</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df[df[<span class="string">&#x27;A&#x27;</span>] &gt; df[<span class="string">&#x27;B&#x27;</span>]]</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="계산-기술-통계"><a href="#계산-기술-통계" class="headerlink" title="계산 / 기술 통계"></a>계산 / 기술 통계</h2><h3 id="abs"><a href="#abs" class="headerlink" title="abs"></a>abs</h3><ul>
+<li>abs()<br>Series 또는 DataFrame의 각 요소의 절댓값 변환된 결과를 반환합니다. 단, 요소가 숫자로 구성된 경우 적용됩니다.<figure class="highlight python"><figcaption><span>음수 변환</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">df2 = -df</span><br><span class="line">df2</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<figure class="highlight python"><figcaption><span>abs 함수 적용 (DataFrame)</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df2.<span class="built_in">abs</span>()</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><figcaption><span>abs 함수 적용 (Series)</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df2[<span class="string">&#x27;A&#x27;</span>].<span class="built_in">abs</span>()</span><br></pre></td></tr></table></figure>
+
+<h3 id="corr"><a href="#corr" class="headerlink" title="corr"></a>corr</h3><ul>
+<li>corr(method=’pearson’, min_periods=1)<br>NA/Null 값을 제외한 컬럼간의 상관 계수를 반환합니다. pearson, kendall, spearman 상관 계수를 적용할 수 있습니다. 기본적으로 pearson 상관계수가 적용되며 변경하고자 하는 경우 method 매개변수에 값을 지정합니다. pearson 또는 spearman 상관 계수를 적용시 최소 관측치의 수를 지정할 수 있습니다. 기본적으로 1개 이상의 관측치가 있는 컬럼을 대상으로 하며 변경하고자하는 경우 min_periods 매개변수에 값을 지정합니다.</li>
+</ul>
+<figure class="highlight python"><figcaption><span>pearson 상관 계수 적용</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.corr()</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><figcaption><span>kendall 상관 계수 적용</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.corr(method=<span class="string">&#x27;kendall&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="count"><a href="#count" class="headerlink" title="count"></a>count</h3><ul>
+<li>count(axis=0, level=None, numeric_only=False)<br>각 열 또는 행의 NA를 제외한 데이터의 개수를 반환합니다. axis 매개변수에 값을 지정하여 열 또는 행을 적용할 수 있습니다. 만약 숫자형(float, int, boolean)만 계산하고 싶은 경우 numeric_only 매개변수에 인수 True를 전달합니다.</li>
+</ul>
+<p>axis이 0으로 지정된 경우 행을 기준으로 하기 때문에 각 열별 데이터의 개수를 반환합니다.<br>axis이 1로 지정된 경우 열을 기준으로 하기 때문에 각 행별 데이터의 개수를 반환합니다.</p>
+<figure class="highlight python"><figcaption><span>각 열별 데이터의 개수</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.count(axis=<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><figcaption><span>각 행별 데이터의 개수lang:Python</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.count(axis&#x3D;1)</span><br></pre></td></tr></table></figure>
+
+<h3 id="describe"><a href="#describe" class="headerlink" title="describe"></a>describe</h3><ul>
+<li>describe()<br>NA를 제외한 데이터의 기술 통계량을 반환합니다. 기술 통계량에는 데이터 집합 분포의 중심 경향, 분산 및 모양을 요약한 통계량이 포함됩니다.<figure class="highlight python"><figcaption><span>기술 통계량 계산</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.describe()</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="diff"><a href="#diff" class="headerlink" title="diff"></a>diff</h3><ul>
+<li>diff(periods=1, axis=0)<br>현재 요소와 이전 요소 간의 차이를 반환합니다. 기본적으로 $$N_i - (N_i-j)$$를 반환합니다. periods 매개변수의 값을 변경하여 이동 간격(j)을 조절할 수 있습니다.</li>
+</ul>
+<p>axis이 0으로 지정된 경우 행을 기준으로 하기 때문에 각 열 별 차이를 반환합니다.<br>axis이 1로 지정된 경우 열을 기준으로 하기 때문에 각 행 별 차이를 반환합니다.</p>
+<figure class="highlight python"><figcaption><span>각 열 별 행의 값 차이 계산</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.diff()</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><figcaption><span>각 행 별 열의 값 차이 계산</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.diff(axis=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="max"><a href="#max" class="headerlink" title="max"></a>max</h3><ul>
+<li>max(axis=0)<br>각 열 또는 행의 최댓값을 반환합니다.</li>
+</ul>
+<p>axis이 0으로 지정된 경우 행을 기준으로 하기 때문에 각 열 별 최댓값을 반환합니다.<br>axis이 1로 지정된 경우 열을 기준으로 하기 때문에 각 행 별 최댓값을 반환합니다.</p>
+<figure class="highlight python"><figcaption><span>각 열 별 최댓값</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.<span class="built_in">max</span>()</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><figcaption><span>각 행 별 최댓값</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.<span class="built_in">max</span>(axis=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="mean"><a href="#mean" class="headerlink" title="mean"></a>mean</h3><ul>
+<li>mean(axis=0)<br>각 열 또는 행의 평균값을 반환합니다.</li>
+</ul>
+<p>axis이 0으로 지정된 경우 행을 기준으로 하기 때문에 각 열 별 평균값을 반환합니다.<br>axis이 1로 지정된 경우 열을 기준으로 하기 때문에 각 행 별 평균값을 반환합니다.</p>
+<figure class="highlight python"><figcaption><span>각 열 별 평균값 계산</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.mean()</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><figcaption><span>각 행 별 평균값 계산</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.mean(axis=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="median"><a href="#median" class="headerlink" title="median"></a>median</h3><ul>
+<li>median(axis=0)<br>각 열 또는 행의 중앙값을 반환합니다.</li>
+</ul>
+<p>axis이 0으로 지정된 경우 행을 기준으로 하기 때문에 각 열 별 중앙값을 반환합니다.<br>axis이 1로 지정된 경우 열을 기준으로 하기 때문에 각 행 별 중앙값을 반환합니다.</p>
+<figure class="highlight python"><figcaption><span>각 열 별 중앙값 계산</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.median()</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><figcaption><span>각 행 별 중앙값 계산</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.median(axis=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="min"><a href="#min" class="headerlink" title="min"></a>min</h3><ul>
+<li>min(axis=0)<br>각 열 또는 행의 최솟값을 반환합니다.</li>
+</ul>
+<p>axis이 0으로 지정된 경우 행을 기준으로 하기 때문에 각 열 별 최솟값을 반환합니다.<br>axis이 1로 지정된 경우 열을 기준으로 하기 때문에 각 행 별 최솟값을 반환합니다.</p>
+<figure class="highlight python"><figcaption><span>각 열 별 최솟값 계산</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.<span class="built_in">min</span>()</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><figcaption><span>각 행 별 최솟값 계산</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.<span class="built_in">min</span>(axis=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="pct-change"><a href="#pct-change" class="headerlink" title="pct_change"></a>pct_change</h3><ul>
+<li>pct_change(axis=0, periods=1)<br>현재 요소와 이전 요소 간의 변화율을 반환합니다. 기본적으로 바로 이전 행에서 변경된 백분율을 계산하며 이는 시계열 요소의 변경 비율을 비교하는 데 유용합니다. periods 매개변수의 값을 변경하여 이동 간격을 조절할 수 있습니다.</li>
+</ul>
+<p>axis이 0으로 지정된 경우 행을 기준으로 하기 때문에 각 열 별 행의 차이를 반환합니다.<br>axis이 1로 지정된 경우 열을 기준으로 하기 때문에 각 행 별 열의 차이를 반환합니다.</p>
+<figure class="highlight python"><figcaption><span>각 열 별 행 변화율 계산</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.pct_change()</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><figcaption><span>각 행 별 열 변화율 계산</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.pct_change(axis=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="rank"><a href="#rank" class="headerlink" title="rank"></a>rank</h3><ul>
+<li>rank()<br>각 열 또는 행의 숫자 데이터 순위를 계산합니다. 기본적으로 동일한 값에는 해당 값 순위의 평균인 순위가 할당됩니다.</li>
+</ul>
+<p>axis이 0으로 지정된 경우 행을 기준으로 하기 때문에 각 열 별 행의 순위를 반환합니다.<br>axis이 1로 지정된 경우 열을 기준으로 하기 때문에 각 행 별 열의 순위를 반환합니다.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.rank()</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.rank(axis=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="round"><a href="#round" class="headerlink" title="round"></a>round</h3><ul>
+<li>round(decimals=0)<br>Series 또는 DataFrame의 반올림 결과를 반환합니다.<figure class="highlight python"><figcaption><span>소수점 2자리 표현</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pd.DataFrame(np.random.randn(<span class="number">5</span>, <span class="number">5</span>)).<span class="built_in">round</span>(<span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="sum"><a href="#sum" class="headerlink" title="sum"></a>sum</h3><ul>
+<li>sum(axis=0)<br>각 열 또는 행의 합계를 반환합니다.</li>
+</ul>
+<p>axis이 0으로 지정된 경우 행을 기준으로 하기 때문에 각 열 별 합계를 반환합니다.<br>axis이 1로 지정된 경우 열을 기준으로 하기 때문에 각 행 별 합계를 반환합니다.</p>
+<figure class="highlight python"><figcaption><span>각 열 별 합계 계산</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.<span class="built_in">sum</span>()</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><figcaption><span>각 행 별 합계 계산</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.<span class="built_in">sum</span>(axis=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="std"><a href="#std" class="headerlink" title="std"></a>std</h3><ul>
+<li>std(axis=0)<br>각 열 또는 행의 표준 편차값을 반환합니다.</li>
+</ul>
+<p>axis이 0으로 지정된 경우 행을 기준으로 하기 때문에 각 열 별 표준 편차값을 반환합니다.<br>axis이 1로 지정된 경우 열을 기준으로 하기 때문에 각 행 별 표준 편차값을 반환합니다.</p>
+<figure class="highlight python"><figcaption><span>각 열 별 표준 편차 계산</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.std()</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><figcaption><span>각 행 별 표준 편차 계산</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.std(axis=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="var"><a href="#var" class="headerlink" title="var"></a>var</h3><ul>
+<li>var(axis=0)<br>각 열 또는 행의 분산값을 반환합니다.</li>
+</ul>
+<p>axis이 0으로 지정된 경우 행을 기준으로 하기 때문에 각 열 별 분산값을 반환합니다.<br>axis이 1로 지정된 경우 열을 기준으로 하기 때문에 각 행 별 분산값을 반환합니다.</p>
+<figure class="highlight python"><figcaption><span>각 열 별 분산 계산</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.var()</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><figcaption><span>각 행 별 분산 계산</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.var(axis=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="nunique"><a href="#nunique" class="headerlink" title="nunique"></a>nunique</h3><ul>
+<li>nunique(axis=0)<br>각 열 또는 행의 고유값의 개수를 반환합니다.</li>
+</ul>
+<p>axis이 0으로 지정된 경우 행을 기준으로 하기 때문에 각 열 별 고유값의 개수를 반환합니다.<br>axis이 1로 지정된 경우 열을 기준으로 하기 때문에 각 행 별 고유값의 개수를 반환합니다.</p>
+<figure class="highlight python"><figcaption><span>각 열 별 고유값 개수 계산</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.nunique()</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><figcaption><span>각 행 별 고유값 개수 계산</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.nunique(axis=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="value-counts"><a href="#value-counts" class="headerlink" title="value_counts"></a>value_counts</h3><ul>
+<li>value_counts(normalize=False, sort=True, ascending=False)<br>Sereis 또는 DataFrame의 고유값별 데이터의 개수를 반환합니다. DataFrame을 지정하는 경우 모든 열의 값이 동일해야 일치하는것으로 계산하기 때문에 주로 Series를 대상으로 적용합니다.</li>
+</ul>
+<p>기본적으로 내림차순 정렬 결과를 반환하며 오름차순 정렬 결과를 적용하고 싶은 경우 ascending 매개변수에 인수 True를 전달합니다. 정규화된 값(비율)을 계산하고 싶은 경우 normalize 매개변수에 인수 True을 전달합니다.</p>
+<figure class="highlight python"><figcaption><span>고유값별 데이터 개수 계산</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">df3 = pd.DataFrame(np.random.randint(<span class="number">0</span>, <span class="number">3</span>, <span class="number">25</span>).reshape(<span class="number">5</span>, <span class="number">5</span>))</span><br><span class="line">df3.value_counts()</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><figcaption><span>0 컬럼의 고유값별 데이터 개수 계산</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df3[<span class="number">0</span>].value_counts()</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><figcaption><span>0 컬럼의 고유값별 데이터 개수 계산</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df3.value_counts([<span class="number">0</span>])</span><br></pre></td></tr></table></figure>
+
+<h3 id="cumsum"><a href="#cumsum" class="headerlink" title="cumsum"></a>cumsum</h3><ul>
+<li>cumsum(axis=0)<br>각 열 또는 행의 누적 합계를 반환합니다.</li>
+</ul>
+<p>axis이 0으로 지정된 경우 행을 기준으로 하기 때문에 각 열 별 누적 합계를 반환합니다.<br>axis이 1로 지정된 경우 열을 기준으로 하기 때문에 각 행 별 누적 합계를 반환합니다.</p>
+<figure class="highlight python"><figcaption><span>각 열 별 누적 합계 계산</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.cumsum()</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><figcaption><span>각 행 별 누적 합계 계산</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.cumsum(axis=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="cumprod"><a href="#cumprod" class="headerlink" title="cumprod"></a>cumprod</h3><ul>
+<li>cumprod(axis=1)<br>각 열 또는 행의 누적 곱을 반환합니다.</li>
+</ul>
+<p>axis이 0으로 지정된 경우 행을 기준으로 하기 때문에 각 열 별 누적 곱을 반환합니다.<br>axis이 1로 지정된 경우 열을 기준으로 하기 때문에 각 행 별 누적 곱을 반환합니다.</p>
+<figure class="highlight python"><figcaption><span>각 열 별 누적 곱 계산</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.cumsum()</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><figcaption><span>각 행 별 누적 곱 계산</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.cumsum(axis=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="idxmax"><a href="#idxmax" class="headerlink" title="idxmax"></a>idxmax</h3><ul>
+<li>idxmax(axis=0)<br>각 열 또는 행의 최댓값의 인덱스를 반환합니다.</li>
+</ul>
+<p>axis이 0으로 지정된 경우 행을 기준으로 하기 때문에 각 열 별 최댓값의 인덱스를 반환합니다.<br>axis이 1로 지정된 경우 열을 기준으로 하기 때문에 각 행 별 최댓값의 인덱스를 반환합니다.</p>
+<figure class="highlight python"><figcaption><span>각 열 별 최댓값 인덱스</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.idxmax()</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><figcaption><span>각 행 별 최댓값 인덱스</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.idxmax(axis=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="idxmin"><a href="#idxmin" class="headerlink" title="idxmin"></a>idxmin</h3><ul>
+<li>idxmin(axis=0)<br>각 열 또는 행의 최솟값의 인덱스를 반환합니다.</li>
+</ul>
+<p>axis이 0으로 지정된 경우 행을 기준으로 하기 때문에 각 열 별 최솟값의 인덱스를 반환합니다.<br>axis이 1로 지정된 경우 열을 기준으로 하기 때문에 각 행 별 최솟값의 인덱스를 반환합니다.</p>
+<figure class="highlight python"><figcaption><span>각 열 별 최솟값 인덱스</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.idxmin()</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><figcaption><span>각 행 별 최솟값 인덱스</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.idxmin(axis=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+
+<h2 id="삭제-및-색인"><a href="#삭제-및-색인" class="headerlink" title="삭제 및 색인"></a>삭제 및 색인</h2><h3 id="drop"><a href="#drop" class="headerlink" title="drop"></a>drop</h3><ul>
+<li>drop(labels=None, axis=0)<br>지정된 레이블을 행 또는 열에서 제거합니다. 삭제하고자 하는 행 또는 열이 1개인 경우 행 인덱스 또는 열 인덱스를 문자열로 여러개인 경우 문자열 리스트로 지정합니다.</li>
+</ul>
+<p>axis이 0으로 지정된 경우 행을 기준으로 하기 때문에 해당 행을 삭제 합니다.<br>axis이 1로 지정된 경우 열을 기준으로 하기 때문에 해당 열을 삭제 합니다.</p>
+<figure class="highlight python"><figcaption><span>단일 행 삭제</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.drop(df.index[<span class="number">0</span>], axis=<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><figcaption><span>복수 행 삭제</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.drop(df.index[:<span class="number">3</span>], axis=<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><figcaption><span>단일 열 삭제</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.drop(<span class="string">&#x27;A&#x27;</span>, axis=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><figcaption><span>복수 열 삭제</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.drop([<span class="string">&#x27;A&#x27;</span>,<span class="string">&#x27;C&#x27;</span>], axis=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="drop-duplicates"><a href="#drop-duplicates" class="headerlink" title="drop_duplicates"></a>drop_duplicates</h3><ul>
+<li>drop_duplicates(subset=None, keep=’first’)<br>중복된 행을 제거한 결과를 반환합니다. 모든 열이 동일한 경우 제거되며 특정 열만 고려하도록 subset 매개변수에 인수를 전달할 수 있습니다. keep 매개변수에 인수 ‘first’가 전달되면 첫번째 데이터를 ‘last’가 전달되면 마지막 데이터를 남깁니다.</li>
+</ul>
+<figure class="highlight python"><figcaption><span>중복된 행 제거</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df3.drop_duplicates()</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><figcaption><span>중복된 행 제거 (기준 적용)lang:Python</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df3.drop_duplicates(0)</span><br></pre></td></tr></table></figure>
+
+<h3 id="rename"><a href="#rename" class="headerlink" title="rename"></a>rename</h3><ul>
+<li>rename()<br>행 인덱스 또는 열 인덱스를 변경할 수 있습니다. 변경하고자 하는 대상을 Key로 변경하고자 하는 값을 Value로 하는 Dict 형태로 값을 전달합니다.<figure class="highlight python"><figcaption><span>행 인덱스 변경</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df3.rename(index=&#123;<span class="number">0</span>:<span class="string">&#x27;A&#x27;</span>&#125;)</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<figure class="highlight python"><figcaption><span>열 인덱스 변경</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df3.rename(columns=&#123;<span class="number">0</span>:<span class="string">&#x27;A&#x27;</span>&#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="reset-index"><a href="#reset-index" class="headerlink" title="reset_index"></a>reset_index</h3><ul>
+<li>reset_index(drop=False)<br>행 인덱스를 재설정한 결과를 반환합니다. 기존의 인덱스는 열로 추가되며 삭제하고 싶은 경우 drop 매개 변수에 인수 True를 전달합니다.<figure class="highlight python"><figcaption><span>인덱스 재설정</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.reset_index()</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="set-index"><a href="#set-index" class="headerlink" title="set_index"></a>set_index</h3><ul>
+<li>set_index()<br>지정된 열을 인덱스로 지정한 결과를 반환합니다.<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">df[<span class="string">&#x27;D&#x27;</span>] = [<span class="string">&#x27;A&#x27;</span>, <span class="string">&#x27;B&#x27;</span>, <span class="string">&#x27;A&#x27;</span>, <span class="string">&#x27;B&#x27;</span>, <span class="string">&#x27;A&#x27;</span>, <span class="string">&#x27;B&#x27;</span>, <span class="string">&#x27;A&#x27;</span>, <span class="string">&#x27;B&#x27;</span>, <span class="string">&#x27;A&#x27;</span>, <span class="string">&#x27;B&#x27;</span>, <span class="string">&#x27;A&#x27;</span>, <span class="string">&#x27;B&#x27;</span>]</span><br><span class="line">df.set_index(<span class="string">&#x27;D&#x27;</span>)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</div><div class="article-licensing box"><div class="licensing-title"><p>Function</p><p><a href="https://baem1n.dev/2021/01/21/PANDAS-FUNCTION/">https://baem1n.dev/2021/01/21/PANDAS-FUNCTION/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>Author</h6><p>BAEM1N</p></div></div><div class="level-item is-narrow"><div><h6>Posted on</h6><p>2021-01-21</p></div></div><div class="level-item is-narrow"><div><h6>Updated on</h6><p>2021-01-27</p></div></div><div class="level-item is-narrow"><div><h6>Licensed under</h6><p><a class="icon" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a><a class="icon" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a><a class="icon" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="fab fa-creative-commons-nc"></i></a><a class="icon" rel="noopener" target="_blank" title="NoDerivatives" href="https://creativecommons.org/licenses/by-nd/4.0/"><i class="fab fa-creative-commons-nd"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/Pandas/">Pandas</a></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2021/01/22/PANDAS-MERGE/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">Merge</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2021/01/20/DATA-COVID-TRAFFIC-02/"><span class="level-item">코로나 영향 분석 - 데이터 처리</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card"><div class="card-content"><h3 class="title is-5">댓글</h3><div id="disqus_thread"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></div><script>var disqus_config = function () {
+            this.page.url = 'https://baem1n.dev/2021/01/21/PANDAS-FUNCTION/';
+            this.page.identifier = '2021/01/21/PANDAS-FUNCTION/';
+        };
+        (function() {
+            var d = document, s = d.createElement('script');  
+            s.src = '//' + 'baem1n' + '.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();</script></div></div></div><!--!--><div class="column column-right is-4-tablet is-4-desktop is-3-widescreen  order-3 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">카탈로그</h3><ul class="menu-list"><li><a class="level is-mobile" href="#선택"><span class="level-left"><span class="level-item">1</span><span class="level-item">선택</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#head"><span class="level-left"><span class="level-item">1.1</span><span class="level-item">head</span></span></a></li><li><a class="level is-mobile" href="#tail"><span class="level-left"><span class="level-item">1.2</span><span class="level-item">tail</span></span></a></li><li><a class="level is-mobile" href="#sample"><span class="level-left"><span class="level-item">1.3</span><span class="level-item">sample</span></span></a></li><li><a class="level is-mobile" href="#select-dtypes"><span class="level-left"><span class="level-item">1.4</span><span class="level-item">select_dtypes</span></span></a></li><li><a class="level is-mobile" href="#pop"><span class="level-left"><span class="level-item">1.5</span><span class="level-item">pop</span></span></a></li><li><a class="level is-mobile" href="#query"><span class="level-left"><span class="level-item">1.6</span><span class="level-item">query</span></span></a></li></ul></li><li><a class="level is-mobile" href="#계산-기술-통계"><span class="level-left"><span class="level-item">2</span><span class="level-item">계산 / 기술 통계</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#abs"><span class="level-left"><span class="level-item">2.1</span><span class="level-item">abs</span></span></a></li><li><a class="level is-mobile" href="#corr"><span class="level-left"><span class="level-item">2.2</span><span class="level-item">corr</span></span></a></li><li><a class="level is-mobile" href="#count"><span class="level-left"><span class="level-item">2.3</span><span class="level-item">count</span></span></a></li><li><a class="level is-mobile" href="#describe"><span class="level-left"><span class="level-item">2.4</span><span class="level-item">describe</span></span></a></li><li><a class="level is-mobile" href="#diff"><span class="level-left"><span class="level-item">2.5</span><span class="level-item">diff</span></span></a></li><li><a class="level is-mobile" href="#max"><span class="level-left"><span class="level-item">2.6</span><span class="level-item">max</span></span></a></li><li><a class="level is-mobile" href="#mean"><span class="level-left"><span class="level-item">2.7</span><span class="level-item">mean</span></span></a></li><li><a class="level is-mobile" href="#median"><span class="level-left"><span class="level-item">2.8</span><span class="level-item">median</span></span></a></li><li><a class="level is-mobile" href="#min"><span class="level-left"><span class="level-item">2.9</span><span class="level-item">min</span></span></a></li><li><a class="level is-mobile" href="#pct-change"><span class="level-left"><span class="level-item">2.10</span><span class="level-item">pct_change</span></span></a></li><li><a class="level is-mobile" href="#rank"><span class="level-left"><span class="level-item">2.11</span><span class="level-item">rank</span></span></a></li><li><a class="level is-mobile" href="#round"><span class="level-left"><span class="level-item">2.12</span><span class="level-item">round</span></span></a></li><li><a class="level is-mobile" href="#sum"><span class="level-left"><span class="level-item">2.13</span><span class="level-item">sum</span></span></a></li><li><a class="level is-mobile" href="#std"><span class="level-left"><span class="level-item">2.14</span><span class="level-item">std</span></span></a></li><li><a class="level is-mobile" href="#var"><span class="level-left"><span class="level-item">2.15</span><span class="level-item">var</span></span></a></li><li><a class="level is-mobile" href="#nunique"><span class="level-left"><span class="level-item">2.16</span><span class="level-item">nunique</span></span></a></li><li><a class="level is-mobile" href="#value-counts"><span class="level-left"><span class="level-item">2.17</span><span class="level-item">value_counts</span></span></a></li><li><a class="level is-mobile" href="#cumsum"><span class="level-left"><span class="level-item">2.18</span><span class="level-item">cumsum</span></span></a></li><li><a class="level is-mobile" href="#cumprod"><span class="level-left"><span class="level-item">2.19</span><span class="level-item">cumprod</span></span></a></li><li><a class="level is-mobile" href="#idxmax"><span class="level-left"><span class="level-item">2.20</span><span class="level-item">idxmax</span></span></a></li><li><a class="level is-mobile" href="#idxmin"><span class="level-left"><span class="level-item">2.21</span><span class="level-item">idxmin</span></span></a></li></ul></li><li><a class="level is-mobile" href="#삭제-및-색인"><span class="level-left"><span class="level-item">3</span><span class="level-item">삭제 및 색인</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#drop"><span class="level-left"><span class="level-item">3.1</span><span class="level-item">drop</span></span></a></li><li><a class="level is-mobile" href="#drop-duplicates"><span class="level-left"><span class="level-item">3.2</span><span class="level-item">drop_duplicates</span></span></a></li><li><a class="level is-mobile" href="#rename"><span class="level-left"><span class="level-item">3.3</span><span class="level-item">rename</span></span></a></li><li><a class="level is-mobile" href="#reset-index"><span class="level-left"><span class="level-item">3.4</span><span class="level-item">reset_index</span></span></a></li><li><a class="level is-mobile" href="#set-index"><span class="level-left"><span class="level-item">3.5</span><span class="level-item">set_index</span></span></a></li></ul></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">카테고리</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/Deep-Learning/"><span class="level-start"><span class="level-item">Deep Learning</span></span><span class="level-end"><span class="level-item tag">1</span></span></a><ul><li><a class="level is-mobile" href="/categories/Deep-Learning/TensorFlow/"><span class="level-start"><span class="level-item">TensorFlow</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></li><li><a class="level is-mobile" href="/categories/Machine-Learning/"><span class="level-start"><span class="level-item">Machine Learning</span></span><span class="level-end"><span class="level-item tag">4</span></span></a><ul><li><a class="level is-mobile" href="/categories/Machine-Learning/Scikit-Learn/"><span class="level-start"><span class="level-item">Scikit-Learn</span></span><span class="level-end"><span class="level-item tag">4</span></span></a></li></ul></li><li><a class="level is-mobile" href="/categories/Python/"><span class="level-start"><span class="level-item">Python</span></span><span class="level-end"><span class="level-item tag">12</span></span></a><ul><li><a class="level is-mobile" href="/categories/Python/Pandas/"><span class="level-start"><span class="level-item">Pandas</span></span><span class="level-end"><span class="level-item tag">12</span></span></a></li></ul></li><li><a class="level is-mobile" href="/categories/%EA%B3%B5%EA%B3%B5-%EB%8D%B0%EC%9D%B4%ED%84%B0/"><span class="level-start"><span class="level-item">공공 데이터</span></span><span class="level-end"><span class="level-item tag">12</span></span></a><ul><li><a class="level is-mobile" href="/categories/%EA%B3%B5%EA%B3%B5-%EB%8D%B0%EC%9D%B4%ED%84%B0/%EC%8B%A4%EA%B1%B0%EB%9E%98%EA%B0%80/"><span class="level-start"><span class="level-item">실거래가</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/%EA%B3%B5%EA%B3%B5-%EB%8D%B0%EC%9D%B4%ED%84%B0/%EC%BD%94%EB%A1%9C%EB%82%98-19/"><span class="level-start"><span class="level-item">코로나 19</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li></ul></li><li><a class="level is-mobile" href="/categories/%ED%99%98%EA%B2%BD-%EC%84%A4%EC%A0%95/"><span class="level-start"><span class="level-item">환경 설정</span></span><span class="level-end"><span class="level-item tag">4</span></span></a><ul><li><a class="level is-mobile" href="/categories/%ED%99%98%EA%B2%BD-%EC%84%A4%EC%A0%95/Apple-Silicon/"><span class="level-start"><span class="level-item">Apple Silicon</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%ED%99%98%EA%B2%BD-%EC%84%A4%EC%A0%95/Python/"><span class="level-start"><span class="level-item">Python</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/%ED%99%98%EA%B2%BD-%EC%84%A4%EC%A0%95/Tableau/"><span class="level-start"><span class="level-item">Tableau</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></li></ul></div></div></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/image/logo.png" alt="BAEM1N" height="28"></a><p class="is-size-7"><span>&copy; 2021 BAEM1N</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><br>0</p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0" href="https://creativecommons.org/licenses/by-nc-nd/4.0/"><i class="fab fa-creative-commons"></i> <i class="fab fa-creative-commons-by"></i> <i class="fab fa-creative-commons-nc"></i> <i class="fab fa-creative-commons-nd"></i> </a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" async></script><script>moment.locale("ko");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="맨 위로" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "이 웹 사이트는 귀하의 경험을 향상시키기 위해 Cookie를 사용합니다.",
+          dismiss: "무시",
+          allow: "허용",
+          deny: "거부",
+          link: "더 알아보기",
+          policy: "Cookie 정책",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/x-mathjax-config">MathJax.Hub.Config({
+            'HTML-CSS': {
+                matchFontHeight: false
+            },
+            SVG: {
+                matchFontHeight: false
+            },
+            CommonHTML: {
+                matchFontHeight: false
+            },
+            tex2jax: {
+                inlineMath: [
+                    ['$','$'],
+                    ['\\(','\\)']
+                ]
+            }
+        });</script><script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="입력 하세요..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"입력 하세요...","untitled":"(제목 없음)","posts":"포스트","pages":"페이지","categories":"카테고리","tags":"태그"});
+        });</script></body></html>

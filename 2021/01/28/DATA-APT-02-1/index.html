@@ -1,0 +1,1231 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>법정동 코드(시군구) - BAEM1N</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="BAEM1N"><meta name="msapplication-TileImage" content="/image/favicon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="BAEM1N"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta description="본 글에서는 시군구 단위의 법정동 코드를 제공합니다."><meta property="og:type" content="blog"><meta property="og:title" content="법정동 코드(시군구)"><meta property="og:url" content="https://baem1n.dev/2021/01/28/DATA-APT-02-1/"><meta property="og:site_name" content="BAEM1N"><meta property="og:description" content="본 글에서는 시군구 단위의 법정동 코드를 제공합니다."><meta property="og:locale" content="ko_KR"><meta property="og:image" content="https://baem1n.dev/image/lawd_cd_00.png"><meta property="article:published_time" content="2021-01-28T13:45:13.000Z"><meta property="article:modified_time" content="2021-01-30T13:26:47.947Z"><meta property="article:author" content="BAEM1N"><meta property="article:tag" content="Python"><meta property="article:tag" content="Pandas"><meta property="article:tag" content="법정동 코드"><meta property="twitter:card" content="summary"><meta property="twitter:image" content="/image/lawd_cd_00.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://baem1n.dev/2021/01/28/DATA-APT-02-1/"},"headline":"BAEM1N","image":["https://baem1n.dev/image/lawd_cd_00.png"],"datePublished":"2021-01-28T13:45:13.000Z","dateModified":"2021-01-30T13:26:47.947Z","author":{"@type":"Person","name":"BAEM1N"},"description":"본 글에서는 시군구 단위의 법정동 코드를 제공합니다."}</script><link rel="canonical" href="https://baem1n.dev/2021/01/28/DATA-APT-02-1/"><link rel="icon" href="/image/favicon.png"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css"><script src="https://www.googletagmanager.com/gtag/js?id=G-6NFDR4885H" async></script><script>window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+    
+        gtag('config', 'G-6NFDR4885H');</script><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script><!--!--><!--!--><meta name="generator" content="Hexo 5.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/image/logo.png" alt="BAEM1N" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item is-hidden-tablet catalogue" title="카탈로그" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="검색" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-9-widescreen"><div class="card"><div class="card-image"><span class="image is-7by3"><img class="fill" src="/image/lawd_cd_00.png" alt="법정동 코드(시군구)"></span></div><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2021-01-28T13:45:13.000Z" title="2021. 1. 28. 오후 10:45:13">2021-01-28</time>&nbsp;게시 됨</span><span class="level-item"><time dateTime="2021-01-30T13:26:47.947Z" title="2021. 1. 30. 오후 10:26:47">2021-01-30</time>&nbsp;업데이트 됨</span><span class="level-item"><a class="link-muted" href="/categories/%EA%B3%B5%EA%B3%B5-%EB%8D%B0%EC%9D%B4%ED%84%B0/">공공 데이터</a><span> / </span><a class="link-muted" href="/categories/%EA%B3%B5%EA%B3%B5-%EB%8D%B0%EC%9D%B4%ED%84%B0/%EC%8B%A4%EA%B1%B0%EB%9E%98%EA%B0%80/">실거래가</a></span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>회 방문</span></div></div><h1 class="title is-3 is-size-4-mobile">법정동 코드(시군구)</h1><div class="content"><p>본 글에서는 시군구 단위의 법정동 코드를 제공합니다.</p>
+<a id="more"></a>
+<h2 id="서울특별시"><a href="#서울특별시" class="headerlink" title="서울특별시"></a>서울특별시</h2><figure class="highlight python"><figcaption><span>서울특별시</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 서울특별시</span></span><br><span class="line">[[<span class="string">&#x27;강남구&#x27;</span>, <span class="string">&#x27;11680&#x27;</span>], [<span class="string">&#x27;강동구&#x27;</span>, <span class="string">&#x27;11740&#x27;</span>], [<span class="string">&#x27;강북구&#x27;</span>, <span class="string">&#x27;11305&#x27;</span>], [<span class="string">&#x27;강서구&#x27;</span>, <span class="string">&#x27;11500&#x27;</span>], [<span class="string">&#x27;관악구&#x27;</span>, <span class="string">&#x27;11620&#x27;</span>], [<span class="string">&#x27;광진구&#x27;</span>, <span class="string">&#x27;11215&#x27;</span>], [<span class="string">&#x27;구로구&#x27;</span>, <span class="string">&#x27;11530&#x27;</span>], [<span class="string">&#x27;금천구&#x27;</span>, <span class="string">&#x27;11545&#x27;</span>], [<span class="string">&#x27;노원구&#x27;</span>, <span class="string">&#x27;11350&#x27;</span>], [<span class="string">&#x27;도봉구&#x27;</span>, <span class="string">&#x27;11320&#x27;</span>], [<span class="string">&#x27;동대문구&#x27;</span>, <span class="string">&#x27;11230&#x27;</span>], [<span class="string">&#x27;동작구&#x27;</span>, <span class="string">&#x27;11590&#x27;</span>], [<span class="string">&#x27;마포구&#x27;</span>, <span class="string">&#x27;11440&#x27;</span>], [<span class="string">&#x27;서대문구&#x27;</span>, <span class="string">&#x27;11410&#x27;</span>], [<span class="string">&#x27;서초구&#x27;</span>, <span class="string">&#x27;11650&#x27;</span>], [<span class="string">&#x27;성동구&#x27;</span>, <span class="string">&#x27;11200&#x27;</span>], [<span class="string">&#x27;성북구&#x27;</span>, <span class="string">&#x27;11290&#x27;</span>], [<span class="string">&#x27;송파구&#x27;</span>, <span class="string">&#x27;11710&#x27;</span>], [<span class="string">&#x27;양천구&#x27;</span>, <span class="string">&#x27;11470&#x27;</span>], [<span class="string">&#x27;영등포구&#x27;</span>, <span class="string">&#x27;11560&#x27;</span>], [<span class="string">&#x27;용산구&#x27;</span>, <span class="string">&#x27;11170&#x27;</span>], [<span class="string">&#x27;은평구&#x27;</span>, <span class="string">&#x27;11380&#x27;</span>], [<span class="string">&#x27;종로구&#x27;</span>, <span class="string">&#x27;11110&#x27;</span>], [<span class="string">&#x27;중구&#x27;</span>, <span class="string">&#x27;11140&#x27;</span>], [<span class="string">&#x27;중랑구&#x27;</span>, <span class="string">&#x27;11260&#x27;</span>]]</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>서울특별시</th>
+<th>법정동코드</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>강남구</td>
+<td>11680</td>
+</tr>
+<tr>
+<td>강동구</td>
+<td>11740</td>
+</tr>
+<tr>
+<td>강북구</td>
+<td>11305</td>
+</tr>
+<tr>
+<td>강서구</td>
+<td>11500</td>
+</tr>
+<tr>
+<td>관악구</td>
+<td>11620</td>
+</tr>
+<tr>
+<td>광진구</td>
+<td>11215</td>
+</tr>
+<tr>
+<td>구로구</td>
+<td>11530</td>
+</tr>
+<tr>
+<td>금천구</td>
+<td>11545</td>
+</tr>
+<tr>
+<td>노원구</td>
+<td>11350</td>
+</tr>
+<tr>
+<td>도봉구</td>
+<td>11320</td>
+</tr>
+<tr>
+<td>동대문구</td>
+<td>11230</td>
+</tr>
+<tr>
+<td>동작구</td>
+<td>11590</td>
+</tr>
+<tr>
+<td>마포구</td>
+<td>11440</td>
+</tr>
+<tr>
+<td>서대문구</td>
+<td>11410</td>
+</tr>
+<tr>
+<td>서초구</td>
+<td>11650</td>
+</tr>
+<tr>
+<td>성동구</td>
+<td>11200</td>
+</tr>
+<tr>
+<td>성북구</td>
+<td>11290</td>
+</tr>
+<tr>
+<td>송파구</td>
+<td>11710</td>
+</tr>
+<tr>
+<td>양천구</td>
+<td>11470</td>
+</tr>
+<tr>
+<td>영등포구</td>
+<td>11560</td>
+</tr>
+<tr>
+<td>용산구</td>
+<td>11170</td>
+</tr>
+<tr>
+<td>은평구</td>
+<td>11380</td>
+</tr>
+<tr>
+<td>종로구</td>
+<td>11110</td>
+</tr>
+<tr>
+<td>중구</td>
+<td>11140</td>
+</tr>
+<tr>
+<td>중랑구</td>
+<td>11260</td>
+</tr>
+</tbody></table>
+<h2 id="부산광역시"><a href="#부산광역시" class="headerlink" title="부산광역시"></a>부산광역시</h2><figure class="highlight python"><figcaption><span>부산광역시</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 부산광역시</span></span><br><span class="line">[[<span class="string">&#x27;강서구&#x27;</span>, <span class="string">&#x27;26440&#x27;</span>], [<span class="string">&#x27;금정구&#x27;</span>, <span class="string">&#x27;26410&#x27;</span>], [<span class="string">&#x27;기장군&#x27;</span>, <span class="string">&#x27;26710&#x27;</span>], [<span class="string">&#x27;남구&#x27;</span>, <span class="string">&#x27;26290&#x27;</span>], [<span class="string">&#x27;동구&#x27;</span>, <span class="string">&#x27;26170&#x27;</span>], [<span class="string">&#x27;동래구&#x27;</span>, <span class="string">&#x27;26260&#x27;</span>], [<span class="string">&#x27;부산진구&#x27;</span>, <span class="string">&#x27;26230&#x27;</span>], [<span class="string">&#x27;북구&#x27;</span>, <span class="string">&#x27;26320&#x27;</span>], [<span class="string">&#x27;사상구&#x27;</span>, <span class="string">&#x27;26530&#x27;</span>], [<span class="string">&#x27;사하구&#x27;</span>, <span class="string">&#x27;26380&#x27;</span>], [<span class="string">&#x27;서구&#x27;</span>, <span class="string">&#x27;26140&#x27;</span>], [<span class="string">&#x27;수영구&#x27;</span>, <span class="string">&#x27;26500&#x27;</span>], [<span class="string">&#x27;연제구&#x27;</span>, <span class="string">&#x27;26470&#x27;</span>], [<span class="string">&#x27;영도구&#x27;</span>, <span class="string">&#x27;26200&#x27;</span>], [<span class="string">&#x27;중구&#x27;</span>, <span class="string">&#x27;26110&#x27;</span>], [<span class="string">&#x27;해운대구&#x27;</span>, <span class="string">&#x27;26350&#x27;</span>]]</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>부산광역시</th>
+<th>법정동코드</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>강서구</td>
+<td>26440</td>
+</tr>
+<tr>
+<td>금정구</td>
+<td>26410</td>
+</tr>
+<tr>
+<td>기장군</td>
+<td>26710</td>
+</tr>
+<tr>
+<td>남구</td>
+<td>26290</td>
+</tr>
+<tr>
+<td>동구</td>
+<td>26170</td>
+</tr>
+<tr>
+<td>동래구</td>
+<td>26260</td>
+</tr>
+<tr>
+<td>부산진구</td>
+<td>26230</td>
+</tr>
+<tr>
+<td>북구</td>
+<td>26320</td>
+</tr>
+<tr>
+<td>사상구</td>
+<td>26530</td>
+</tr>
+<tr>
+<td>사하구</td>
+<td>26380</td>
+</tr>
+<tr>
+<td>서구</td>
+<td>26140</td>
+</tr>
+<tr>
+<td>수영구</td>
+<td>26500</td>
+</tr>
+<tr>
+<td>연제구</td>
+<td>26470</td>
+</tr>
+<tr>
+<td>영도구</td>
+<td>26200</td>
+</tr>
+<tr>
+<td>중구</td>
+<td>26110</td>
+</tr>
+<tr>
+<td>해운대구</td>
+<td>26350</td>
+</tr>
+</tbody></table>
+<h2 id="대구광역시"><a href="#대구광역시" class="headerlink" title="대구광역시"></a>대구광역시</h2><figure class="highlight python"><figcaption><span>대구광역시</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 대구광역시</span></span><br><span class="line">[[<span class="string">&#x27;남구&#x27;</span>, <span class="string">&#x27;27200&#x27;</span>], [<span class="string">&#x27;달서구&#x27;</span>, <span class="string">&#x27;27290&#x27;</span>], [<span class="string">&#x27;달성군&#x27;</span>, <span class="string">&#x27;27710&#x27;</span>], [<span class="string">&#x27;동구&#x27;</span>, <span class="string">&#x27;27140&#x27;</span>], [<span class="string">&#x27;북구&#x27;</span>, <span class="string">&#x27;27230&#x27;</span>], [<span class="string">&#x27;서구&#x27;</span>, <span class="string">&#x27;27170&#x27;</span>], [<span class="string">&#x27;수성구&#x27;</span>, <span class="string">&#x27;27260&#x27;</span>], [<span class="string">&#x27;중구&#x27;</span>, <span class="string">&#x27;27110&#x27;</span>]]</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>대구광역시</th>
+<th>법정동코드</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>남구</td>
+<td>27200</td>
+</tr>
+<tr>
+<td>달서구</td>
+<td>27290</td>
+</tr>
+<tr>
+<td>달성군</td>
+<td>27710</td>
+</tr>
+<tr>
+<td>동구</td>
+<td>27140</td>
+</tr>
+<tr>
+<td>북구</td>
+<td>27230</td>
+</tr>
+<tr>
+<td>서구</td>
+<td>27170</td>
+</tr>
+<tr>
+<td>수성구</td>
+<td>27260</td>
+</tr>
+<tr>
+<td>중구</td>
+<td>27110</td>
+</tr>
+</tbody></table>
+<h2 id="인천광역시"><a href="#인천광역시" class="headerlink" title="인천광역시"></a>인천광역시</h2><figure class="highlight python"><figcaption><span>인천광역시</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 인천광역시</span></span><br><span class="line">[[<span class="string">&#x27;강화군&#x27;</span>, <span class="string">&#x27;28710&#x27;</span>], [<span class="string">&#x27;계양구&#x27;</span>, <span class="string">&#x27;28245&#x27;</span>], [<span class="string">&#x27;남동구&#x27;</span>, <span class="string">&#x27;28200&#x27;</span>], [<span class="string">&#x27;동구&#x27;</span>, <span class="string">&#x27;28140&#x27;</span>], [<span class="string">&#x27;미추홀구&#x27;</span>, <span class="string">&#x27;28177&#x27;</span>], [<span class="string">&#x27;부평구&#x27;</span>, <span class="string">&#x27;28237&#x27;</span>], [<span class="string">&#x27;서구&#x27;</span>, <span class="string">&#x27;28260&#x27;</span>], [<span class="string">&#x27;연수구&#x27;</span>, <span class="string">&#x27;28185&#x27;</span>], [<span class="string">&#x27;옹진군&#x27;</span>, <span class="string">&#x27;28720&#x27;</span>], [<span class="string">&#x27;중구&#x27;</span>, <span class="string">&#x27;28110&#x27;</span>]]</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>인천광역시</th>
+<th>법정동코드</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>강화군</td>
+<td>28710</td>
+</tr>
+<tr>
+<td>계양구</td>
+<td>28245</td>
+</tr>
+<tr>
+<td>남동구</td>
+<td>28200</td>
+</tr>
+<tr>
+<td>동구</td>
+<td>28140</td>
+</tr>
+<tr>
+<td>미추홀구</td>
+<td>28177</td>
+</tr>
+<tr>
+<td>부평구</td>
+<td>28237</td>
+</tr>
+<tr>
+<td>서구</td>
+<td>28260</td>
+</tr>
+<tr>
+<td>연수구</td>
+<td>28185</td>
+</tr>
+<tr>
+<td>옹진군</td>
+<td>28720</td>
+</tr>
+<tr>
+<td>중구</td>
+<td>28110</td>
+</tr>
+</tbody></table>
+<h2 id="광주광역시"><a href="#광주광역시" class="headerlink" title="광주광역시"></a>광주광역시</h2><figure class="highlight python"><figcaption><span>광주광역시</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 광주광역시</span></span><br><span class="line">[[<span class="string">&#x27;광산구&#x27;</span>, <span class="string">&#x27;29200&#x27;</span>], [<span class="string">&#x27;남구&#x27;</span>, <span class="string">&#x27;29155&#x27;</span>], [<span class="string">&#x27;동구&#x27;</span>, <span class="string">&#x27;29110&#x27;</span>], [<span class="string">&#x27;북구&#x27;</span>, <span class="string">&#x27;29170&#x27;</span>], [<span class="string">&#x27;서구&#x27;</span>, <span class="string">&#x27;29140&#x27;</span>]]</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>광주광역시</th>
+<th>법정동코드</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>광산구</td>
+<td>29200</td>
+</tr>
+<tr>
+<td>남구</td>
+<td>29155</td>
+</tr>
+<tr>
+<td>동구</td>
+<td>29110</td>
+</tr>
+<tr>
+<td>북구</td>
+<td>29170</td>
+</tr>
+<tr>
+<td>서구</td>
+<td>29140</td>
+</tr>
+</tbody></table>
+<h2 id="대전광역시"><a href="#대전광역시" class="headerlink" title="대전광역시"></a>대전광역시</h2><figure class="highlight python"><figcaption><span>대전광역시</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 대전광역시</span></span><br><span class="line">[[<span class="string">&#x27;대덕구&#x27;</span>, <span class="string">&#x27;30230&#x27;</span>], [<span class="string">&#x27;동구&#x27;</span>, <span class="string">&#x27;30110&#x27;</span>], [<span class="string">&#x27;서구&#x27;</span>, <span class="string">&#x27;30170&#x27;</span>], [<span class="string">&#x27;유성구&#x27;</span>, <span class="string">&#x27;30200&#x27;</span>], [<span class="string">&#x27;중구&#x27;</span>, <span class="string">&#x27;30140&#x27;</span>]]</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>대전광역시</th>
+<th>법정동코드</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>대덕구</td>
+<td>30230</td>
+</tr>
+<tr>
+<td>동구</td>
+<td>30110</td>
+</tr>
+<tr>
+<td>서구</td>
+<td>30170</td>
+</tr>
+<tr>
+<td>유성구</td>
+<td>30200</td>
+</tr>
+<tr>
+<td>중구</td>
+<td>30140</td>
+</tr>
+</tbody></table>
+<h2 id="울산광역시"><a href="#울산광역시" class="headerlink" title="울산광역시"></a>울산광역시</h2><figure class="highlight python"><figcaption><span>울산광역시</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 울산광역시</span></span><br><span class="line">[[<span class="string">&#x27;남구&#x27;</span>, <span class="string">&#x27;31140&#x27;</span>], [<span class="string">&#x27;동구&#x27;</span>, <span class="string">&#x27;31170&#x27;</span>], [<span class="string">&#x27;북구&#x27;</span>, <span class="string">&#x27;31200&#x27;</span>], [<span class="string">&#x27;울주군&#x27;</span>, <span class="string">&#x27;31710&#x27;</span>], [<span class="string">&#x27;중구&#x27;</span>, <span class="string">&#x27;31110&#x27;</span>]]</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>울산광역시</th>
+<th>법정동코드</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>남구</td>
+<td>31140</td>
+</tr>
+<tr>
+<td>동구</td>
+<td>31170</td>
+</tr>
+<tr>
+<td>북구</td>
+<td>31200</td>
+</tr>
+<tr>
+<td>울주군</td>
+<td>31710</td>
+</tr>
+<tr>
+<td>중구</td>
+<td>31110</td>
+</tr>
+</tbody></table>
+<h2 id="세종특별자치시"><a href="#세종특별자치시" class="headerlink" title="세종특별자치시"></a>세종특별자치시</h2><figure class="highlight python"><figcaption><span>세종특별자치시</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 세종특별자치시</span></span><br><span class="line">[[<span class="string">&#x27;세종특별자치시&#x27;</span>, <span class="string">&#x27;36110&#x27;</span>]]</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>세종특별자치시</th>
+<th>법정동코드</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>세종특별자치시</td>
+<td>36110</td>
+</tr>
+</tbody></table>
+<h2 id="경기도"><a href="#경기도" class="headerlink" title="경기도"></a>경기도</h2><figure class="highlight python"><figcaption><span>경기도</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 경기도</span></span><br><span class="line">[[<span class="string">&#x27;가평군&#x27;</span>, <span class="string">&#x27;41820&#x27;</span>], [<span class="string">&#x27;고양시 덕양구&#x27;</span>, <span class="string">&#x27;41281&#x27;</span>], [<span class="string">&#x27;고양시 일산동구&#x27;</span>, <span class="string">&#x27;41285&#x27;</span>], [<span class="string">&#x27;고양시 일산서구&#x27;</span>, <span class="string">&#x27;41287&#x27;</span>], [<span class="string">&#x27;과천시&#x27;</span>, <span class="string">&#x27;41290&#x27;</span>], [<span class="string">&#x27;광명시&#x27;</span>, <span class="string">&#x27;41210&#x27;</span>], [<span class="string">&#x27;광주시&#x27;</span>, <span class="string">&#x27;41610&#x27;</span>], [<span class="string">&#x27;구리시&#x27;</span>, <span class="string">&#x27;41310&#x27;</span>], [<span class="string">&#x27;군포시&#x27;</span>, <span class="string">&#x27;41410&#x27;</span>], [<span class="string">&#x27;김포시&#x27;</span>, <span class="string">&#x27;41570&#x27;</span>], [<span class="string">&#x27;남양주시&#x27;</span>, <span class="string">&#x27;41360&#x27;</span>], [<span class="string">&#x27;동두천시&#x27;</span>, <span class="string">&#x27;41250&#x27;</span>], [<span class="string">&#x27;부천시&#x27;</span>, <span class="string">&#x27;41190&#x27;</span>], [<span class="string">&#x27;성남시 분당구&#x27;</span>, <span class="string">&#x27;41135&#x27;</span>], [<span class="string">&#x27;성남시 수정구&#x27;</span>, <span class="string">&#x27;41131&#x27;</span>], [<span class="string">&#x27;성남시 중원구&#x27;</span>, <span class="string">&#x27;41133&#x27;</span>], [<span class="string">&#x27;수원시 권선구&#x27;</span>, <span class="string">&#x27;41113&#x27;</span>], [<span class="string">&#x27;수원시 영통구&#x27;</span>, <span class="string">&#x27;41117&#x27;</span>], [<span class="string">&#x27;수원시 장안구&#x27;</span>, <span class="string">&#x27;41111&#x27;</span>], [<span class="string">&#x27;수원시 팔달구&#x27;</span>, <span class="string">&#x27;41115&#x27;</span>], [<span class="string">&#x27;시흥시&#x27;</span>, <span class="string">&#x27;41390&#x27;</span>], [<span class="string">&#x27;안산시 단원구&#x27;</span>, <span class="string">&#x27;41273&#x27;</span>], [<span class="string">&#x27;안산시 상록구&#x27;</span>, <span class="string">&#x27;41271&#x27;</span>], [<span class="string">&#x27;안성시&#x27;</span>, <span class="string">&#x27;41550&#x27;</span>], [<span class="string">&#x27;안양시 동안구&#x27;</span>, <span class="string">&#x27;41173&#x27;</span>], [<span class="string">&#x27;안양시 만안구&#x27;</span>, <span class="string">&#x27;41171&#x27;</span>], [<span class="string">&#x27;양주시&#x27;</span>, <span class="string">&#x27;41630&#x27;</span>], [<span class="string">&#x27;양평군&#x27;</span>, <span class="string">&#x27;41830&#x27;</span>], [<span class="string">&#x27;여주시&#x27;</span>, <span class="string">&#x27;41670&#x27;</span>], [<span class="string">&#x27;연천군&#x27;</span>, <span class="string">&#x27;41800&#x27;</span>], [<span class="string">&#x27;오산시&#x27;</span>, <span class="string">&#x27;41370&#x27;</span>], [<span class="string">&#x27;용인시 기흥구&#x27;</span>, <span class="string">&#x27;41463&#x27;</span>], [<span class="string">&#x27;용인시 수지구&#x27;</span>, <span class="string">&#x27;41465&#x27;</span>], [<span class="string">&#x27;용인시 처인구&#x27;</span>, <span class="string">&#x27;41461&#x27;</span>], [<span class="string">&#x27;의왕시&#x27;</span>, <span class="string">&#x27;41430&#x27;</span>], [<span class="string">&#x27;의정부시&#x27;</span>, <span class="string">&#x27;41150&#x27;</span>], [<span class="string">&#x27;이천시&#x27;</span>, <span class="string">&#x27;41500&#x27;</span>], [<span class="string">&#x27;파주시&#x27;</span>, <span class="string">&#x27;41480&#x27;</span>], [<span class="string">&#x27;평택시&#x27;</span>, <span class="string">&#x27;41220&#x27;</span>], [<span class="string">&#x27;포천시&#x27;</span>, <span class="string">&#x27;41650&#x27;</span>], [<span class="string">&#x27;하남시&#x27;</span>, <span class="string">&#x27;41450&#x27;</span>], [<span class="string">&#x27;화성시&#x27;</span>, <span class="string">&#x27;41590&#x27;</span>]]</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>경기도</th>
+<th>법정동코드</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>가평군</td>
+<td>41820</td>
+</tr>
+<tr>
+<td>고양시 덕양구</td>
+<td>41281</td>
+</tr>
+<tr>
+<td>고양시 일산동구</td>
+<td>41285</td>
+</tr>
+<tr>
+<td>고양시 일산서구</td>
+<td>41287</td>
+</tr>
+<tr>
+<td>과천시</td>
+<td>41290</td>
+</tr>
+<tr>
+<td>광명시</td>
+<td>41210</td>
+</tr>
+<tr>
+<td>광주시</td>
+<td>41610</td>
+</tr>
+<tr>
+<td>구리시</td>
+<td>41310</td>
+</tr>
+<tr>
+<td>군포시</td>
+<td>41410</td>
+</tr>
+<tr>
+<td>김포시</td>
+<td>41570</td>
+</tr>
+<tr>
+<td>남양주시</td>
+<td>41360</td>
+</tr>
+<tr>
+<td>동두천시</td>
+<td>41250</td>
+</tr>
+<tr>
+<td>부천시</td>
+<td>41190</td>
+</tr>
+<tr>
+<td>성남시 분당구</td>
+<td>41135</td>
+</tr>
+<tr>
+<td>성남시 수정구</td>
+<td>41131</td>
+</tr>
+<tr>
+<td>성남시 중원구</td>
+<td>41133</td>
+</tr>
+<tr>
+<td>수원시 권선구</td>
+<td>41113</td>
+</tr>
+<tr>
+<td>수원시 영통구</td>
+<td>41117</td>
+</tr>
+<tr>
+<td>수원시 장안구</td>
+<td>41111</td>
+</tr>
+<tr>
+<td>수원시 팔달구</td>
+<td>41115</td>
+</tr>
+<tr>
+<td>시흥시</td>
+<td>41390</td>
+</tr>
+<tr>
+<td>안산시 단원구</td>
+<td>41273</td>
+</tr>
+<tr>
+<td>안산시 상록구</td>
+<td>41271</td>
+</tr>
+<tr>
+<td>안성시</td>
+<td>41550</td>
+</tr>
+<tr>
+<td>안양시 동안구</td>
+<td>41173</td>
+</tr>
+<tr>
+<td>안양시 만안구</td>
+<td>41171</td>
+</tr>
+<tr>
+<td>양주시</td>
+<td>41630</td>
+</tr>
+<tr>
+<td>양평군</td>
+<td>41830</td>
+</tr>
+<tr>
+<td>여주시</td>
+<td>41670</td>
+</tr>
+<tr>
+<td>연천군</td>
+<td>41800</td>
+</tr>
+<tr>
+<td>오산시</td>
+<td>41370</td>
+</tr>
+<tr>
+<td>용인시 기흥구</td>
+<td>41463</td>
+</tr>
+<tr>
+<td>용인시 수지구</td>
+<td>41465</td>
+</tr>
+<tr>
+<td>용인시 처인구</td>
+<td>41461</td>
+</tr>
+<tr>
+<td>의왕시</td>
+<td>41430</td>
+</tr>
+<tr>
+<td>의정부시</td>
+<td>41150</td>
+</tr>
+<tr>
+<td>이천시</td>
+<td>41500</td>
+</tr>
+<tr>
+<td>파주시</td>
+<td>41480</td>
+</tr>
+<tr>
+<td>평택시</td>
+<td>41220</td>
+</tr>
+<tr>
+<td>포천시</td>
+<td>41650</td>
+</tr>
+<tr>
+<td>하남시</td>
+<td>41450</td>
+</tr>
+<tr>
+<td>화성시</td>
+<td>41590</td>
+</tr>
+</tbody></table>
+<h2 id="강원도"><a href="#강원도" class="headerlink" title="강원도"></a>강원도</h2><figure class="highlight python"><figcaption><span>강원도</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 강원도</span></span><br><span class="line">[[<span class="string">&#x27;강릉시&#x27;</span>, <span class="string">&#x27;42150&#x27;</span>], [<span class="string">&#x27;고성군&#x27;</span>, <span class="string">&#x27;42820&#x27;</span>], [<span class="string">&#x27;동해시&#x27;</span>, <span class="string">&#x27;42170&#x27;</span>], [<span class="string">&#x27;삼척시&#x27;</span>, <span class="string">&#x27;42230&#x27;</span>], [<span class="string">&#x27;속초시&#x27;</span>, <span class="string">&#x27;42210&#x27;</span>], [<span class="string">&#x27;양구군&#x27;</span>, <span class="string">&#x27;42800&#x27;</span>], [<span class="string">&#x27;양양군&#x27;</span>, <span class="string">&#x27;42830&#x27;</span>], [<span class="string">&#x27;영월군&#x27;</span>, <span class="string">&#x27;42750&#x27;</span>], [<span class="string">&#x27;원주시&#x27;</span>, <span class="string">&#x27;42130&#x27;</span>], [<span class="string">&#x27;인제군&#x27;</span>, <span class="string">&#x27;42810&#x27;</span>], [<span class="string">&#x27;정선군&#x27;</span>, <span class="string">&#x27;42770&#x27;</span>], [<span class="string">&#x27;철원군&#x27;</span>, <span class="string">&#x27;42780&#x27;</span>], [<span class="string">&#x27;춘천시&#x27;</span>, <span class="string">&#x27;42110&#x27;</span>], [<span class="string">&#x27;태백시&#x27;</span>, <span class="string">&#x27;42190&#x27;</span>], [<span class="string">&#x27;평창군&#x27;</span>, <span class="string">&#x27;42760&#x27;</span>], [<span class="string">&#x27;홍천군&#x27;</span>, <span class="string">&#x27;42720&#x27;</span>], [<span class="string">&#x27;화천군&#x27;</span>, <span class="string">&#x27;42790&#x27;</span>], [<span class="string">&#x27;횡성군&#x27;</span>, <span class="string">&#x27;42730&#x27;</span>]]</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>강원도</th>
+<th>법정동코드</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>강릉시</td>
+<td>42150</td>
+</tr>
+<tr>
+<td>고성군</td>
+<td>42820</td>
+</tr>
+<tr>
+<td>동해시</td>
+<td>42170</td>
+</tr>
+<tr>
+<td>삼척시</td>
+<td>42230</td>
+</tr>
+<tr>
+<td>속초시</td>
+<td>42210</td>
+</tr>
+<tr>
+<td>양구군</td>
+<td>42800</td>
+</tr>
+<tr>
+<td>양양군</td>
+<td>42830</td>
+</tr>
+<tr>
+<td>영월군</td>
+<td>42750</td>
+</tr>
+<tr>
+<td>원주시</td>
+<td>42130</td>
+</tr>
+<tr>
+<td>인제군</td>
+<td>42810</td>
+</tr>
+<tr>
+<td>정선군</td>
+<td>42770</td>
+</tr>
+<tr>
+<td>철원군</td>
+<td>42780</td>
+</tr>
+<tr>
+<td>춘천시</td>
+<td>42110</td>
+</tr>
+<tr>
+<td>태백시</td>
+<td>42190</td>
+</tr>
+<tr>
+<td>평창군</td>
+<td>42760</td>
+</tr>
+<tr>
+<td>홍천군</td>
+<td>42720</td>
+</tr>
+<tr>
+<td>화천군</td>
+<td>42790</td>
+</tr>
+<tr>
+<td>횡성군</td>
+<td>42730</td>
+</tr>
+</tbody></table>
+<h2 id="충청북도"><a href="#충청북도" class="headerlink" title="충청북도"></a>충청북도</h2><figure class="highlight python"><figcaption><span>충청북도</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 충청북도</span></span><br><span class="line">[[<span class="string">&#x27;괴산군&#x27;</span>, <span class="string">&#x27;43760&#x27;</span>], [<span class="string">&#x27;단양군&#x27;</span>, <span class="string">&#x27;43800&#x27;</span>], [<span class="string">&#x27;보은군&#x27;</span>, <span class="string">&#x27;43720&#x27;</span>], [<span class="string">&#x27;영동군&#x27;</span>, <span class="string">&#x27;43740&#x27;</span>], [<span class="string">&#x27;옥천군&#x27;</span>, <span class="string">&#x27;43730&#x27;</span>], [<span class="string">&#x27;음성군&#x27;</span>, <span class="string">&#x27;43770&#x27;</span>], [<span class="string">&#x27;제천시&#x27;</span>, <span class="string">&#x27;43150&#x27;</span>], [<span class="string">&#x27;증평군&#x27;</span>, <span class="string">&#x27;43745&#x27;</span>], [<span class="string">&#x27;진천군&#x27;</span>, <span class="string">&#x27;43750&#x27;</span>], [<span class="string">&#x27;청주시 상당구&#x27;</span>, <span class="string">&#x27;43111&#x27;</span>], [<span class="string">&#x27;청주시 서원구&#x27;</span>, <span class="string">&#x27;43112&#x27;</span>], [<span class="string">&#x27;청주시 청원구&#x27;</span>, <span class="string">&#x27;43114&#x27;</span>], [<span class="string">&#x27;청주시 흥덕구&#x27;</span>, <span class="string">&#x27;43113&#x27;</span>], [<span class="string">&#x27;충주시&#x27;</span>, <span class="string">&#x27;43130&#x27;</span>]]</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>충청북도</th>
+<th>법정동코드</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>괴산군</td>
+<td>43760</td>
+</tr>
+<tr>
+<td>단양군</td>
+<td>43800</td>
+</tr>
+<tr>
+<td>보은군</td>
+<td>43720</td>
+</tr>
+<tr>
+<td>영동군</td>
+<td>43740</td>
+</tr>
+<tr>
+<td>옥천군</td>
+<td>43730</td>
+</tr>
+<tr>
+<td>음성군</td>
+<td>43770</td>
+</tr>
+<tr>
+<td>제천시</td>
+<td>43150</td>
+</tr>
+<tr>
+<td>증평군</td>
+<td>43745</td>
+</tr>
+<tr>
+<td>진천군</td>
+<td>43750</td>
+</tr>
+<tr>
+<td>청주시 상당구</td>
+<td>43111</td>
+</tr>
+<tr>
+<td>청주시 서원구</td>
+<td>43112</td>
+</tr>
+<tr>
+<td>청주시 청원구</td>
+<td>43114</td>
+</tr>
+<tr>
+<td>청주시 흥덕구</td>
+<td>43113</td>
+</tr>
+<tr>
+<td>충주시</td>
+<td>43130</td>
+</tr>
+</tbody></table>
+<h2 id="충청남도"><a href="#충청남도" class="headerlink" title="충청남도"></a>충청남도</h2><figure class="highlight python"><figcaption><span>충청남도</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 충청남도</span></span><br><span class="line">[[<span class="string">&#x27;계룡시&#x27;</span>, <span class="string">&#x27;44250&#x27;</span>], [<span class="string">&#x27;공주시&#x27;</span>, <span class="string">&#x27;44150&#x27;</span>], [<span class="string">&#x27;금산군&#x27;</span>, <span class="string">&#x27;44710&#x27;</span>], [<span class="string">&#x27;논산시&#x27;</span>, <span class="string">&#x27;44230&#x27;</span>], [<span class="string">&#x27;당진시&#x27;</span>, <span class="string">&#x27;44270&#x27;</span>], [<span class="string">&#x27;보령시&#x27;</span>, <span class="string">&#x27;44180&#x27;</span>], [<span class="string">&#x27;부여군&#x27;</span>, <span class="string">&#x27;44760&#x27;</span>], [<span class="string">&#x27;서산시&#x27;</span>, <span class="string">&#x27;44210&#x27;</span>], [<span class="string">&#x27;서천군&#x27;</span>, <span class="string">&#x27;44770&#x27;</span>], [<span class="string">&#x27;아산시&#x27;</span>, <span class="string">&#x27;44200&#x27;</span>], [<span class="string">&#x27;예산군&#x27;</span>, <span class="string">&#x27;44810&#x27;</span>], [<span class="string">&#x27;천안시 동남구&#x27;</span>, <span class="string">&#x27;44131&#x27;</span>], [<span class="string">&#x27;천안시 서북구&#x27;</span>, <span class="string">&#x27;44133&#x27;</span>], [<span class="string">&#x27;청양군&#x27;</span>, <span class="string">&#x27;44790&#x27;</span>], [<span class="string">&#x27;태안군&#x27;</span>, <span class="string">&#x27;44825&#x27;</span>], [<span class="string">&#x27;홍성군&#x27;</span>, <span class="string">&#x27;44800&#x27;</span>]]</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>충청남도</th>
+<th>법정동코드</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>계룡시</td>
+<td>44250</td>
+</tr>
+<tr>
+<td>공주시</td>
+<td>44150</td>
+</tr>
+<tr>
+<td>금산군</td>
+<td>44710</td>
+</tr>
+<tr>
+<td>논산시</td>
+<td>44230</td>
+</tr>
+<tr>
+<td>당진시</td>
+<td>44270</td>
+</tr>
+<tr>
+<td>보령시</td>
+<td>44180</td>
+</tr>
+<tr>
+<td>부여군</td>
+<td>44760</td>
+</tr>
+<tr>
+<td>서산시</td>
+<td>44210</td>
+</tr>
+<tr>
+<td>서천군</td>
+<td>44770</td>
+</tr>
+<tr>
+<td>아산시</td>
+<td>44200</td>
+</tr>
+<tr>
+<td>예산군</td>
+<td>44810</td>
+</tr>
+<tr>
+<td>천안시 동남구</td>
+<td>44131</td>
+</tr>
+<tr>
+<td>천안시 서북구</td>
+<td>44133</td>
+</tr>
+<tr>
+<td>청양군</td>
+<td>44790</td>
+</tr>
+<tr>
+<td>태안군</td>
+<td>44825</td>
+</tr>
+<tr>
+<td>홍성군</td>
+<td>44800</td>
+</tr>
+</tbody></table>
+<h2 id="전라북도"><a href="#전라북도" class="headerlink" title="전라북도"></a>전라북도</h2><figure class="highlight python"><figcaption><span>전라북도</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 전라북도</span></span><br><span class="line">[[<span class="string">&#x27;고창군&#x27;</span>, <span class="string">&#x27;45790&#x27;</span>], [<span class="string">&#x27;군산시&#x27;</span>, <span class="string">&#x27;45130&#x27;</span>], [<span class="string">&#x27;김제시&#x27;</span>, <span class="string">&#x27;45210&#x27;</span>], [<span class="string">&#x27;남원시&#x27;</span>, <span class="string">&#x27;45190&#x27;</span>], [<span class="string">&#x27;무주군&#x27;</span>, <span class="string">&#x27;45730&#x27;</span>], [<span class="string">&#x27;부안군&#x27;</span>, <span class="string">&#x27;45800&#x27;</span>], [<span class="string">&#x27;순창군&#x27;</span>, <span class="string">&#x27;45770&#x27;</span>], [<span class="string">&#x27;완주군&#x27;</span>, <span class="string">&#x27;45710&#x27;</span>], [<span class="string">&#x27;익산시&#x27;</span>, <span class="string">&#x27;45140&#x27;</span>], [<span class="string">&#x27;임실군&#x27;</span>, <span class="string">&#x27;45750&#x27;</span>], [<span class="string">&#x27;장수군&#x27;</span>, <span class="string">&#x27;45740&#x27;</span>], [<span class="string">&#x27;전주시 덕진구&#x27;</span>, <span class="string">&#x27;45113&#x27;</span>], [<span class="string">&#x27;전주시 완산구&#x27;</span>, <span class="string">&#x27;45111&#x27;</span>], [<span class="string">&#x27;정읍시&#x27;</span>, <span class="string">&#x27;45180&#x27;</span>], [<span class="string">&#x27;진안군&#x27;</span>, <span class="string">&#x27;45720&#x27;</span>]]</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>전라북도</th>
+<th>법정동코드</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>고창군</td>
+<td>45790</td>
+</tr>
+<tr>
+<td>군산시</td>
+<td>45130</td>
+</tr>
+<tr>
+<td>김제시</td>
+<td>45210</td>
+</tr>
+<tr>
+<td>남원시</td>
+<td>45190</td>
+</tr>
+<tr>
+<td>무주군</td>
+<td>45730</td>
+</tr>
+<tr>
+<td>부안군</td>
+<td>45800</td>
+</tr>
+<tr>
+<td>순창군</td>
+<td>45770</td>
+</tr>
+<tr>
+<td>완주군</td>
+<td>45710</td>
+</tr>
+<tr>
+<td>익산시</td>
+<td>45140</td>
+</tr>
+<tr>
+<td>임실군</td>
+<td>45750</td>
+</tr>
+<tr>
+<td>장수군</td>
+<td>45740</td>
+</tr>
+<tr>
+<td>전주시 덕진구</td>
+<td>45113</td>
+</tr>
+<tr>
+<td>전주시 완산구</td>
+<td>45111</td>
+</tr>
+<tr>
+<td>정읍시</td>
+<td>45180</td>
+</tr>
+<tr>
+<td>진안군</td>
+<td>45720</td>
+</tr>
+</tbody></table>
+<h2 id="전라남도"><a href="#전라남도" class="headerlink" title="전라남도"></a>전라남도</h2><figure class="highlight python"><figcaption><span>전라남도</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 전라남도</span></span><br><span class="line">[[<span class="string">&#x27;강진군&#x27;</span>, <span class="string">&#x27;46810&#x27;</span>], [<span class="string">&#x27;고흥군&#x27;</span>, <span class="string">&#x27;46770&#x27;</span>], [<span class="string">&#x27;곡성군&#x27;</span>, <span class="string">&#x27;46720&#x27;</span>], [<span class="string">&#x27;광양시&#x27;</span>, <span class="string">&#x27;46230&#x27;</span>], [<span class="string">&#x27;구례군&#x27;</span>, <span class="string">&#x27;46730&#x27;</span>], [<span class="string">&#x27;나주시&#x27;</span>, <span class="string">&#x27;46170&#x27;</span>], [<span class="string">&#x27;담양군&#x27;</span>, <span class="string">&#x27;46710&#x27;</span>], [<span class="string">&#x27;목포시&#x27;</span>, <span class="string">&#x27;46110&#x27;</span>], [<span class="string">&#x27;무안군&#x27;</span>, <span class="string">&#x27;46840&#x27;</span>], [<span class="string">&#x27;보성군&#x27;</span>, <span class="string">&#x27;46780&#x27;</span>], [<span class="string">&#x27;순천시&#x27;</span>, <span class="string">&#x27;46150&#x27;</span>], [<span class="string">&#x27;신안군&#x27;</span>, <span class="string">&#x27;46910&#x27;</span>], [<span class="string">&#x27;여수시&#x27;</span>, <span class="string">&#x27;46130&#x27;</span>], [<span class="string">&#x27;영광군&#x27;</span>, <span class="string">&#x27;46870&#x27;</span>], [<span class="string">&#x27;영암군&#x27;</span>, <span class="string">&#x27;46830&#x27;</span>], [<span class="string">&#x27;완도군&#x27;</span>, <span class="string">&#x27;46890&#x27;</span>], [<span class="string">&#x27;장성군&#x27;</span>, <span class="string">&#x27;46880&#x27;</span>], [<span class="string">&#x27;장흥군&#x27;</span>, <span class="string">&#x27;46800&#x27;</span>], [<span class="string">&#x27;진도군&#x27;</span>, <span class="string">&#x27;46900&#x27;</span>], [<span class="string">&#x27;함평군&#x27;</span>, <span class="string">&#x27;46860&#x27;</span>], [<span class="string">&#x27;해남군&#x27;</span>, <span class="string">&#x27;46820&#x27;</span>], [<span class="string">&#x27;화순군&#x27;</span>, <span class="string">&#x27;46790&#x27;</span>]]</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>전라남도</th>
+<th>법정동코드</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>강진군</td>
+<td>46810</td>
+</tr>
+<tr>
+<td>고흥군</td>
+<td>46770</td>
+</tr>
+<tr>
+<td>곡성군</td>
+<td>46720</td>
+</tr>
+<tr>
+<td>광양시</td>
+<td>46230</td>
+</tr>
+<tr>
+<td>구례군</td>
+<td>46730</td>
+</tr>
+<tr>
+<td>나주시</td>
+<td>46170</td>
+</tr>
+<tr>
+<td>담양군</td>
+<td>46710</td>
+</tr>
+<tr>
+<td>목포시</td>
+<td>46110</td>
+</tr>
+<tr>
+<td>무안군</td>
+<td>46840</td>
+</tr>
+<tr>
+<td>보성군</td>
+<td>46780</td>
+</tr>
+<tr>
+<td>순천시</td>
+<td>46150</td>
+</tr>
+<tr>
+<td>신안군</td>
+<td>46910</td>
+</tr>
+<tr>
+<td>여수시</td>
+<td>46130</td>
+</tr>
+<tr>
+<td>영광군</td>
+<td>46870</td>
+</tr>
+<tr>
+<td>영암군</td>
+<td>46830</td>
+</tr>
+<tr>
+<td>완도군</td>
+<td>46890</td>
+</tr>
+<tr>
+<td>장성군</td>
+<td>46880</td>
+</tr>
+<tr>
+<td>장흥군</td>
+<td>46800</td>
+</tr>
+<tr>
+<td>진도군</td>
+<td>46900</td>
+</tr>
+<tr>
+<td>함평군</td>
+<td>46860</td>
+</tr>
+<tr>
+<td>해남군</td>
+<td>46820</td>
+</tr>
+<tr>
+<td>화순군</td>
+<td>46790</td>
+</tr>
+</tbody></table>
+<h2 id="경상북도"><a href="#경상북도" class="headerlink" title="경상북도"></a>경상북도</h2><figure class="highlight python"><figcaption><span>경상북도</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 경상북도</span></span><br><span class="line">[[<span class="string">&#x27;경산시&#x27;</span>, <span class="string">&#x27;47290&#x27;</span>], [<span class="string">&#x27;경주시&#x27;</span>, <span class="string">&#x27;47130&#x27;</span>], [<span class="string">&#x27;고령군&#x27;</span>, <span class="string">&#x27;47830&#x27;</span>], [<span class="string">&#x27;구미시&#x27;</span>, <span class="string">&#x27;47190&#x27;</span>], [<span class="string">&#x27;군위군&#x27;</span>, <span class="string">&#x27;47720&#x27;</span>], [<span class="string">&#x27;김천시&#x27;</span>, <span class="string">&#x27;47150&#x27;</span>], [<span class="string">&#x27;문경시&#x27;</span>, <span class="string">&#x27;47280&#x27;</span>], [<span class="string">&#x27;봉화군&#x27;</span>, <span class="string">&#x27;47920&#x27;</span>], [<span class="string">&#x27;상주시&#x27;</span>, <span class="string">&#x27;47250&#x27;</span>], [<span class="string">&#x27;성주군&#x27;</span>, <span class="string">&#x27;47840&#x27;</span>], [<span class="string">&#x27;안동시&#x27;</span>, <span class="string">&#x27;47170&#x27;</span>], [<span class="string">&#x27;영덕군&#x27;</span>, <span class="string">&#x27;47770&#x27;</span>], [<span class="string">&#x27;영양군&#x27;</span>, <span class="string">&#x27;47760&#x27;</span>], [<span class="string">&#x27;영주시&#x27;</span>, <span class="string">&#x27;47210&#x27;</span>], [<span class="string">&#x27;영천시&#x27;</span>, <span class="string">&#x27;47230&#x27;</span>], [<span class="string">&#x27;예천군&#x27;</span>, <span class="string">&#x27;47900&#x27;</span>], [<span class="string">&#x27;울릉군&#x27;</span>, <span class="string">&#x27;47940&#x27;</span>], [<span class="string">&#x27;울진군&#x27;</span>, <span class="string">&#x27;47930&#x27;</span>], [<span class="string">&#x27;의성군&#x27;</span>, <span class="string">&#x27;47730&#x27;</span>], [<span class="string">&#x27;청도군&#x27;</span>, <span class="string">&#x27;47820&#x27;</span>], [<span class="string">&#x27;청송군&#x27;</span>, <span class="string">&#x27;47750&#x27;</span>], [<span class="string">&#x27;칠곡군&#x27;</span>, <span class="string">&#x27;47850&#x27;</span>], [<span class="string">&#x27;포항시 남구&#x27;</span>, <span class="string">&#x27;47111&#x27;</span>], [<span class="string">&#x27;포항시 북구&#x27;</span>, <span class="string">&#x27;47113&#x27;</span>]]</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>경상북도</th>
+<th>법정동코드</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>경산시</td>
+<td>47290</td>
+</tr>
+<tr>
+<td>경주시</td>
+<td>47130</td>
+</tr>
+<tr>
+<td>고령군</td>
+<td>47830</td>
+</tr>
+<tr>
+<td>구미시</td>
+<td>47190</td>
+</tr>
+<tr>
+<td>군위군</td>
+<td>47720</td>
+</tr>
+<tr>
+<td>김천시</td>
+<td>47150</td>
+</tr>
+<tr>
+<td>문경시</td>
+<td>47280</td>
+</tr>
+<tr>
+<td>봉화군</td>
+<td>47920</td>
+</tr>
+<tr>
+<td>상주시</td>
+<td>47250</td>
+</tr>
+<tr>
+<td>성주군</td>
+<td>47840</td>
+</tr>
+<tr>
+<td>안동시</td>
+<td>47170</td>
+</tr>
+<tr>
+<td>영덕군</td>
+<td>47770</td>
+</tr>
+<tr>
+<td>영양군</td>
+<td>47760</td>
+</tr>
+<tr>
+<td>영주시</td>
+<td>47210</td>
+</tr>
+<tr>
+<td>영천시</td>
+<td>47230</td>
+</tr>
+<tr>
+<td>예천군</td>
+<td>47900</td>
+</tr>
+<tr>
+<td>울릉군</td>
+<td>47940</td>
+</tr>
+<tr>
+<td>울진군</td>
+<td>47930</td>
+</tr>
+<tr>
+<td>의성군</td>
+<td>47730</td>
+</tr>
+<tr>
+<td>청도군</td>
+<td>47820</td>
+</tr>
+<tr>
+<td>청송군</td>
+<td>47750</td>
+</tr>
+<tr>
+<td>칠곡군</td>
+<td>47850</td>
+</tr>
+<tr>
+<td>포항시 남구</td>
+<td>47111</td>
+</tr>
+<tr>
+<td>포항시 북구</td>
+<td>47113</td>
+</tr>
+</tbody></table>
+<h2 id="경상남도"><a href="#경상남도" class="headerlink" title="경상남도"></a>경상남도</h2><figure class="highlight python"><figcaption><span>경상남도</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 경상남도</span></span><br><span class="line">[[<span class="string">&#x27;거제시&#x27;</span>, <span class="string">&#x27;48310&#x27;</span>], [<span class="string">&#x27;거창군&#x27;</span>, <span class="string">&#x27;48880&#x27;</span>], [<span class="string">&#x27;고성군&#x27;</span>, <span class="string">&#x27;48820&#x27;</span>], [<span class="string">&#x27;김해시&#x27;</span>, <span class="string">&#x27;48250&#x27;</span>], [<span class="string">&#x27;남해군&#x27;</span>, <span class="string">&#x27;48840&#x27;</span>], [<span class="string">&#x27;밀양시&#x27;</span>, <span class="string">&#x27;48270&#x27;</span>], [<span class="string">&#x27;사천시&#x27;</span>, <span class="string">&#x27;48240&#x27;</span>], [<span class="string">&#x27;산청군&#x27;</span>, <span class="string">&#x27;48860&#x27;</span>], [<span class="string">&#x27;양산시&#x27;</span>, <span class="string">&#x27;48330&#x27;</span>], [<span class="string">&#x27;의령군&#x27;</span>, <span class="string">&#x27;48720&#x27;</span>], [<span class="string">&#x27;진주시&#x27;</span>, <span class="string">&#x27;48170&#x27;</span>], [<span class="string">&#x27;창녕군&#x27;</span>, <span class="string">&#x27;48740&#x27;</span>], [<span class="string">&#x27;창원시 마산합포구&#x27;</span>, <span class="string">&#x27;48125&#x27;</span>], [<span class="string">&#x27;창원시 마산회원구&#x27;</span>, <span class="string">&#x27;48127&#x27;</span>], [<span class="string">&#x27;창원시 성산구&#x27;</span>, <span class="string">&#x27;48123&#x27;</span>], [<span class="string">&#x27;창원시 의창구&#x27;</span>, <span class="string">&#x27;48121&#x27;</span>], [<span class="string">&#x27;창원시 진해구&#x27;</span>, <span class="string">&#x27;48129&#x27;</span>], [<span class="string">&#x27;통영시&#x27;</span>, <span class="string">&#x27;48220&#x27;</span>], [<span class="string">&#x27;하동군&#x27;</span>, <span class="string">&#x27;48850&#x27;</span>], [<span class="string">&#x27;함안군&#x27;</span>, <span class="string">&#x27;48730&#x27;</span>], [<span class="string">&#x27;함양군&#x27;</span>, <span class="string">&#x27;48870&#x27;</span>], [<span class="string">&#x27;합천군&#x27;</span>, <span class="string">&#x27;48890&#x27;</span>]]</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>경상남도</th>
+<th>법정동코드</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>거제시</td>
+<td>48310</td>
+</tr>
+<tr>
+<td>거창군</td>
+<td>48880</td>
+</tr>
+<tr>
+<td>고성군</td>
+<td>48820</td>
+</tr>
+<tr>
+<td>김해시</td>
+<td>48250</td>
+</tr>
+<tr>
+<td>남해군</td>
+<td>48840</td>
+</tr>
+<tr>
+<td>밀양시</td>
+<td>48270</td>
+</tr>
+<tr>
+<td>사천시</td>
+<td>48240</td>
+</tr>
+<tr>
+<td>산청군</td>
+<td>48860</td>
+</tr>
+<tr>
+<td>양산시</td>
+<td>48330</td>
+</tr>
+<tr>
+<td>의령군</td>
+<td>48720</td>
+</tr>
+<tr>
+<td>진주시</td>
+<td>48170</td>
+</tr>
+<tr>
+<td>창녕군</td>
+<td>48740</td>
+</tr>
+<tr>
+<td>창원시 마산합포구</td>
+<td>48125</td>
+</tr>
+<tr>
+<td>창원시 마산회원구</td>
+<td>48127</td>
+</tr>
+<tr>
+<td>창원시 성산구</td>
+<td>48123</td>
+</tr>
+<tr>
+<td>창원시 의창구</td>
+<td>48121</td>
+</tr>
+<tr>
+<td>창원시 진해구</td>
+<td>48129</td>
+</tr>
+<tr>
+<td>통영시</td>
+<td>48220</td>
+</tr>
+<tr>
+<td>하동군</td>
+<td>48850</td>
+</tr>
+<tr>
+<td>함안군</td>
+<td>48730</td>
+</tr>
+<tr>
+<td>함양군</td>
+<td>48870</td>
+</tr>
+<tr>
+<td>합천군</td>
+<td>48890</td>
+</tr>
+</tbody></table>
+<h2 id="제주특별자치도"><a href="#제주특별자치도" class="headerlink" title="제주특별자치도"></a>제주특별자치도</h2><figure class="highlight python"><figcaption><span>제주특별자치도</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 제주특별자치도</span></span><br><span class="line">[[<span class="string">&#x27;서귀포시&#x27;</span>, <span class="string">&#x27;50130&#x27;</span>], [<span class="string">&#x27;제주시&#x27;</span>, <span class="string">&#x27;50110&#x27;</span>]]</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>제주특별자치도</th>
+<th>법정동코드</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>서귀포시</td>
+<td>50130</td>
+</tr>
+<tr>
+<td>제주시</td>
+<td>50110</td>
+</tr>
+</tbody></table>
+</div><div class="article-licensing box"><div class="licensing-title"><p>법정동 코드(시군구)</p><p><a href="https://baem1n.dev/2021/01/28/DATA-APT-02-1/">https://baem1n.dev/2021/01/28/DATA-APT-02-1/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>Author</h6><p>BAEM1N</p></div></div><div class="level-item is-narrow"><div><h6>Posted on</h6><p>2021-01-28</p></div></div><div class="level-item is-narrow"><div><h6>Updated on</h6><p>2021-01-30</p></div></div><div class="level-item is-narrow"><div><h6>Licensed under</h6><p><a class="icon" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a><a class="icon" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a><a class="icon" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="fab fa-creative-commons-nc"></i></a><a class="icon" rel="noopener" target="_blank" title="NoDerivatives" href="https://creativecommons.org/licenses/by-nd/4.0/"><i class="fab fa-creative-commons-nd"></i></a></p></div></div></div></div></div><div class="article-tags is-size-7 mb-4"><span class="mr-2">#</span><a class="link-muted mr-2" rel="tag" href="/tags/Python/">Python</a><a class="link-muted mr-2" rel="tag" href="/tags/Pandas/">Pandas</a><a class="link-muted mr-2" rel="tag" href="/tags/%EB%B2%95%EC%A0%95%EB%8F%99-%EC%BD%94%EB%93%9C/">법정동 코드</a></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2021/01/29/DATA-APT-03/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">아파트 실거래가 분석 - 데이터 수집</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2021/01/28/DATA-APT-02/"><span class="level-item">아파트 실거래가 분석 - 법정동 코드</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card"><div class="card-content"><h3 class="title is-5">댓글</h3><div id="disqus_thread"><noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></div><script>var disqus_config = function () {
+            this.page.url = 'https://baem1n.dev/2021/01/28/DATA-APT-02-1/';
+            this.page.identifier = '2021/01/28/DATA-APT-02-1/';
+        };
+        (function() {
+            var d = document, s = d.createElement('script');  
+            s.src = '//' + 'baem1n' + '.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();</script></div></div></div><!--!--><div class="column column-right is-4-tablet is-4-desktop is-3-widescreen  order-3 is-sticky"><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">카탈로그</h3><ul class="menu-list"><li><a class="level is-mobile" href="#서울특별시"><span class="level-left"><span class="level-item">1</span><span class="level-item">서울특별시</span></span></a></li><li><a class="level is-mobile" href="#부산광역시"><span class="level-left"><span class="level-item">2</span><span class="level-item">부산광역시</span></span></a></li><li><a class="level is-mobile" href="#대구광역시"><span class="level-left"><span class="level-item">3</span><span class="level-item">대구광역시</span></span></a></li><li><a class="level is-mobile" href="#인천광역시"><span class="level-left"><span class="level-item">4</span><span class="level-item">인천광역시</span></span></a></li><li><a class="level is-mobile" href="#광주광역시"><span class="level-left"><span class="level-item">5</span><span class="level-item">광주광역시</span></span></a></li><li><a class="level is-mobile" href="#대전광역시"><span class="level-left"><span class="level-item">6</span><span class="level-item">대전광역시</span></span></a></li><li><a class="level is-mobile" href="#울산광역시"><span class="level-left"><span class="level-item">7</span><span class="level-item">울산광역시</span></span></a></li><li><a class="level is-mobile" href="#세종특별자치시"><span class="level-left"><span class="level-item">8</span><span class="level-item">세종특별자치시</span></span></a></li><li><a class="level is-mobile" href="#경기도"><span class="level-left"><span class="level-item">9</span><span class="level-item">경기도</span></span></a></li><li><a class="level is-mobile" href="#강원도"><span class="level-left"><span class="level-item">10</span><span class="level-item">강원도</span></span></a></li><li><a class="level is-mobile" href="#충청북도"><span class="level-left"><span class="level-item">11</span><span class="level-item">충청북도</span></span></a></li><li><a class="level is-mobile" href="#충청남도"><span class="level-left"><span class="level-item">12</span><span class="level-item">충청남도</span></span></a></li><li><a class="level is-mobile" href="#전라북도"><span class="level-left"><span class="level-item">13</span><span class="level-item">전라북도</span></span></a></li><li><a class="level is-mobile" href="#전라남도"><span class="level-left"><span class="level-item">14</span><span class="level-item">전라남도</span></span></a></li><li><a class="level is-mobile" href="#경상북도"><span class="level-left"><span class="level-item">15</span><span class="level-item">경상북도</span></span></a></li><li><a class="level is-mobile" href="#경상남도"><span class="level-left"><span class="level-item">16</span><span class="level-item">경상남도</span></span></a></li><li><a class="level is-mobile" href="#제주특별자치도"><span class="level-left"><span class="level-item">17</span><span class="level-item">제주특별자치도</span></span></a></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div><div class="card widget" data-type="categories"><div class="card-content"><div class="menu"><h3 class="menu-label">카테고리</h3><ul class="menu-list"><li><a class="level is-mobile" href="/categories/Deep-Learning/"><span class="level-start"><span class="level-item">Deep Learning</span></span><span class="level-end"><span class="level-item tag">1</span></span></a><ul><li><a class="level is-mobile" href="/categories/Deep-Learning/TensorFlow/"><span class="level-start"><span class="level-item">TensorFlow</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></li><li><a class="level is-mobile" href="/categories/Machine-Learning/"><span class="level-start"><span class="level-item">Machine Learning</span></span><span class="level-end"><span class="level-item tag">4</span></span></a><ul><li><a class="level is-mobile" href="/categories/Machine-Learning/Scikit-Learn/"><span class="level-start"><span class="level-item">Scikit-Learn</span></span><span class="level-end"><span class="level-item tag">4</span></span></a></li></ul></li><li><a class="level is-mobile" href="/categories/Python/"><span class="level-start"><span class="level-item">Python</span></span><span class="level-end"><span class="level-item tag">12</span></span></a><ul><li><a class="level is-mobile" href="/categories/Python/Pandas/"><span class="level-start"><span class="level-item">Pandas</span></span><span class="level-end"><span class="level-item tag">12</span></span></a></li></ul></li><li><a class="level is-mobile" href="/categories/%EA%B3%B5%EA%B3%B5-%EB%8D%B0%EC%9D%B4%ED%84%B0/"><span class="level-start"><span class="level-item">공공 데이터</span></span><span class="level-end"><span class="level-item tag">12</span></span></a><ul><li><a class="level is-mobile" href="/categories/%EA%B3%B5%EA%B3%B5-%EB%8D%B0%EC%9D%B4%ED%84%B0/%EC%8B%A4%EA%B1%B0%EB%9E%98%EA%B0%80/"><span class="level-start"><span class="level-item">실거래가</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li><li><a class="level is-mobile" href="/categories/%EA%B3%B5%EA%B3%B5-%EB%8D%B0%EC%9D%B4%ED%84%B0/%EC%BD%94%EB%A1%9C%EB%82%98-19/"><span class="level-start"><span class="level-item">코로나 19</span></span><span class="level-end"><span class="level-item tag">6</span></span></a></li></ul></li><li><a class="level is-mobile" href="/categories/%ED%99%98%EA%B2%BD-%EC%84%A4%EC%A0%95/"><span class="level-start"><span class="level-item">환경 설정</span></span><span class="level-end"><span class="level-item tag">4</span></span></a><ul><li><a class="level is-mobile" href="/categories/%ED%99%98%EA%B2%BD-%EC%84%A4%EC%A0%95/Apple-Silicon/"><span class="level-start"><span class="level-item">Apple Silicon</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/categories/%ED%99%98%EA%B2%BD-%EC%84%A4%EC%A0%95/Python/"><span class="level-start"><span class="level-item">Python</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/categories/%ED%99%98%EA%B2%BD-%EC%84%A4%EC%A0%95/Tableau/"><span class="level-start"><span class="level-item">Tableau</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></li></ul></div></div></div></div></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/image/logo.png" alt="BAEM1N" height="28"></a><p class="is-size-7"><span>&copy; 2021 BAEM1N</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><br>0</p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="CC BY-NC-SA 4.0" href="https://creativecommons.org/licenses/by-nc-nd/4.0/"><i class="fab fa-creative-commons"></i> <i class="fab fa-creative-commons-by"></i> <i class="fab fa-creative-commons-nc"></i> <i class="fab fa-creative-commons-nd"></i> </a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" async></script><script>moment.locale("ko");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="맨 위로" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "이 웹 사이트는 귀하의 경험을 향상시키기 위해 Cookie를 사용합니다.",
+          dismiss: "무시",
+          allow: "허용",
+          deny: "거부",
+          link: "더 알아보기",
+          policy: "Cookie 정책",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/x-mathjax-config">MathJax.Hub.Config({
+            'HTML-CSS': {
+                matchFontHeight: false
+            },
+            SVG: {
+                matchFontHeight: false
+            },
+            CommonHTML: {
+                matchFontHeight: false
+            },
+            tex2jax: {
+                inlineMath: [
+                    ['$','$'],
+                    ['\\(','\\)']
+                ]
+            }
+        });</script><script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="입력 하세요..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"입력 하세요...","untitled":"(제목 없음)","posts":"포스트","pages":"페이지","categories":"카테고리","tags":"태그"});
+        });</script></body></html>
