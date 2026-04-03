@@ -20,6 +20,9 @@ pnpm-debug.log*
 # pagefind
 public/pagefind/
 
+# local docs
+docs/
+
 # macOS-specific files
 .DS_Store
 
