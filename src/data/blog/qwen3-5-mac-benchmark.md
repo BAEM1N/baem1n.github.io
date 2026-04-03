@@ -10,6 +10,7 @@ tags:
   - ollama
   - apple-silicon
 featured: true
+aiAssisted: true
 ---
 
 > **TL;DR**: Qwen3.5-35B-A3B(MoE)는 MLX에서 **139 tok/s**로 27B Dense 대비 4.6배 빠르면서 메모리는 29%만 더 사용한다. 긴 컨텍스트 프리필은 llama.cpp Flash Attention이 MLX 대비 **204배** 빠르다. 로컬 LLM 추론에서 "어떤 백엔드를 쓸 것인가"는 생성 vs 프리필 어느 쪽이 중요한지에 따라 결정해야 한다.

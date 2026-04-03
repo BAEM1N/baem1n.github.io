@@ -10,7 +10,7 @@ tags:
   - ollama
   - apple-silicon
 featured: true
-draft: true
+aiAssisted: true
 ---
 
 > **TL;DR**: Qwen3.5-35B-A3B (MoE) reaches **139 tok/s** on MLX — 4.6x faster than 27B Dense with only 29% more memory. For long-context prefill, llama.cpp Flash Attention is **204x faster** than MLX. Choosing the right backend depends on whether generation or prefill matters more for your workload.

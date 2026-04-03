@@ -19,6 +19,7 @@ const blogSchema = ({ image }: { image: () => any }) =>
     canonicalURL: z.string().optional(),
     hideEditPost: z.boolean().optional(),
     timezone: z.string().optional(),
+    aiAssisted: z.boolean().optional(),
   });
 
 const blog = defineCollection({

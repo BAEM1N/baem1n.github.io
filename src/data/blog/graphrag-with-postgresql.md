@@ -10,6 +10,7 @@ tags:
   - langchain
   - llm
 featured: true
+aiAssisted: true
 ---
 
 > **TL;DR**: Apache AGE(그래프) + pgvector(벡터)를 PostgreSQL 위에 올리면 Neo4j + Pinecone 조합과 동일한 GraphRAG를 **DB 1개, 커넥션 1개, 백업 1개**로 운영할 수 있다. `langchain-age` 패키지로 LangChain 생태계에 바로 연결된다.
