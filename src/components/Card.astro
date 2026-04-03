@@ -6,16 +6,19 @@ import Datetime from "./Datetime.astro";
 
 type Props = {
   variant?: "h2" | "h3";
+  basePath?: string;
 } & CollectionEntry<"blog">;
 
-const { variant: Heading = "h2", id, data, filePath } = Astro.props;
+const { variant: Heading = "h2", id, data, filePath, basePath } = Astro.props;
 
 const { title, description, ...props } = data;
+
+const postPath = basePath ? `${basePath}/${id}` : getPath(id, filePath);
 ---
 
 <li class="my-6">
   <a
-    href={getPath(id, filePath)}
+    href={postPath}
     class:list={[
       "inline-block text-lg font-medium text-accent",
       "decoration-dashed underline-offset-4 hover:underline",
