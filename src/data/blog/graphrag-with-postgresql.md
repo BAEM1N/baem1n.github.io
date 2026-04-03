@@ -181,11 +181,28 @@ PostgreSQL DBA가 이미 알고 있는 것들:
 
 새로운 운영 전문성이 필요 없다.
 
-### 5. RAG 워크로드에서 성능은 충분하다
+### 5. RAG 워크로드에서 성능은 충분하다 — 실측 데이터
 
-Neo4j의 인덱스 프리 인접성은 6홉 이상의 깊은 탐색에서 유리하다. 하지만 RAG 워크로드는 보통 1~3홉이다: "관련 문서 찾기", "엔티티 컨텍스트 확장".
+"AGE가 Neo4j보다 느리지 않나?"라는 의문이 있을 수 있다. 동일한 1K 노드 / 2K 엣지 그래프에서 같은 Cypher를 실행한 실측 결과:
 
-이 패턴에서 AGE는 충분히 빠르다. `langchain-age`는 PostgreSQL의 `WITH RECURSIVE`를 활용한 `traverse()` 메서드를 제공하며, 깊은 홉에서 AGE 자체 Cypher보다 **10~22배 빠른** 성능을 보인다.
+| 테스트 | Neo4j p50 | AGE p50 | 승자 |
+|--------|:---------:|:-------:|:----:|
+| 포인트 룩업 | 2.0ms | **0.9ms** | AGE 2.2x |
+| 1홉 탐색 | 1.7ms | **1.0ms** | AGE 1.7x |
+| 단건 CREATE | 3.3ms | **0.9ms** | AGE 3.7x |
+| 3홉 탐색 | **1.7ms** | 25.8ms | Neo4j 14.9x |
+| 6홉 탐색 | **2.4ms** | 27.7ms | Neo4j 11.6x |
+
+RAG에서 가장 흔한 패턴 (1~2홉 조회, CRUD)에서 AGE가 Neo4j보다 빠르다. Neo4j가 우위인 것은 3홉 이상 깊은 탐색뿐이다.
+
+깊은 탐색도 `langchain-age`의 `traverse()` (PostgreSQL WITH RECURSIVE)를 쓰면 역전된다:
+
+| 깊이 | AGE Cypher | AGE traverse() | Neo4j |
+|:----:|:----------:|:--------------:|:-----:|
+| 3홉 | 26.4ms | **1.3ms** | 1.7ms |
+| 6홉 | 28.2ms | **1.4ms** | 2.4ms |
+
+traverse()를 쓰면 6홉에서도 AGE가 Neo4j보다 1.7배 빠르다. 자세한 벤치마크 결과는 [Neo4j vs AGE 실측 벤치마크](/posts/neo4j-vs-age-benchmark)에서 확인할 수 있다.
 
 ## Neo4j가 더 나은 경우
 
@@ -227,5 +244,11 @@ pip install "langchain-age[all]"
 - [Tutorial (EN)](https://github.com/BAEM1N/langchain-age/blob/main/docs/en/tutorial.md)
 - [Tutorial (KO)](https://github.com/BAEM1N/langchain-age/blob/main/docs/ko/tutorial.md)
 - [Notebooks](https://github.com/BAEM1N/langchain-age/tree/main/notebooks)
+
+## 관련 포스트
+
+- [Neo4j vs Apache AGE 실측 벤치마크](/posts/neo4j-vs-age-benchmark) — 8개 항목 공정 비교, traverse() 성능 데이터 포함
+
+---
 
 *langchain-age는 MIT 라이선스. Apache AGE는 Apache 2.0. pgvector는 PostgreSQL License. 라이선스 비용 없음, 벤더 종속 없음.*

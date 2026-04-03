@@ -174,11 +174,28 @@ Apache AGE is Apache 2.0. No restrictions.
 
 Your PostgreSQL DBA already knows how to set up streaming replication, run pg_dump, monitor with pg_stat_statements, and manage connection pooling with PgBouncer. No new operational expertise required.
 
-### 5. Performance Is Fine for RAG
+### 5. Performance Is Fine for RAG — Measured Data
 
-Neo4j's index-free adjacency wins at 6+ hop deep traversals. But RAG workloads are typically 1–3 hops: "find related documents", "expand entity context".
+"Isn't AGE slower than Neo4j?" Here are actual measurements on the same 1K-node / 2K-edge graph, identical Cypher:
 
-For these patterns, AGE is fast enough — and `langchain-age` provides a `traverse()` method using PostgreSQL's `WITH RECURSIVE` that's actually **10–22x faster** than AGE's own Cypher for deep hops.
+| Test | Neo4j p50 | AGE p50 | Winner |
+|------|:---------:|:-------:|:------:|
+| Point lookup | 2.0ms | **0.9ms** | AGE 2.2x |
+| 1-hop traversal | 1.7ms | **1.0ms** | AGE 1.7x |
+| Single CREATE | 3.3ms | **0.9ms** | AGE 3.7x |
+| 3-hop traversal | **1.7ms** | 25.8ms | Neo4j 14.9x |
+| 6-hop traversal | **2.4ms** | 27.7ms | Neo4j 11.6x |
+
+AGE is faster than Neo4j for the most common RAG patterns (1–2 hop lookups, CRUD). Neo4j only wins at 3+ hop deep traversals.
+
+Even deep traversals can be reversed with `langchain-age`'s `traverse()` (PostgreSQL WITH RECURSIVE):
+
+| Depth | AGE Cypher | AGE traverse() | Neo4j |
+|:-----:|:----------:|:--------------:|:-----:|
+| 3-hop | 26.4ms | **1.3ms** | 1.7ms |
+| 6-hop | 28.2ms | **1.4ms** | 2.4ms |
+
+With traverse(), AGE beats Neo4j by 1.7x even at 6 hops. See the full benchmark in [Neo4j vs AGE Benchmark](/en/posts/neo4j-vs-age-benchmark).
 
 ## When Neo4j IS Better
 
@@ -220,5 +237,11 @@ pip install "langchain-age[all]"
 - [Tutorial (EN)](https://github.com/BAEM1N/langchain-age/blob/main/docs/en/tutorial.md)
 - [Tutorial (KO)](https://github.com/BAEM1N/langchain-age/blob/main/docs/ko/tutorial.md)
 - [Notebooks](https://github.com/BAEM1N/langchain-age/tree/main/notebooks)
+
+## Related
+
+- [Neo4j vs Apache AGE Benchmark](/en/posts/neo4j-vs-age-benchmark) — 8-test fair comparison with traverse() performance data
+
+---
 
 *langchain-age is MIT licensed. Apache AGE is Apache 2.0. pgvector is PostgreSQL License. No licensing fees, no vendor lock-in.*
