@@ -49,6 +49,8 @@ def bench(fn, iterations=50):
 
 ## Results
 
+### Cypher vs Cypher (Fair Comparison)
+
 | Test | Neo4j p50 | AGE p50 | Winner | Factor |
 |------|:---------:|:-------:|:------:|:------:|
 | **Point lookup** (MATCH by property) | 2.0ms | **0.9ms** | AGE | 2.2x |
@@ -104,7 +106,14 @@ The difference is negligible at 1 hop but grows exponentially at 3+ hops.
 
 ### AGE's Escape Hatch: `traverse()` + WITH RECURSIVE
 
-`langchain-age` provides a `traverse()` method using PostgreSQL `WITH RECURSIVE`, which is **10–22x faster** than AGE's own Cypher `*N`:
+`langchain-age` provides a `traverse()` method using PostgreSQL `WITH RECURSIVE`. Measured on the same 1K-node graph:
+
+| Depth | AGE Cypher | AGE traverse() | Neo4j Cypher | traverse vs Neo4j |
+|:-----:|:----------:|:--------------:|:------------:|:-----------------:|
+| 3-hop | 26.4ms | **1.3ms** (21x) | 1.7ms | AGE 1.3x faster |
+| 6-hop | 28.2ms | **1.4ms** (19x) | 2.4ms | AGE 1.7x faster |
+
+**With traverse(), AGE beats Neo4j even on deep traversals.** This approach is impossible in Neo4j — you cannot bypass its Cypher engine.
 
 ```python
 # Cypher *6: 27.7ms

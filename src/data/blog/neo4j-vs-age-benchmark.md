@@ -49,6 +49,8 @@ def bench(fn, iterations=50):
 
 ## 결과
 
+### Cypher 대 Cypher (공정 비교)
+
 | 테스트 | Neo4j p50 | AGE p50 | 승자 | 배율 |
 |--------|:---------:|:-------:|:----:|:----:|
 | **포인트 룩업** (MATCH by property) | 2.0ms | **0.9ms** | AGE | 2.2x |
@@ -104,7 +106,14 @@ AGE:     SELECT ... JOIN ... JOIN ... JOIN ...               (O(index) per hop)
 
 ### AGE의 탈출구: `traverse()` + WITH RECURSIVE
 
-`langchain-age`는 깊은 탐색을 위해 PostgreSQL `WITH RECURSIVE`를 사용하는 `traverse()` 메서드를 제공한다. AGE의 Cypher `*N` 대비 **10~22배 빠르다**:
+`langchain-age`는 깊은 탐색을 위해 PostgreSQL `WITH RECURSIVE`를 사용하는 `traverse()` 메서드를 제공한다. 동일한 1K 노드 그래프에서의 실측 결과:
+
+| 깊이 | AGE Cypher | AGE traverse() | Neo4j Cypher | traverse vs Neo4j |
+|:----:|:----------:|:--------------:|:------------:|:-----------------:|
+| 3-hop | 26.4ms | **1.3ms** (21x) | 1.7ms | AGE 1.3x 빠름 |
+| 6-hop | 28.2ms | **1.4ms** (19x) | 2.4ms | AGE 1.7x 빠름 |
+
+**traverse()를 쓰면 AGE가 Neo4j보다 깊은 탐색에서도 빠르다.** Neo4j에서는 불가능한 접근법이다 — Cypher 엔진을 우회할 수 없기 때문.
 
 ```python
 # Cypher *6: 27.7ms
