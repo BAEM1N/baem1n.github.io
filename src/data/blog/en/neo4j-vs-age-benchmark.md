@@ -106,27 +106,71 @@ The difference is negligible at 1 hop but grows exponentially at 3+ hops.
 
 ### AGE's Escape Hatch: `traverse()` + WITH RECURSIVE
 
-`langchain-age` provides a `traverse()` method using PostgreSQL `WITH RECURSIVE`. Measured on the same 1K-node graph:
+The reason AGE's Cypher is slow on deep traversals is clear: AGE's Cypher-to-SQL translator expands `MATCH (a)-[:LINK*6]->(b)` into a 6-way self-join. PostgreSQL's query planner doesn't optimise this well.
 
-| Depth | AGE Cypher | AGE traverse() | Neo4j Cypher | traverse vs Neo4j |
-|:-----:|:----------:|:--------------:|:------------:|:-----------------:|
-| 3-hop | 26.4ms | **1.3ms** (21x) | 1.7ms | AGE 1.3x faster |
-| 6-hop | 28.2ms | **1.4ms** (19x) | 2.4ms | AGE 1.7x faster |
+But AGE has an escape hatch that Neo4j doesn't — **the data lives in PostgreSQL tables**, so you can bypass Cypher and write SQL directly. `langchain-age`'s `traverse()` method uses PostgreSQL `WITH RECURSIVE` CTEs, which the query planner handles far more efficiently.
 
-**With traverse(), AGE beats Neo4j even on deep traversals.** This approach is impossible in Neo4j — you cannot bypass its Cypher engine.
+The generated SQL:
 
-```python
-# Cypher *6: 27.7ms
-graph.query("MATCH (a:Node {idx: 0})-[:LINK*6]->(b) RETURN count(b)")
+```sql
+WITH RECURSIVE traverse AS (
+    -- Find start nodes
+    SELECT e.end_id AS node_id, 1 AS depth
+    FROM graph."LINK" e
+    JOIN graph."N" n ON e.start_id = n.id
+    WHERE n.properties::text::jsonb->>'idx' = '0'
 
-# traverse(): ~4ms (WITH RECURSIVE)
-graph.traverse(
-    start_label="Node", start_filter={"idx": 0},
-    edge_label="LINK", max_depth=6,
+    UNION
+
+    -- Recurse: next hop
+    SELECT e.end_id, t.depth + 1
+    FROM traverse t
+    JOIN graph."LINK" e ON e.start_id = t.node_id
+    WHERE t.depth < 6
 )
+SELECT DISTINCT depth, node_id FROM traverse;
 ```
 
-This brings AGE close to Neo4j performance even at 6 hops. This approach is impossible in Neo4j — you cannot bypass its Cypher engine.
+The key difference:
+- **Cypher `*6`**: AGE generates 6 nested `SELECT ... JOIN ... JOIN ...` → execution plan explosion
+- **WITH RECURSIVE**: PostgreSQL expands one hop at a time → `UNION` deduplicates → efficient
+
+Measured on the same 1K-node graph:
+
+| Depth | AGE Cypher | AGE traverse() | Improvement | Neo4j Cypher | traverse vs Neo4j |
+|:-----:|:----------:|:--------------:|:----------:|:------------:|:-----------------:|
+| 3-hop | 26.4ms | **1.3ms** | 21x | 1.7ms | AGE 1.3x faster |
+| 6-hop | 28.2ms | **1.4ms** | 19x | 2.4ms | AGE 1.7x faster |
+
+**With traverse(), AGE beats Neo4j even on deep traversals.**
+
+This is possible because of AGE's architectural property — AGE data is stored in ordinary PostgreSQL tables, accessible via raw SQL. Neo4j uses its own storage engine, so there's no way to bypass its Cypher engine. The same optimisation cannot be applied to Neo4j.
+
+Usage:
+
+```python
+# Cypher *6: 28.2ms
+graph.query("MATCH (a:Node {idx: 0})-[:LINK*6]->(b) RETURN count(b)")
+
+# traverse(): 1.4ms — same result, 19x faster
+results = graph.traverse(
+    start_label="Node",
+    start_filter={"idx": 0},
+    edge_label="LINK",
+    max_depth=6,
+    direction="outgoing",      # also "incoming", "both"
+    return_properties=True,    # False = node IDs only (faster)
+)
+# [{"depth": 1, "node_id": 123, "properties": {"name": "..."}}, ...]
+```
+
+Recommended usage:
+
+| Pattern | Method | Why |
+|---------|--------|-----|
+| 1–3 hops | `graph.query()` (Cypher) | Readable and fast enough |
+| 4+ hops | `graph.traverse()` | 10–22x performance gain |
+| Complex start conditions | `graph.create_property_index()` first | Index accelerates start-node lookup |
 
 ## FAQ
 
