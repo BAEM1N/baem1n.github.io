@@ -230,3 +230,5 @@ measurement:
   thermal_guard: 85°C / 60s cooldown
   total_runs: 692
 ```
+
+전체 벤치마크 코드와 원본 데이터는 [GitHub 레포지토리](https://github.com/BAEM1N/llm-bench)에서 확인할 수 있다.
