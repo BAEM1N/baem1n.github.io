@@ -17,6 +17,9 @@ pnpm-debug.log*
 .env
 .env.production
 
+# pagefind
+public/pagefind/
+
 # macOS-specific files
 .DS_Store
 

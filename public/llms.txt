@@ -1,10 +1,13 @@
-# baem1n.dev
+# baem1n.github.io
 
 > AI, 데이터, 자동화, 개발 기록을 공유하는 개인 개발 블로그
 
 ## 핵심 페이지
 - /about : 블로그 소개
-- /blog : 전체 글 목록
+- /posts : 전체 글 목록
+- /tags : 태그별 글 목록
+- /archives : 아카이브
+- /search : 검색
 - /rss.xml : RSS 피드
 
 ## 안내

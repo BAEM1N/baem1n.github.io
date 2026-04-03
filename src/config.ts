@@ -1,0 +1,23 @@
+export const SITE = {
+  website: "https://baem1n.github.io/",
+  author: "baem1n",
+  profile: "https://github.com/baem1n",
+  desc: "AI, 데이터, 자동화, 개발 기록을 공유하는 개인 개발 블로그",
+  title: "baem1n.dev",
+  ogImage: "og-default.png",
+  lightAndDarkMode: true,
+  postPerIndex: 4,
+  postPerPage: 4,
+  scheduledPostMargin: 15 * 60 * 1000,
+  showArchives: true,
+  showBackButton: true,
+  editPost: {
+    enabled: false,
+    text: "Edit page",
+    url: "https://github.com/baem1n/baem1n.github.io/edit/master/",
+  },
+  dynamicOgImage: true,
+  dir: "ltr",
+  lang: "ko",
+  timezone: "Asia/Seoul",
+} as const;

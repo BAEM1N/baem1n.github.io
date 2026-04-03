@@ -37,7 +37,10 @@ jobs:
         run: npm ci
 
       - name: Build with Astro
-        run: npm run build
+        run: npx astro check && npx astro build
+
+      - name: Build Pagefind search index
+        run: npx pagefind --site dist
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
