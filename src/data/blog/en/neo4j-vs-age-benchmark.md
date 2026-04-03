@@ -1,6 +1,6 @@
 ---
 author: baem1n
-pubDatetime: 2026-04-03T12:00:00.000Z
+pubDatetime: 2026-04-03T00:00:00.000Z
 title: "Neo4j vs Apache AGE Benchmark — Same Cypher, Same Data, Different Results"
 description: "A fair benchmark running identical Cypher queries on Neo4j 5 and Apache AGE 1.7.0. Eight tests covering point lookups, 1–6 hop traversals, CREATE operations, and schema introspection."
 tags:

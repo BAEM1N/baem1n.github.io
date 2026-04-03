@@ -1,6 +1,6 @@
 ---
 author: baem1n
-pubDatetime: 2026-04-03T12:00:00.000Z
+pubDatetime: 2026-04-03T00:00:00.000Z
 title: "Neo4j vs Apache AGE 실측 벤치마크 — 같은 Cypher, 같은 데이터, 다른 결과"
 description: "동일한 Cypher 쿼리를 Neo4j 5와 Apache AGE 1.7.0에서 실행한 공정 비교 벤치마크. 포인트 룩업, 1~6홉 탐색, CREATE, 배치 삽입, 스키마 조회 8개 항목을 실측했다."
 tags:
