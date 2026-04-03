@@ -1,6 +1,6 @@
 ---
 author: baem1n
-pubDatetime: 2026-04-03T12:00:00.000Z
+pubDatetime: 2026-04-03T00:00:00.000Z
 title: "GraphRAG를 PostgreSQL만으로 구축하기 — Neo4j 없이 Apache AGE + pgvector"
 description: "Neo4j 없이 PostgreSQL 하나로 GraphRAG 파이프라인을 구축하는 방법. Apache AGE와 pgvector를 조합해 그래프 + 벡터 검색을 단일 DB에서 운영하는 실전 가이드."
 tags:

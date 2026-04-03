@@ -9,6 +9,32 @@ import { SITE } from "@/config";
 type Props = MarkdownLayoutProps<{ title: string }>;
 
 const { frontmatter } = Astro.props;
+
+const personJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "배기민 (BAEM1N)",
+  alternateName: "baem1n",
+  url: SITE.website,
+  jobTitle: "AI/Data Educator & Engineer",
+  worksFor: {
+    "@type": "Organization",
+    name: "DDOK.AI",
+  },
+  knowsAbout: [
+    "Data Science",
+    "Machine Learning",
+    "Deep Learning",
+    "RAG",
+    "AI Agent",
+    "LLMOps",
+    "LangChain",
+  ],
+  sameAs: [
+    "https://github.com/baem1n",
+    "https://www.linkedin.com/in/baem1n/",
+  ],
+};
 ---
 
 <Layout title={`${frontmatter.title} | ${SITE.title}`}>
@@ -21,4 +47,9 @@ const { frontmatter } = Astro.props;
     </section>
   </main>
   <Footer />
+  <script
+    type="application/ld+json"
+    is:inline
+    set:html={JSON.stringify(personJsonLd)}
+  />
 </Layout>
