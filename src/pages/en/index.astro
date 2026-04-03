@@ -14,7 +14,7 @@ import { SOCIALS } from "@/constants";
 
 const posts = await getCollection("blog-en");
 
-const sortedPosts = getSortedPosts(posts);
+const sortedPosts = getSortedPosts(posts as any);
 const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
 const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
 ---
