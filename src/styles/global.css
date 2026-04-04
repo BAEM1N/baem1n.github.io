@@ -20,6 +20,11 @@ html[data-theme="dark"] {
   --border: #ab4b08;
 }
 
+:root {
+  --font-body: "Noto Sans KR", system-ui, sans-serif;
+  --font-code: "JetBrains Mono", monospace;
+}
+
 @theme inline {
   --font-app: var(--font-body);
   --font-mono: var(--font-code);

@@ -1,4 +1,4 @@
-import { defineConfig, envField, fontProviders } from "astro/config";
+import { defineConfig, envField } from "astro/config";
 import tailwindcss from "@tailwindcss/vite";
 import sitemap from "@astrojs/sitemap";
 import remarkToc from "remark-toc";
@@ -17,6 +17,10 @@ export default defineConfig({
   integrations: [
     sitemap({
       filter: page => SITE.showArchives || !page.endsWith("/archives"),
+      serialize(item) {
+        item.lastmod = new Date().toISOString();
+        return item;
+      },
     }),
   ],
   markdown: {
@@ -59,23 +63,5 @@ export default defineConfig({
   },
   experimental: {
     preserveScriptOrder: true,
-    fonts: [
-      {
-        name: "Noto Sans KR",
-        cssVariable: "--font-body",
-        provider: fontProviders.google(),
-        fallbacks: ["system-ui", "sans-serif"],
-        weights: [300, 400, 500, 600, 700],
-        styles: ["normal"],
-      },
-      {
-        name: "JetBrains Mono",
-        cssVariable: "--font-code",
-        provider: fontProviders.google(),
-        fallbacks: ["monospace"],
-        weights: [400, 500, 600, 700],
-        styles: ["normal", "italic"],
-      },
-    ],
   },
 });

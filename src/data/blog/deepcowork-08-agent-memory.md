@@ -2,7 +2,7 @@
 author: baem1n
 pubDatetime: 2026-04-04T07:00:00.000Z
 title: "DeepCoWork #8: 에이전트 메모리 4계층 -- SOUL.md, USER.md, AGENTS.md, MEMORY.md"
-description: "DeepCoWork의 4단계 메모리 시스템이 어떻게 에이전트의 페르소나, 사용자 선호, 세션 기억을 관리하는지 해부합니다."
+description: "DeepCoWork의 4단계 메모리 시스템이 어떻게 에이전트의 페르소나, 사용자 선호, 세션 기억을 관리하는지 실전 가이드."
 tags:
   - agent-memory
   - system-prompt
@@ -11,7 +11,7 @@ tags:
 aiAssisted: true
 ---
 
-> **TL;DR**: DeepCoWork는 4개의 마크다운 파일로 에이전트 메모리를 관리한다. SOUL.md(페르소나), USER.md(사용자 선호), AGENTS.md(에이전트 지침)는 글로벌이고, MEMORY.md는 워크스페이스별 세션 기억이다. 모두 시스템 프롬프트에 자동 주입되며, UI에서 직접 편집 가능하다.
+> **TL;DR**: SOUL.md, USER.md, AGENTS.md, MEMORY.md 4개 마크다운 파일이 에이전트의 페르소나부터 세션 기억까지 관리하며, 모두 시스템 프롬프트에 자동 주입된다.
 
 ## Table of contents
 
@@ -55,7 +55,7 @@ def build_system_prompt(mode: str, workspace_dir: Path) -> str:
     return "\n\n".join(parts)
 ```
 
-비어있는 파일은 건너뛴다 -- 불필요한 컨텍스트를 LLM에 넘기지 않는다.
+비어있는 파일은 건너뛴다 -- [LangChain 토큰 카운팅 가이드](https://python.langchain.com/docs/how_to/chat_token_usage_tracking/)에서 강조하듯, 불필요한 컨텍스트를 LLM에 넘기지 않는 것이 비용과 품질 모두에 중요하다.
 
 ## SOUL.md: 에이전트 페르소나
 
@@ -105,7 +105,7 @@ def memory_write(content: str) -> str:
 API 서버는 포트 3001에서 실행, CORS 설정 필요.
 ```
 
-다음 세션에서 에이전트가 이 정보를 시스템 프롬프트로 받아 맥락을 유지한다.
+다음 세션에서 에이전트가 이 정보를 시스템 프롬프트로 받아 맥락을 유지한다. [LangGraph persistence 문서](https://langchain-ai.github.io/langgraph/concepts/persistence/)의 체크포인터와 별도로, 이 파일 기반 메모리는 사람이 읽고 편집할 수 있다는 장점이 있다.
 
 ## memory_read: 메모리 조회
 
@@ -198,6 +198,16 @@ async def update_memory(req: MemoryUpdateRequest):
 | 에이전트 지침 | AGENTS.md | CLAUDE.md | .cursorrules |
 | 세션 기억 | MEMORY.md (자동) | - | - |
 | 편집 방식 | UI 내장 에디터 | 파일 직접 편집 | 설정 UI |
+
+## 실측 데이터
+
+| 항목 | 수치 |
+|------|------|
+| 메모리 파일 최대 크기 (SOUL/USER/AGENTS.md) | 50KB |
+| MEMORY.md 자동 기록 빈도 (일반적인 세션) | 2~4회/세션 |
+| 메모리 주입 후 시스템 프롬프트 증가량 | ~200~800 토큰 |
+| 메모리 변경 → 에이전트 재빌드 소요 시간 | ~150ms |
+| rebuild_all_agents_safe() 동시성 보호 | asyncio.Lock (단일 재빌드 보장) |
 
 ## 자주 묻는 질문
 

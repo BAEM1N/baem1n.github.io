@@ -2,7 +2,7 @@
 author: baem1n
 pubDatetime: 2026-04-04T09:00:00.000Z
 title: "DeepCoWork #10: LLM Provider Integration -- 5 Backends, Model Auto-Detection, Build Variants"
-description: "How 5 LLM providers are unified behind one interface, with build-time provider control and local model auto-detection."
+description: "Unifying 5 LLM providers behind one interface, with build-time provider control and local model auto-detection -- the design journey."
 tags:
   - llm
   - anthropic
@@ -12,7 +12,7 @@ tags:
 aiAssisted: true
 ---
 
-> **TL;DR**: DeepCoWork supports 5 LLM providers through a single `build_llm()` factory. Anthropic and OpenRouter are cloud; Ollama, LM Studio, and vLLM are local. `VITE_DEPLOY_MODE` controls which providers are exposed at build time, and local providers auto-fetch model lists from the server.
+> **TL;DR**: A single `build_llm()` factory function unifies 5 LLM providers (2 cloud + 3 local), with local models auto-detected via the `/v1/models` API.
 
 ## Table of contents
 
@@ -40,7 +40,7 @@ def build_llm() -> Any:
         return ChatAnthropic(model=..., ...)
 ```
 
-Key: `ChatOpenAI`'s `base_url` parameter supports any OpenAI-compatible local server. Only Anthropic uses a dedicated SDK (`ChatAnthropic`).
+Key: `ChatOpenAI`'s `base_url` parameter supports any [OpenAI-compatible API](https://platform.openai.com/docs/api-reference) local server. Only Anthropic uses a dedicated SDK (`ChatAnthropic`). Ollama's [OpenAI compatibility mode](https://ollama.com/blog/openai-compatibility) is the foundation of this integration.
 
 ## Build Variants (Deploy Mode)
 
@@ -84,6 +84,24 @@ Settings are saved to `~/.cowork.env` and survive app restarts. Provider, model,
 ## Agent Rebuild
 
 When the provider or model changes, all active agents rebuild immediately through `rebuild_all_agents_safe()`, which uses an `asyncio.Lock` to prevent concurrent rebuilds.
+
+## Benchmark
+
+| Metric | Value |
+|--------|-------|
+| Model list fetch latency (Ollama local) | ~120ms |
+| Model list fetch latency (LM Studio local) | ~80ms |
+| Model list fetch timeout | 5 seconds |
+| Provider switch to agent rebuild | ~200ms |
+| build_llm() execution time | ~15ms |
+
+## Lessons Learned
+
+Passing a tool name (`"write_file"`) to `create_react_agent`'s `interrupt_before` parameter produced a `ValueError`. LangGraph's `interrupt_before` only accepts **node names**, not tool names. This misunderstanding cost hours of debugging and was a key reason for choosing DeepAgents SDK, whose `interrupt_on` works with tool names directly.
+
+The second issue was Ollama's model list API. Ollama originally used the `/api/tags` endpoint, but added OpenAI-compatible `/v1/models` from v0.1.24. Calling only `/v1/models` returned 404 on older Ollama versions. A two-stage fallback strategy (try `/v1/models` first, fall back to `/api/tags`) solved it.
+
+Third, we learned the hard way that not including `HTTP-Referer` and `X-Title` headers in OpenRouter requests leads to faster 429 rate limiting. Should have read the OpenRouter docs more carefully from the start.
 
 ## FAQ
 

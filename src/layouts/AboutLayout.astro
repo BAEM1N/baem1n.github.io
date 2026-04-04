@@ -37,7 +37,13 @@ const personJsonLd = {
 };
 ---
 
-<Layout title={`${frontmatter.title} | ${SITE.title}`}>
+{/* Detect EN about page by checking URL path */}
+<Layout
+  title={`${frontmatter.title} | ${SITE.title}`}
+  lang={Astro.url.pathname.startsWith("/en/") ? "en" : "ko"}
+  alternateUrl={Astro.url.pathname.startsWith("/en/") ? `${SITE.website}about/` : `${SITE.website}en/about/`}
+  alternateLang={Astro.url.pathname.startsWith("/en/") ? "ko" : "en"}
+>
   <Header />
   <Breadcrumb />
   <main id="main-content" class="app-layout">

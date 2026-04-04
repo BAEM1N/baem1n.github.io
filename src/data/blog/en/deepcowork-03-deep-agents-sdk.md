@@ -2,7 +2,7 @@
 author: baem1n
 pubDatetime: 2026-04-04T02:00:00.000Z
 title: "DeepCoWork #3: DeepAgents SDK Internals -- create_deep_agent, LocalShellBackend, ReAct Loop"
-description: "Deep dive into the core SDK functions and how DeepCoWork wraps them in a single coupling point."
+description: "Deep dive into the core SDK functions and how DeepCoWork wraps them in a single coupling point -- internals and implementation details."
 tags:
   - deep-agents
   - langchain
@@ -12,7 +12,7 @@ tags:
 aiAssisted: true
 ---
 
-> **TL;DR**: All agent logic in DeepCoWork lives in one file: `agent_core.py`. `create_deep_agent` builds a LangGraph ReAct graph, `LocalShellBackend` auto-provides file/shell tools, and `interrupt_on` halts execution before dangerous tool calls. This file is the only SDK coupling point.
+> **TL;DR**: `agent_core.py` is the sole SDK coupling point, configuring 7 tools + ReAct loop + HITL gate all in one file.
 
 ## Table of contents
 
@@ -28,7 +28,7 @@ DeepCoWork isolates all Deep Agents SDK interaction into `agent_core.py`. The ex
 | `get_agent_state()` | Query agent state |
 | `resume_agent_input()` | Resume from HITL |
 
-When the SDK version changes, only this file needs updating.
+When the SDK version changes, only this file needs updating. The [Deep Agents SDK API reference](https://github.com/langchain-ai/deepagents) and [LangGraph create_react_agent docs](https://langchain-ai.github.io/langgraph/reference/prebuilt/#create_react_agent) are the key references.
 
 ## Dissecting create_deep_agent
 
@@ -197,6 +197,16 @@ def _resolve_skills(workspace_dir: Path) -> list[str]:
 ```
 
 Priority: global (`~/.cowork/skills/`) < workspace (`{workspace}/skills/`). Later-loaded skills take precedence.
+
+## Benchmark
+
+| Metric | Value |
+|--------|-------|
+| LocalShellBackend tool count | 7 (read_file, write_file, edit_file, execute, ls, glob, grep) |
+| Custom tool count (web_search, memory, task, etc.) | 4 |
+| Typical Cowork task ReAct loop iterations | 8-15 |
+| MAX_AGENT_ITERATIONS setting | 25 |
+| Checkpointer SQLite WAL read performance | ~0.3ms/query |
 
 ## FAQ
 

@@ -13,6 +13,8 @@ tags:
 featured: true
 ---
 
+> **Disclosure**: The author maintains [langchain-age](https://github.com/baem1n/langchain-age). All benchmark code is open-source and reproducible.
+
 > **TL;DR**: On a 1K-node/2K-edge graph with identical Cypher queries, AGE wins **6 out of 8 tests** (point lookup 2.2x, CREATE 3.7x, schema 2.1x faster). Neo4j wins **deep traversals by 11–15x** (3+ hops). For RAG workloads (1–2 hops + CRUD), AGE is faster and free. For deep graph analytics, Neo4j is clearly superior.
 
 ## Table of contents
@@ -26,6 +28,13 @@ This is Part 2 of the langchain-age series.
 3. [Mastering Vector Search](/en/posts/langchain-age-hybrid-search) — Hybrid, MMR, Filtering
 4. [Building a GraphRAG Pipeline](/en/posts/langchain-age-graphrag-pipeline) — Vector + Graph Integration
 5. [Full AI Agent Stack on One PostgreSQL](/en/posts/langchain-age-langgraph-agent) — LangGraph Integration
+
+## What You'll Learn
+
+- Quantify the exact performance gap between Neo4j and AGE using identical Cypher queries.
+- Determine which database is faster for RAG workloads (1–2 hops + CRUD) with real numbers.
+- Understand why `traverse()` optimisation matters for deep traversals — and how it reverses Neo4j's advantage.
+- Make a data-driven database choice based on your specific workload pattern.
 
 ## Why This Benchmark Matters
 
@@ -182,6 +191,12 @@ Recommended usage:
 | 4+ hops | `graph.traverse()` | 10–22x performance gain |
 | Complex start conditions | `graph.create_property_index()` first | Index accelerates start-node lookup |
 
+## Benchmark Limitations
+
+- **Small graph only.** This benchmark uses a 1K-node/2K-edge graph. At millions or billions of nodes, index strategies, cache hit rates, and disk I/O patterns change significantly — results may differ.
+- **Docker with default settings.** Both systems ran in default Docker containers. Production tuning (memory, JVM for Neo4j, shared_buffers for PostgreSQL) will shift absolute numbers.
+- **No vector search.** This benchmark covers pure graph query performance only. A pgvector vs Neo4j Vector Index comparison requires a separate benchmark.
+
 ## FAQ
 
 ### How compatible is AGE's Cypher with Neo4j?
@@ -231,6 +246,21 @@ python benchmarks/bench.py
 ```
 
 The benchmark script is available at [benchmarks/bench.py](https://github.com/BAEM1N/langchain-age/blob/main/benchmarks/bench.py).
+
+## External Resources
+
+- [Apache AGE Official Site](https://age.apache.org/) — PostgreSQL graph extension project
+- [pgvector](https://github.com/pgvector/pgvector) — Vector similarity search for PostgreSQL
+- [Neo4j Cypher Manual](https://neo4j.com/docs/cypher-manual/) — Official Neo4j Cypher documentation
+- [langchain-age GitHub](https://github.com/baem1n/langchain-age) — Source code for this benchmark
+
+## Key Takeaways
+
+- On a 1K-node graph with identical Cypher, AGE is **1.5–3.7x faster** than Neo4j in 6 out of 8 tests (point lookup, 1-hop traversal, aggregation, CREATE, batch CREATE, schema introspection).
+- Neo4j is **11–15x faster** than AGE Cypher on 3+ hop deep traversals, due to its index-free adjacency architecture.
+- AGE's `traverse()` (WITH RECURSIVE CTE) reduces 6-hop traversal from 28.2ms to 1.4ms — **19x faster** — beating Neo4j's 2.4ms by **1.7x**.
+- For RAG workloads (1–2 hops + CRUD), AGE is consistently faster than Neo4j, with zero licence cost.
+- The `traverse()` optimisation is possible because AGE data lives in PostgreSQL tables. The same optimisation cannot be applied to Neo4j.
 
 ## Related
 

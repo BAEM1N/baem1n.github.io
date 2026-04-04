@@ -13,6 +13,8 @@ featured: true
 aiAssisted: true
 ---
 
+> **Disclosure**: 이 글의 저자는 [langchain-age](https://github.com/baem1n/langchain-age) 메인테이너입니다.
+
 > **TL;DR**: Apache AGE(그래프) + pgvector(벡터)를 PostgreSQL 위에 올리면 Neo4j + Pinecone 조합과 동일한 GraphRAG를 **DB 1개, 커넥션 1개, 백업 1개**로 운영할 수 있다. `langchain-age` 패키지로 LangChain 생태계에 바로 연결된다.
 
 ## Table of contents
@@ -26,6 +28,13 @@ aiAssisted: true
 3. [벡터 검색 완전 정복](/posts/langchain-age-hybrid-search) — Hybrid, MMR, 필터링
 4. [GraphRAG 파이프라인 실전 구축](/posts/langchain-age-graphrag-pipeline) — 벡터 + 그래프 통합
 5. [PostgreSQL 하나로 AI Agent 전체 스택](/posts/langchain-age-langgraph-agent) — LangGraph 연동
+
+## 이 글을 읽고 나면
+
+- Docker 한 줄로 PostgreSQL + AGE + pgvector 환경을 셋업할 수 있다
+- Cypher로 지식 그래프를 구축하고 노드를 벡터화할 수 있다
+- Neo4j 대비 AGE의 비용, 라이선스, 운영 차이를 수치로 비교 판단할 수 있다
+- LLM 기반 Cypher QA 체인으로 자연어 질의 → 그래프 답변 파이프라인을 구동할 수 있다
 
 ## 문제: GraphRAG를 위해 DB를 2개 운영해야 하나?
 
@@ -244,6 +253,18 @@ AGE는 openCypher 스펙을 구현하며 CREATE, MATCH, MERGE, DELETE 등 핵심
 
 Cypher EXPORT로 노드와 관계를 내보낸 후 AGE에서 동일한 CREATE 문으로 적재할 수 있다. 대량 데이터는 AGE의 CSV 로더를 사용하면 효율적이다.
 
+### langchain-age와 langchain-neo4j의 API는 얼마나 호환되나?
+
+langchain-age는 langchain-neo4j의 API를 미러링한다. `AGEGraph`는 `Neo4jGraph`, `AGEVector`는 `Neo4jVector`, `AGEGraphCypherQAChain`은 `GraphCypherQAChain`에 대응한다. 대부분의 경우 import 경로와 커넥션 문자열을 변경하면 기존 코드가 그대로 동작한다. 단, Neo4j 전용 APOC 프로시저를 사용하는 코드는 수정이 필요하다.
+
+### 이미 Neo4j를 쓰고 있다면 AGE로 마이그레이션해야 하나?
+
+반드시 그런 것은 아니다. Neo4j가 이미 잘 동작하고, 라이선스 비용이 문제가 아니라면 굳이 마이그레이션할 이유가 없다. AGE가 유리한 경우는: (1) PostgreSQL을 이미 운영 중이고 별도 DB를 추가하고 싶지 않을 때, (2) GPL 라이선스가 상용 제품에 문제가 될 때, (3) HA 비용을 줄이고 싶을 때다.
+
+### Apache AGE를 프로덕션에서 사용해도 안정적인가?
+
+Apache AGE는 Apache Software Foundation의 Top-Level Project이며 PostgreSQL 확장으로 동작하므로, PostgreSQL의 MVCC·WAL·크래시 복구를 그대로 상속한다. 프로덕션 HA는 Patroni나 repmgr 같은 기존 PG HA 솔루션을 그대로 적용할 수 있다.
+
 ## 시작하기
 
 ```bash
@@ -254,6 +275,17 @@ pip install "langchain-age[all]"
 - [Tutorial (EN)](https://github.com/BAEM1N/langchain-age/blob/main/docs/en/tutorial.md)
 - [Tutorial (KO)](https://github.com/BAEM1N/langchain-age/blob/main/docs/ko/tutorial.md)
 - [Notebooks](https://github.com/BAEM1N/langchain-age/tree/main/notebooks)
+
+- [Apache AGE 공식 문서](https://age.apache.org/)
+- [pgvector GitHub](https://github.com/pgvector/pgvector)
+- [LangChain 공식 문서](https://python.langchain.com/)
+
+## 핵심 정리
+
+- Apache AGE는 PostgreSQL 확장이므로 기존 PG 인프라(HA, 백업, 모니터링)를 그대로 활용할 수 있다. 새로운 운영 전문성이 필요 없다.
+- Neo4j Enterprise의 HA 라이선스는 $15K+/년이지만, AGE는 PostgreSQL 네이티브 HA(Patroni/repmgr)로 $0에 동일한 가용성을 확보한다.
+- `langchain-age`는 `langchain-neo4j`와 동일한 API를 제공하므로, 기존 Neo4j 코드를 import 경로와 커넥션 문자열 변경만으로 마이그레이션할 수 있다.
+- 그래프(AGE) + 벡터(pgvector) + 장기 메모리(LangGraph PostgresStore)가 하나의 PostgreSQL에서 동작하므로, 백업 파이프라인과 모니터링 대상이 1개로 줄어든다.
 
 ## 관련 포스트
 

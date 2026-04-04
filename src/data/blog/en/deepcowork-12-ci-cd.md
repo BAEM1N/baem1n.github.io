@@ -2,7 +2,7 @@
 author: baem1n
 pubDatetime: 2026-04-04T11:00:00.000Z
 title: "DeepCoWork #12: GitHub Actions Cross-Platform Build -- PyInstaller Sidecar, CI/CD"
-description: "Building Tauri + PyInstaller apps for macOS, Windows, and Linux in GitHub Actions with automatic release."
+description: "Building Tauri + PyInstaller apps for macOS, Windows, and Linux -- a CI/CD pipeline implementation story."
 tags:
   - github-actions
   - ci-cd
@@ -12,7 +12,7 @@ tags:
 aiAssisted: true
 ---
 
-> **TL;DR**: DeepCoWork uses GitHub Actions matrix builds for macOS, Linux, and Windows. Each runner builds the Python sidecar with PyInstaller, then Tauri bundles it into .dmg/.deb/.msi. Tag pushes automatically create draft releases.
+> **TL;DR**: GitHub Actions matrix builds produce PyInstaller sidecar + Tauri app for 3 OSes, completing in 8-12 minutes with cache hits.
 
 ## Table of contents
 
@@ -52,7 +52,7 @@ on:
         default: 'all'
 ```
 
-Auto-triggered on tag pushes (`v1.0.0` etc.), with manual dispatch also available. The `deploy_mode` input controls build variants.
+Auto-triggered on tag pushes (`v1.0.0` etc.), with manual dispatch also available. The `deploy_mode` input controls build variants. The [GitHub Actions workflow docs](https://docs.github.com/en/actions/writing-workflows) and [tauri-action](https://github.com/tauri-apps/tauri-action) plugin are the key references.
 
 ## Build Matrix
 
@@ -161,6 +161,25 @@ Users need no Python, Node.js, or Rust installed -- just run the installer.
 | Tauri sidecar not found | Name mismatch | Check `agent-server-{target-triple}` format |
 | Linux build failure | WebKitGTK missing | Install `libwebkit2gtk-4.1-dev` |
 | macOS code signing | No certificate | Notarization setup needed (not yet supported) |
+
+## Benchmark
+
+| Metric | Value |
+|--------|-------|
+| First build time (including Rust compilation) | 15-20 minutes |
+| Cached build time | 8-12 minutes |
+| PyInstaller sidecar build time | ~3 minutes |
+| Final .dmg size (macOS arm64) | ~110MB |
+| Final .msi size (Windows x64) | ~125MB |
+| Final .deb size (Linux x64) | ~105MB |
+
+## Lessons Learned
+
+The macOS x64 build failed because `macos-latest` had already switched to ARM64 (Apple Silicon) runners, so PyInstaller generated an `aarch64-apple-darwin` binary. Tauri expected `--target x86_64-apple-darwin` but the sidecar binary name was `aarch64`, causing a mismatch. We dropped macOS Intel builds and went ARM64-only, since the Intel Mac user base had already shrunk significantly.
+
+The second issue was PyInstaller missing dynamic imports. The LangChain and FastAPI (uvicorn) ecosystems use dynamic imports extensively, so we went through 7-8 cycles of "build, run, check error, add `--hidden-import`." Frequently missed modules included `uvicorn.logging`, `aiosqlite`, and `langchain_anthropic`.
+
+Third, on Windows we forgot to append the `.exe` suffix to the PyInstaller binary name, causing Tauri's sidecar lookup to fail. A simple omission in the `get_target_triple()` function's Windows branch -- but since it only reproduced in CI and not locally, the feedback loop was painfully long.
 
 ## FAQ
 

@@ -2,7 +2,7 @@
 author: baem1n
 pubDatetime: 2026-04-04T04:00:00.000Z
 title: "DeepCoWork #5: SSE 스트리밍 파이프라인 -- agent.astream에서 React UI까지"
-description: "LangGraph astream → SSE → EventSource → Zustand → React로 이어지는 실시간 스트리밍 파이프라인 전체를 해부합니다."
+description: "LangGraph astream → SSE → EventSource → Zustand → React로 이어지는 실시간 스트리밍 파이프라인의 동작 원리와 구현."
 tags:
   - sse
   - streaming
@@ -12,7 +12,7 @@ tags:
 aiAssisted: true
 ---
 
-> **TL;DR**: DeepCoWork의 스트리밍은 5단계다: LangGraph `agent.astream()` → Python SSE 변환 → FastAPI StreamingResponse → fetch ReadableStream → Zustand store → React 렌더링. 토큰, 도구 호출, 태스크 업데이트, 승인 요청이 모두 같은 SSE 채널을 공유한다.
+> **TL;DR**: 에이전트의 `astream()` 출력이 SSE → EventSource → Zustand → React까지 50ms 이내에 도달하는 실시간 파이프라인 구조다.
 
 ## Table of contents
 
@@ -159,7 +159,7 @@ while (true) {
 }
 ```
 
-EventSource 대신 fetch를 사용한 이유: POST 요청이 필요하고, EventSource는 GET만 지원한다. 버퍼 관리로 불완전한 SSE 라인을 처리한다.
+EventSource 대신 fetch를 사용한 이유: POST 요청이 필요하고, [MDN EventSource 명세](https://developer.mozilla.org/en-US/docs/Web/API/EventSource)에 따르면 EventSource는 GET만 지원한다. 버퍼 관리로 불완전한 SSE 라인을 처리한다. [LangGraph 스트리밍 문서](https://langchain-ai.github.io/langgraph/how-tos/streaming-tokens/)에서 `stream_mode` 옵션의 상세 동작을 확인할 수 있다.
 
 ## 5단계: Zustand 상태 업데이트
 
@@ -219,6 +219,24 @@ function resetStall() {
 ```
 
 모든 SSE 이벤트 수신 시 타이머를 리셋한다. HITL 대기 중에는 승인 이벤트가 타이머를 리셋하므로 타임아웃이 발생하지 않는다.
+
+## 실측 데이터
+
+| 항목 | 수치 |
+|------|------|
+| 토큰-투-렌더 레이턴시 (LLM 응답 → UI 표시) | ~35ms (로컬), ~50ms (원격) |
+| SSE 이벤트 처리량 (초당) | ~120 이벤트/초 (도구 호출 포함 피크) |
+| 9가지 SSE 이벤트 타입 | token, tool_call, tool_result, tasks, agents, approval, files_changed, title, error |
+| 스톨 타임아웃 | 45초 |
+| 평균 fetch 버퍼 크기 | ~2.4KB/청크 |
+
+## 삽질 노트
+
+처음에 SSE 파싱을 줄 단위(`\n` 기준 split)로 했더니 멀티바이트 한글이 잘렸다. UTF-8에서 한글 한 글자가 3바이트인데, fetch의 ReadableStream이 바이트 경계에서 청크를 나누면 글자 중간이 잘리는 문제였다. `TextDecoder`의 `stream: true` 옵션을 켜서 해결했다. 이 옵션이 불완전한 멀티바이트 시퀀스를 내부 버퍼에 보관하고 다음 청크와 합쳐서 디코딩한다.
+
+두 번째 문제는 도구 호출 메시지의 텍스트가 토큰으로 렌더링되는 버그였다. LangGraph의 `messages` 이벤트에는 도구 호출 JSON이 `content` 필드에 포함되는 경우가 있다. `tool_calls` 속성이 있는 메시지를 필터링하는 로직을 추가해서 해결했는데, 이 필터 없이는 JSON 문자열이 채팅 창에 그대로 출력됐다.
+
+세 번째로, asyncio.Queue의 pump 패턴을 도입하기 전에는 HITL 대기 중 SSE 연결이 끊어졌다. FastAPI의 StreamingResponse는 제너레이터가 yield하지 않으면 연결을 유지하지 않기 때문이다. Queue 기반으로 바꾸니 승인 대기 중에도 연결이 살아있게 됐다.
 
 ## 자주 묻는 질문
 

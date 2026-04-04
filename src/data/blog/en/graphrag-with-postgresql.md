@@ -13,6 +13,8 @@ featured: true
 aiAssisted: true
 ---
 
+> **Disclosure**: The author maintains [langchain-age](https://github.com/baem1n/langchain-age).
+
 > **TL;DR**: Combine Apache AGE (graph) + pgvector (vector) on PostgreSQL to get the same GraphRAG capabilities as Neo4j + Pinecone — with **1 database, 1 connection string, 1 backup pipeline**. The `langchain-age` package plugs directly into the LangChain ecosystem.
 
 ## Table of contents
@@ -26,6 +28,13 @@ This is Part 1 of the langchain-age series.
 3. [Mastering Vector Search](/en/posts/langchain-age-hybrid-search) — Hybrid, MMR, Filtering
 4. [Building a GraphRAG Pipeline](/en/posts/langchain-age-graphrag-pipeline) — Vector + Graph Integration
 5. [Full AI Agent Stack on One PostgreSQL](/en/posts/langchain-age-langgraph-agent) — LangGraph Integration
+
+## What You'll Be Able to Do
+
+- Set up a PostgreSQL + AGE + pgvector environment with a single Docker command
+- Build a knowledge graph with Cypher and vectorize nodes for semantic search
+- Compare AGE vs Neo4j on cost, licensing, and operational complexity with real numbers
+- Run a natural language → Cypher → graph answer pipeline using LLM-powered QA chains
 
 ## The Problem: Do You Really Need Two Databases for GraphRAG?
 
@@ -237,6 +246,18 @@ Yes. You can use LangGraph's PostgresStore and Checkpoint on the same PostgreSQL
 
 Export nodes and relationships via Cypher EXPORT, then load them with identical CREATE statements in AGE. For large datasets, use AGE's CSV loader for efficiency.
 
+### How compatible is langchain-age with the langchain-neo4j API?
+
+langchain-age mirrors the langchain-neo4j API. `AGEGraph` corresponds to `Neo4jGraph`, `AGEVector` to `Neo4jVector`, and `AGEGraphCypherQAChain` to `GraphCypherQAChain`. In most cases, changing import paths and the connection string is all that's needed. Code using Neo4j-specific APOC procedures will need modification.
+
+### Should I migrate from Neo4j to AGE?
+
+Not necessarily. If Neo4j is working well and licensing costs aren't a concern, there's no reason to switch. AGE is advantageous when: (1) you already run PostgreSQL and don't want another database, (2) GPL licensing conflicts with your commercial product, or (3) you want to reduce HA costs.
+
+### Is Apache AGE production-ready?
+
+Apache AGE is an Apache Software Foundation Top-Level Project and runs as a PostgreSQL extension, inheriting PostgreSQL's MVCC, WAL, and crash recovery guarantees. For production HA, you can use existing PG HA solutions like Patroni or repmgr without any AGE-specific configuration.
+
 ## Getting Started
 
 ```bash
@@ -247,6 +268,17 @@ pip install "langchain-age[all]"
 - [Tutorial (EN)](https://github.com/BAEM1N/langchain-age/blob/main/docs/en/tutorial.md)
 - [Tutorial (KO)](https://github.com/BAEM1N/langchain-age/blob/main/docs/ko/tutorial.md)
 - [Notebooks](https://github.com/BAEM1N/langchain-age/tree/main/notebooks)
+
+- [Apache AGE Official](https://age.apache.org/)
+- [pgvector GitHub](https://github.com/pgvector/pgvector)
+- [LangChain Docs](https://python.langchain.com/)
+
+## Key Takeaways
+
+- Apache AGE is a PostgreSQL extension, so your existing PG infrastructure (HA, backups, monitoring) works as-is. No new operational expertise needed.
+- Neo4j Enterprise HA licensing costs $15K+/year. AGE achieves the same availability for $0 using PostgreSQL-native HA (Patroni/repmgr).
+- `langchain-age` mirrors the `langchain-neo4j` API, so existing Neo4j code can be migrated by changing import paths and connection strings.
+- Graph (AGE) + Vector (pgvector) + Long-term Memory (LangGraph PostgresStore) all run on one PostgreSQL — one backup pipeline, one monitoring target.
 
 ## Related
 

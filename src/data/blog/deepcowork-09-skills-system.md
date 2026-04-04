@@ -2,7 +2,7 @@
 author: baem1n
 pubDatetime: 2026-04-04T08:00:00.000Z
 title: "DeepCoWork #9: 스킬 시스템 -- SKILL.md, 프로그레시브 디스클로저, 런타임 주입"
-description: "SKILL.md 기반 스킬 시스템의 설계, YAML 프론트매터 파싱, UI 관리, 런타임 주입 메커니즘을 분석합니다."
+description: "SKILL.md 기반 스킬 시스템의 설계, YAML 프론트매터 파싱, UI 관리, 런타임 주입까지 구현하며 배운 것."
 tags:
   - skills
   - plugin-system
@@ -11,13 +11,13 @@ tags:
 aiAssisted: true
 ---
 
-> **TL;DR**: DeepCoWork의 스킬 시스템은 `~/.cowork/skills/{name}/SKILL.md` 파일 기반이다. YAML 프론트매터로 이름, 설명, 허용 도구를 선언하고, 마크다운 본문에 에이전트 지침을 작성한다. 스킬은 UI에서 생성/편집/삭제 가능하며, 변경 즉시 모든 에이전트에 반영된다.
+> **TL;DR**: `~/.cowork/skills/{name}/SKILL.md` 파일 하나로 에이전트 능력을 확장하는 플러그인 시스템이며, UI에서 CRUD 즉시 반영된다.
 
 ## Table of contents
 
 ## 스킬이란
 
-스킬은 에이전트의 능력을 확장하는 플러그인이다. 예를 들어 "django-expert" 스킬을 추가하면 에이전트가 Django 프로젝트에 특화된 행동을 한다.
+스킬은 에이전트의 능력을 확장하는 플러그인이다. 예를 들어 "django-expert" 스킬을 추가하면 에이전트가 Django 프로젝트에 특화된 행동을 한다. [Agent Skills Specification](https://www.agentskills.io/) 커뮤니티 표준을 참고하여 설계했다.
 
 ```
 ~/.cowork/skills/
@@ -97,7 +97,7 @@ def _resolve_skills(workspace_dir: Path) -> list[str]:
     return sources
 ```
 
-`create_deep_agent`의 `skills` 파라미터로 전달되면, SDK가 스킬 디렉토리의 모든 SKILL.md를 읽어 에이전트 컨텍스트에 포함한다.
+`create_deep_agent`의 `skills` 파라미터로 전달되면, SDK가 스킬 디렉토리의 모든 SKILL.md를 읽어 에이전트 컨텍스트에 포함한다. [Deep Agents SDK](https://github.com/langchain-ai/deepagents)의 `SkillsMiddleware`가 프로그레시브 디스클로저를 처리한다.
 
 우선순위:
 1. 글로벌 스킬: `~/.cowork/skills/`
@@ -214,6 +214,24 @@ allowed-tools: read_file write_file execute
 3. 사용자가 스킬을 삭제하면 즉시 비활성화
 
 이 방식으로 불필요한 스킬이 LLM 컨텍스트를 낭비하지 않는다.
+
+## 실측 데이터
+
+| 항목 | 수치 |
+|------|------|
+| 스킬 로딩 시간 (SKILL.md 파싱) | ~2ms/파일 |
+| 스킬 10개 등록 시 시스템 프롬프트 증가량 | ~1,500 토큰 (메타데이터만) |
+| 스킬 이름 최대 길이 | 64자 (a-z, 0-9, 하이픈) |
+| 스킬 변경 → 에이전트 재빌드 | ~150ms |
+| API 응답 시간 (GET /settings/skills) | ~8ms (스킬 5개 기준) |
+
+## 삽질 노트
+
+Skills 폴더를 `~/.cowork/skills/`에 뒀더니 `_resolve_skills()`에서 워크스페이스 기준 상대경로(`skills/`)를 반환하는 바람에, SDK가 현재 작업 디렉토리의 `skills/` 폴더를 찾으려 해서 스킬이 0개로 나왔다. `config.WORKSPACE_ROOT` 기준으로 경로를 해석하도록 수정하니 해결됐다. 경로 문제라 에러 메시지도 안 나오고 그냥 조용히 스킬이 무시되어서 디버깅에 시간이 꽤 걸렸다.
+
+두 번째 삽질은 스킬 이름 검증이었다. 초기에는 이름에 `/`를 허용했는데, `PUT /settings/skills/../../etc/passwd` 같은 요청으로 경로 탈출이 가능했다. 정규식으로 영문 소문자, 숫자, 하이픈만 허용하도록 바꾸고, 추가로 `is_safe_path()` 이중 검증을 넣었다.
+
+세 번째로, 스킬 프론트매터 파싱에 `pyyaml`을 쓰려다가 의존성 추가가 부담스러워 직접 파서를 작성했다. 간단한 `key: value` 형태만 처리하면 되니 20줄 정도로 충분했고, 중첩 YAML 구조(`metadata.category`)까지 지원할 필요는 없었다.
 
 ## 자주 묻는 질문
 

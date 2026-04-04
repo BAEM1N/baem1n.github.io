@@ -53,6 +53,8 @@ SK하이닉스, mySUNI(SK 전 계열사), KB국민카드, IBK기업은행, NH농
 
 ## 오픈소스/활동
 
+- [langchain-age](https://github.com/baem1n/langchain-age) — Apache AGE + LangChain 통합 패키지 (메인테이너)
+- [DeepCoWork](https://github.com/BAEM1N/deep-cowork) — DeepAgents SDK 기반 AI 에이전트 데스크톱 앱 (제작자)
 - [LangChain-OpenTutorial](https://github.com/LangChain-OpenTutorial/LangChain-OpenTutorial) — 인프라 팀 PM
 - [GitHub](https://github.com/baem1n) · [LinkedIn](https://www.linkedin.com/in/baem1n/)
 

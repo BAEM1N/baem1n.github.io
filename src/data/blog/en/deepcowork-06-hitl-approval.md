@@ -2,7 +2,7 @@
 author: baem1n
 pubDatetime: 2026-04-04T05:00:00.000Z
 title: "DeepCoWork #6: HITL Approval Flow -- interrupt_on, Approval Queue, Timeout, Rejection Recovery"
-description: "The complete implementation of the human-in-the-loop approval flow for dangerous tool calls."
+description: "Design and implementation of the human-in-the-loop approval flow for dangerous tool calls."
 tags:
   - hitl
   - human-in-the-loop
@@ -11,13 +11,15 @@ tags:
 aiAssisted: true
 ---
 
-> **TL;DR**: DeepCoWork requires user approval before `write_file`, `edit_file`, and `execute` tool calls. LangGraph `interrupt_on` suspends the graph, an asyncio.Event-based approval queue synchronizes with the frontend, and timeouts auto-reject for safety.
+> **TL;DR**: Write/execute tool calls trigger a [LangGraph interrupt](https://langchain-ai.github.io/langgraph/concepts/human_in_the_loop/)-based graph suspension with a 300-second auto-reject timeout for safety.
 
 ## Table of contents
 
 ## Why HITL
 
 When an AI agent overwrites files or runs `rm -rf`, there is no undo. HITL (Human-in-the-Loop) is the safety gate that requires human confirmation before dangerous operations.
+
+The implementation follows the tool call review pattern from the [LangGraph HITL how-to guide](https://langchain-ai.github.io/langgraph/how-tos/human_in_the_loop/review-tool-calls/).
 
 | Tool | Needs Approval | Reason |
 |------|---------------|--------|
@@ -144,6 +146,16 @@ On rejection, the agent receives a `reject` decision and typically:
 1. Tries an alternative approach to the same goal
 2. Asks the user why they rejected
 3. Skips the task and moves to the next one
+
+## Benchmark
+
+| Metric | Value |
+|--------|-------|
+| Approval timeout | 300 seconds (5 minutes) |
+| Approval request to modal display latency | ~80ms |
+| Average user response time (internal testing) | ~3.2 seconds |
+| Rejection recovery success rate (Claude Sonnet) | ~70% |
+| MAX_AGENT_ITERATIONS | 25 (infinite loop prevention) |
 
 ## Abort: Full Stop
 

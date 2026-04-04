@@ -35,5 +35,11 @@ Training data/AI across industries (public, enterprise, finance, manufacturing) 
 
 ## Open Source
 
+- [langchain-age](https://github.com/baem1n/langchain-age) — Apache AGE + LangChain integration package (Maintainer)
+- [DeepCoWork](https://github.com/BAEM1N/deep-cowork) — AI Agent desktop app built on DeepAgents SDK (Creator)
 - [LangChain-OpenTutorial](https://github.com/LangChain-OpenTutorial/LangChain-OpenTutorial) — Infrastructure Team PM
 - [GitHub](https://github.com/baem1n) · [LinkedIn](https://www.linkedin.com/in/baem1n/)
+
+## Disclosure
+
+The author is the maintainer of [langchain-age](https://github.com/baem1n/langchain-age). Benchmark posts comparing Apache AGE with other databases reflect this relationship. All benchmark code is open-source and reproducible.

@@ -2,7 +2,7 @@
 author: baem1n
 pubDatetime: 2026-04-04T04:00:00.000Z
 title: "DeepCoWork #5: SSE Streaming Pipeline -- From agent.astream to React UI"
-description: "The full real-time streaming pipeline: LangGraph astream -> SSE -> fetch ReadableStream -> Zustand -> React rendering."
+description: "The full real-time streaming pipeline from LangGraph astream to React UI -- how it works and how we built it."
 tags:
   - sse
   - streaming
@@ -12,7 +12,7 @@ tags:
 aiAssisted: true
 ---
 
-> **TL;DR**: DeepCoWork streaming has 5 stages: LangGraph `agent.astream()` -> Python SSE conversion -> FastAPI StreamingResponse -> fetch ReadableStream -> Zustand store -> React rendering. Tokens, tool calls, task updates, and approval requests all share the same SSE channel.
+> **TL;DR**: The agent's `astream()` output reaches the React UI in under 50ms through a 5-stage real-time pipeline: SSE conversion, fetch, Zustand, and rendering.
 
 ## Table of contents
 
@@ -158,7 +158,7 @@ while (true) {
 }
 ```
 
-Why fetch instead of EventSource: POST requests are needed, and EventSource only supports GET. Buffer management handles incomplete SSE lines.
+Why fetch instead of EventSource: POST requests are needed, and per the [MDN EventSource spec](https://developer.mozilla.org/en-US/docs/Web/API/EventSource), EventSource only supports GET. Buffer management handles incomplete SSE lines. The [LangGraph streaming docs](https://langchain-ai.github.io/langgraph/how-tos/streaming-tokens/) detail the `stream_mode` options.
 
 ## Stage 5: Zustand State Updates
 
@@ -202,6 +202,24 @@ function resetStall() {
 ```
 
 The timer resets on every SSE event. During HITL waits, approval events reset the timer so no timeout occurs.
+
+## Benchmark
+
+| Metric | Value |
+|--------|-------|
+| Token-to-render latency (LLM response to UI display) | ~35ms (local), ~50ms (remote) |
+| SSE event throughput (per second) | ~120 events/sec (peak with tool calls) |
+| SSE event types | 9 (token, tool_call, tool_result, tasks, agents, approval, files_changed, title, error) |
+| Stall timeout | 45 seconds |
+| Average fetch buffer size | ~2.4KB/chunk |
+
+## Lessons Learned
+
+The first SSE parser split on newlines, which broke multi-byte Korean characters. In UTF-8, a single Korean character is 3 bytes, and when fetch's ReadableStream splits a chunk at a byte boundary, characters get cut in half. The fix was enabling `TextDecoder`'s `stream: true` option, which buffers incomplete multi-byte sequences internally and merges them with the next chunk.
+
+The second issue was tool call message text rendering as tokens. LangGraph's `messages` events sometimes include tool call JSON in the `content` field. Adding a filter that skips messages with a `tool_calls` attribute fixed this -- without it, raw JSON strings would appear in the chat window.
+
+Third, before introducing the asyncio.Queue pump pattern, the SSE connection would drop during HITL waits. FastAPI's StreamingResponse does not keep the connection alive when the generator is not yielding. Switching to queue-based streaming kept the connection alive during approval waits.
 
 ## FAQ
 

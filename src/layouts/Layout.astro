@@ -1,5 +1,4 @@
 ---
-import { Font } from "astro:assets";
 import { ClientRouter } from "astro:transitions";
 import { PUBLIC_GOOGLE_SITE_VERIFICATION } from "astro:env/client";
 import { SITE } from "@/config";
@@ -15,6 +14,10 @@ type Props = {
   pubDatetime?: Date;
   modDatetime?: Date | null;
   scrollSmooth?: boolean;
+  lang?: string;
+  tags?: string[];
+  alternateUrl?: string;
+  alternateLang?: string;
 };
 
 const {
@@ -27,6 +30,10 @@ const {
   pubDatetime,
   modDatetime,
   scrollSmooth = false,
+  lang = SITE.lang ?? "en",
+  tags = [],
+  alternateUrl,
+  alternateLang,
 } = Astro.props;
 
 const socialImageURL = new URL(ogImage, Astro.url);
@@ -42,7 +49,7 @@ const authorEntity = {
 const structuredData = isArticle
   ? {
       "@context": "https://schema.org",
-      "@type": "Article",
+      "@type": "BlogPosting",
       headline: `${title}`,
       description: `${description}`,
       image: `${socialImageURL}`,
@@ -59,7 +66,8 @@ const structuredData = isArticle
         "@type": "WebPage",
         "@id": `${canonicalURL}`,
       },
-      inLanguage: SITE.lang ?? "en",
+      inLanguage: lang,
+      ...(tags.length > 0 && { keywords: tags.join(", ") }),
     }
   : {
       "@context": "https://schema.org",
@@ -67,32 +75,45 @@ const structuredData = isArticle
       name: SITE.title,
       description: SITE.desc,
       url: SITE.website,
-      inLanguage: SITE.lang ?? "en",
+      inLanguage: lang,
       author: [authorEntity],
+      potentialAction: {
+        "@type": "SearchAction",
+        target: {
+          "@type": "EntryPoint",
+          urlTemplate: `${SITE.website}search?q={search_term_string}`,
+        },
+        "query-input": "required name=search_term_string",
+      },
     };
 ---
 
 <!doctype html>
 <html
   dir={SITE.dir}
-  lang=`${SITE.lang ?? "en"}`
+  lang={lang}
   class={`${scrollSmooth && "scroll-smooth"}`}
 >
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href={canonicalURL} />
+    {alternateUrl && alternateLang && (
+      <>
+        <link rel="alternate" hreflang={lang} href={canonicalURL.toString()} />
+        <link rel="alternate" hreflang={alternateLang} href={alternateUrl} />
+        <link rel="alternate" hreflang="x-default" href={lang === "ko" ? canonicalURL.toString() : alternateUrl} />
+      </>
+    )}
     <meta name="generator" content={Astro.generator} />
 
-    <!-- Load Fonts -->
-    <Font
-      cssVariable="--font-body"
-      preload={[{ subset: "latin", weight: 400, style: "normal" }]}
-    />
-    <Font
-      cssVariable="--font-code"
-      preload={[{ subset: "latin", weight: 400, style: "normal" }]}
+    <!-- Load Fonts via Google Fonts (external CSS, not inline) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
     />
 
     <!-- General Meta Tags -->
@@ -103,10 +124,12 @@ const structuredData = isArticle
     <link rel="sitemap" href="/sitemap-index.xml" />
 
     <!-- Open Graph / Facebook -->
+    <meta property="og:type" content={isArticle ? "article" : "website"} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:image" content={socialImageURL} />
+    <meta property="og:locale" content={lang === "en" ? "en_US" : "ko_KR"} />
 
     <!-- Article Published/Modified time -->
     {

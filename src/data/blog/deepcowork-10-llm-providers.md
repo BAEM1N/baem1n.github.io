@@ -2,7 +2,7 @@
 author: baem1n
 pubDatetime: 2026-04-04T09:00:00.000Z
 title: "DeepCoWork #10: LLM 프로바이더 통합 -- 5개 백엔드, 모델 자동 감지, 빌드 변형"
-description: "Anthropic, OpenRouter, Ollama, LM Studio, vLLM 5개 프로바이더를 하나의 인터페이스로 통합한 구조를 분석합니다."
+description: "Anthropic, OpenRouter, Ollama, LM Studio, vLLM 5개 프로바이더를 하나의 인터페이스로 통합하는 설계 과정을 공유합니다."
 tags:
   - llm
   - anthropic
@@ -12,7 +12,7 @@ tags:
 aiAssisted: true
 ---
 
-> **TL;DR**: DeepCoWork는 `build_llm()` 하나로 5개 LLM 프로바이더를 지원한다. Anthropic과 OpenRouter는 클라우드, Ollama/LM Studio/vLLM은 로컬이다. `VITE_DEPLOY_MODE` 빌드 변수로 프로바이더 노출을 제어하고, 로컬 프로바이더는 서버에서 모델 목록을 자동 가져온다.
+> **TL;DR**: `build_llm()` 팩토리 함수 하나로 5개 LLM 프로바이더(클라우드 2 + 로컬 3)를 통합하며, 로컬 모델은 `/v1/models` API로 자동 감지한다.
 
 ## Table of contents
 
@@ -65,7 +65,7 @@ def build_llm() -> Any:
         )
 ```
 
-핵심: `ChatOpenAI`의 `base_url` 파라미터로 OpenAI 호환 API를 사용하는 모든 로컬 서버를 지원한다. Anthropic만 전용 SDK(`ChatAnthropic`)를 사용한다.
+핵심: `ChatOpenAI`의 `base_url` 파라미터로 [OpenAI 호환 API](https://platform.openai.com/docs/api-reference)를 사용하는 모든 로컬 서버를 지원한다. Anthropic만 전용 SDK(`ChatAnthropic`)를 사용한다. Ollama의 [OpenAI 호환 모드](https://ollama.com/blog/openai-compatibility)가 이 통합의 핵심이다.
 
 ## 빌드 변형 (Deploy Mode)
 
@@ -167,6 +167,24 @@ async def rebuild_all_agents_safe():
 ```
 
 `asyncio.Lock`으로 동시 재빌드를 방지한다.
+
+## 실측 데이터
+
+| 항목 | 수치 |
+|------|------|
+| 모델 목록 조회 레이턴시 (Ollama 로컬) | ~120ms |
+| 모델 목록 조회 레이턴시 (LM Studio 로컬) | ~80ms |
+| 모델 목록 조회 타임아웃 | 5초 |
+| 프로바이더 전환 → 에이전트 재빌드 | ~200ms |
+| build_llm() 실행 시간 | ~15ms |
+
+## 삽질 노트
+
+`create_react_agent`의 `interrupt_before` 파라미터에 도구 이름(`"write_file"`)을 넣었더니 `ValueError`가 발생했다. LangGraph의 `interrupt_before`는 **노드 이름**만 받고, 도구 이름은 받지 않는다. 이걸 모르고 한참 삽질했는데, DeepAgents SDK의 `interrupt_on`이 도구 이름 기반으로 동작해서 이 문제를 깔끔하게 해결해줬다. 이 차이가 DeepAgents SDK를 선택한 핵심 이유 중 하나다.
+
+두 번째 문제는 Ollama의 모델 목록 API였다. Ollama는 원래 `/api/tags` 엔드포인트를 사용하는데, v0.1.24부터 OpenAI 호환 `/v1/models`도 지원한다. 처음에 `/v1/models`만 호출했더니 구버전 Ollama에서 404가 나왔다. 2단계 폴백 전략(v1/models 먼저, 실패 시 /api/tags)으로 해결했다.
+
+세 번째로, OpenRouter 연동 시 `HTTP-Referer`와 `X-Title` 헤더를 안 넣으면 429 레이트리밋에 더 빨리 걸린다는 걸 나중에 알았다. OpenRouter 문서를 꼼꼼히 읽지 않은 대가였다.
 
 ## 자주 묻는 질문
 

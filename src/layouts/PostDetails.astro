@@ -1,6 +1,7 @@
 ---
 import { render, type CollectionEntry } from "astro:content";
 import Layout from "@/layouts/Layout.astro";
+import { extractFaq, buildFaqJsonLd } from "@/utils/extractFaq";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import Tag from "@/components/Tag.astro";
@@ -18,9 +19,12 @@ import { SITE } from "@/config";
 type Props = {
   post: CollectionEntry<"blog">;
   posts: CollectionEntry<"blog">[];
+  lang?: string;
+  alternateUrl?: string;
+  alternateLang?: string;
 };
 
-const { post, posts } = Astro.props;
+const { post, posts, lang, alternateUrl, alternateLang } = Astro.props;
 
 const {
   title,
@@ -37,6 +41,9 @@ const {
 } = post.data;
 
 const { Content } = await render(post);
+
+const faqItems = extractFaq(post.body);
+const faqJsonLd = buildFaqJsonLd(faqItems);
 
 let ogImageUrl: string | undefined;
 
@@ -66,6 +73,10 @@ const layoutProps = {
   canonicalURL,
   ogImage,
   scrollSmooth: true,
+  lang,
+  tags,
+  alternateUrl,
+  alternateLang,
 };
 
 /* ========== Prev/Next Posts ========== */
@@ -186,6 +197,13 @@ const nextPost =
     </div>
   </main>
   <Footer />
+  {faqJsonLd && (
+    <script
+      type="application/ld+json"
+      is:inline
+      set:html={JSON.stringify(faqJsonLd)}
+    />
+  )}
 </Layout>
 
 <script is:inline data-astro-rerun>

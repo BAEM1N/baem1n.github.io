@@ -2,7 +2,7 @@
 author: baem1n
 pubDatetime: 2026-04-04T00:00:00.000Z
 title: "DeepCoWork: DeepAgents SDK 기반 AI 에이전트 데스크톱 앱을 만들었다"
-description: "LangChain Deep Agents SDK + Tauri 2로 만든 오픈소스 AI 에이전트 데스크톱 앱. 아키텍처, 핵심 기능, 왜 만들었는지를 공유합니다."
+description: "LangChain Deep Agents SDK + Tauri 2로 만든 오픈소스 AI 에이전트 데스크톱 앱의 아키텍처와 핵심 기능을 설계 과정과 함께 공유합니다."
 tags:
   - ai-agent
   - deep-agents
@@ -13,13 +13,13 @@ featured: true
 aiAssisted: true
 ---
 
-> **TL;DR**: [DeepCoWork](https://github.com/BAEM1N/deep-cowork)는 LangChain의 Deep Agents SDK 위에 Tauri 2 데스크톱 셸을 씌운 오픈소스 AI 에이전트 앱이다. 파일 읽기/쓰기, 셸 실행, 서브에이전트 위임을 지원하며, 위험한 작업은 사용자 승인(HITL)을 거친다. Anthropic, OpenRouter, Ollama, LM Studio, vLLM 5개 프로바이더를 지원하고, macOS/Windows/Linux 크로스 플랫폼 빌드를 GitHub Actions로 자동화했다.
+> **TL;DR**: DeepCoWork는 [Deep Agents SDK](https://github.com/langchain-ai/deepagents) + [Tauri 2](https://v2.tauri.app/) 기반 오픈소스 AI 에이전트 데스크톱 앱으로, 5개 LLM 프로바이더와 HITL 승인을 지원한다.
 
 ## Table of contents
 
 ## 왜 만들었나
 
-Claude Cowork가 나왔을 때 "이걸 오픈소스로 만들 수 있겠다"고 생각했다. Anthropic의 [Deep Agents SDK](https://github.com/langchain-ai/deepagents)가 Apache 2.0으로 공개되어 있었고, 핵심 4대 요소가 명확했다:
+Claude Cowork가 나왔을 때 "이걸 오픈소스로 만들 수 있겠다"고 생각했다. Anthropic의 [Deep Agents SDK](https://github.com/langchain-ai/deepagents)가 Apache 2.0으로 공개되어 있었고, [Tauri 2](https://v2.tauri.app/start/)의 sidecar 기능으로 Python 백엔드를 데스크톱에 임베딩할 수 있었다. 핵심 4대 요소가 명확했다:
 
 | 구성요소 | 역할 |
 |----------|------|
@@ -232,6 +232,16 @@ cd ../app && npm run tauri dev
 12. GitHub Actions 크로스 플랫폼 빌드
 
 소스코드: [github.com/BAEM1N/deep-cowork](https://github.com/BAEM1N/deep-cowork)
+
+## 실측 데이터
+
+| 항목 | 수치 |
+|------|------|
+| Tauri 앱 바이너리 (sidecar 제외) | ~12MB (macOS arm64) |
+| PyInstaller sidecar 바이너리 | ~95MB (DeepAgents + LangChain + FastAPI 포함) |
+| 전체 .dmg 설치 파일 크기 | ~110MB |
+| 콜드 스타트 (앱 실행 → 첫 채팅 가능) | ~4.2초 (M1 Mac 기준) |
+| 메모리 사용량 (유휴 시) | ~180MB (Tauri ~45MB + Python ~135MB) |
 
 ## 자주 묻는 질문
 

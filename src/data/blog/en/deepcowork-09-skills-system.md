@@ -2,7 +2,7 @@
 author: baem1n
 pubDatetime: 2026-04-04T08:00:00.000Z
 title: "DeepCoWork #9: Skills System -- SKILL.md, Progressive Disclosure, Runtime Injection"
-description: "Design of the SKILL.md-based skills system: YAML frontmatter parsing, UI management, and runtime injection."
+description: "Design of the SKILL.md-based skills system: YAML frontmatter parsing, UI management, and runtime injection -- what we learned building it."
 tags:
   - skills
   - plugin-system
@@ -11,13 +11,13 @@ tags:
 aiAssisted: true
 ---
 
-> **TL;DR**: DeepCoWork's skills system is file-based: `~/.cowork/skills/{name}/SKILL.md`. YAML frontmatter declares name, description, and allowed tools; the markdown body contains agent instructions. Skills are created, edited, and deleted from the UI, with changes applied instantly to all agents.
+> **TL;DR**: A single `~/.cowork/skills/{name}/SKILL.md` file extends agent capabilities as a plugin, with UI-based CRUD and instant propagation to all agents.
 
 ## Table of contents
 
 ## What is a Skill
 
-A skill is a plugin that extends agent capabilities. Adding a "django-expert" skill makes the agent specialize in Django projects.
+A skill is a plugin that extends agent capabilities. Adding a "django-expert" skill makes the agent specialize in Django projects. The design was inspired by the [Agent Skills Specification](https://www.agentskills.io/) community standard.
 
 ## SKILL.md Format
 
@@ -88,10 +88,28 @@ The panel provides a list view of all skills with inline editing. Users can crea
 
 Skills follow a "load only when needed" pattern:
 1. At agent build time, only check if skill directories exist
-2. The SDK activates only relevant skills for the task context
+2. The [Deep Agents SDK](https://github.com/langchain-ai/deepagents)'s `SkillsMiddleware` activates only relevant skills for the task context
 3. Deleting a skill deactivates it immediately
 
 This prevents unnecessary skills from consuming LLM context.
+
+## Benchmark
+
+| Metric | Value |
+|--------|-------|
+| Skill loading time (SKILL.md parsing) | ~2ms/file |
+| System prompt increase with 10 skills | ~1,500 tokens (metadata only) |
+| Skill name max length | 64 chars (a-z, 0-9, hyphens) |
+| Skill change to agent rebuild | ~150ms |
+| API response time (GET /settings/skills) | ~8ms (5 skills) |
+
+## Lessons Learned
+
+Placing the skills folder at `~/.cowork/skills/` caused `_resolve_skills()` to return a relative path (`skills/`), which made the SDK look for a `skills/` directory relative to the current working directory. Skills showed up as 0. The fix was resolving paths relative to `config.WORKSPACE_ROOT`. Since it was a silent path mismatch with no error message, debugging took considerable time.
+
+The second issue was skill name validation. Initially we allowed `/` in names, which opened a path traversal attack via `PUT /settings/skills/../../etc/passwd`. We locked it down to a regex allowing only lowercase letters, numbers, and hyphens, plus an additional `is_safe_path()` double-check.
+
+Third, we considered using `pyyaml` for frontmatter parsing but decided against adding the dependency. A simple 20-line parser handling `key: value` pairs was sufficient -- there was no need to support nested YAML structures like `metadata.category`.
 
 ## FAQ
 

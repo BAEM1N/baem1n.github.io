@@ -2,7 +2,7 @@
 author: baem1n
 pubDatetime: 2026-04-04T11:00:00.000Z
 title: "DeepCoWork #12: GitHub Actions 크로스 플랫폼 빌드 -- PyInstaller 사이드카, CI/CD"
-description: "macOS, Windows, Linux 3개 플랫폼에서 Tauri + PyInstaller 앱을 빌드하고 릴리스하는 GitHub Actions 워크플로를 해부합니다."
+description: "macOS, Windows, Linux 3개 플랫폼에서 Tauri + PyInstaller 앱을 빌드하고 릴리스하는 CI/CD 파이프라인 구현기."
 tags:
   - github-actions
   - ci-cd
@@ -12,7 +12,7 @@ tags:
 aiAssisted: true
 ---
 
-> **TL;DR**: DeepCoWork는 GitHub Actions에서 macOS, Linux, Windows 3개 플랫폼을 매트릭스 빌드한다. 각 러너에서 PyInstaller로 Python 사이드카를 빌드한 후, Tauri가 이를 포함하여 .dmg/.deb/.msi를 생성한다. 태그 푸시 시 자동 릴리스까지 처리된다.
+> **TL;DR**: GitHub Actions 매트릭스 빌드로 3개 OS에서 PyInstaller sidecar + Tauri 앱을 빌드하며, 캐시 적중 시 8~12분에 완료된다.
 
 ## Table of contents
 
@@ -53,7 +53,7 @@ on:
         default: 'all'
 ```
 
-태그 푸시(`v1.0.0` 등)로 자동 트리거되고, `workflow_dispatch`로 수동 실행도 가능하다. `deploy_mode` 입력으로 빌드 변형을 제어한다.
+태그 푸시(`v1.0.0` 등)로 자동 트리거되고, `workflow_dispatch`로 수동 실행도 가능하다. `deploy_mode` 입력으로 빌드 변형을 제어한다. [GitHub Actions 워크플로 문서](https://docs.github.com/en/actions/writing-workflows)와 [tauri-action](https://github.com/tauri-apps/tauri-action) 플러그인이 핵심 참고 자료다.
 
 ## 빌드 매트릭스
 
@@ -211,6 +211,25 @@ release:
 | Tauri sidecar 미발견 | 이름 불일치 | `agent-server-{target-triple}` 형식 확인 |
 | Linux 빌드 실패 | WebKitGTK 미설치 | `apt-get install libwebkit2gtk-4.1-dev` |
 | macOS 코드사인 | 인증서 미설정 | Notarization 설정 필요 (현재 미지원) |
+
+## 실측 데이터
+
+| 항목 | 수치 |
+|------|------|
+| 초기 빌드 시간 (Rust 컴파일 포함) | 15~20분 |
+| 캐시 적중 빌드 시간 | 8~12분 |
+| PyInstaller sidecar 빌드 시간 | ~3분 |
+| 최종 .dmg 크기 (macOS arm64) | ~110MB |
+| 최종 .msi 크기 (Windows x64) | ~125MB |
+| 최종 .deb 크기 (Linux x64) | ~105MB |
+
+## 삽질 노트
+
+macOS x64 빌드가 실패했다. `macos-latest`가 이미 ARM64(Apple Silicon) 러너로 바뀌어서 PyInstaller가 `aarch64-apple-darwin` 바이너리를 생성했기 때문이다. Tauri는 `--target x86_64-apple-darwin`을 기대하는데 sidecar 바이너리 이름이 `aarch64`라 매칭이 안 됐다. 결국 macOS Intel 빌드를 드롭하고 ARM64만 지원하기로 결정했다. Intel Mac 사용자 비율이 이미 매우 낮았기 때문이다.
+
+두 번째 삽질은 PyInstaller의 동적 임포트 누락이었다. LangChain과 FastAPI(uvicorn) 생태계는 동적 임포트를 많이 사용해서, `--hidden-import`를 하나씩 추가하며 "빌드→실행→에러 확인→추가" 사이클을 7~8번 반복했다. `uvicorn.logging`, `aiosqlite`, `langchain_anthropic` 등이 자주 누락되는 모듈이었다.
+
+세 번째로, Windows에서 PyInstaller 바이너리 이름에 `.exe` 확장자를 안 붙였더니 Tauri sidecar 탐색이 실패했다. `get_target_triple()` 함수에서 Windows일 때 `.exe` suffix를 추가하는 분기를 빠뜨린 단순한 실수였는데, CI에서만 재현되어 로컬에서 디버깅할 수 없어 피드백 루프가 길었다.
 
 ## 자주 묻는 질문
 

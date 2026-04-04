@@ -13,6 +13,8 @@ tags:
 featured: true
 ---
 
+> **Disclosure**: 이 글의 저자는 [langchain-age](https://github.com/baem1n/langchain-age) 메인테이너입니다. 모든 벤치마크 코드는 오픈소스이며 재현 가능합니다.
+
 > **TL;DR**: 1K 노드/2K 엣지 그래프에서 동일한 Cypher를 실행한 결과, AGE는 8개 테스트 중 **6개에서 Neo4j보다 빠르다** (포인트 룩업 2.2배, CREATE 3.7배, 스키마 조회 2.1배). Neo4j는 **3홉 이상 깊은 탐색에서 11~15배 빠르다**. RAG 워크로드 (1~2홉 + CRUD)에서는 AGE가 더 빠르고, 깊은 그래프 분석에서는 Neo4j가 확실히 우위다.
 
 ## Table of contents
@@ -26,6 +28,13 @@ featured: true
 3. [벡터 검색 완전 정복](/posts/langchain-age-hybrid-search) — Hybrid, MMR, 필터링
 4. [GraphRAG 파이프라인 실전 구축](/posts/langchain-age-graphrag-pipeline) — 벡터 + 그래프 통합
 5. [PostgreSQL 하나로 AI Agent 전체 스택](/posts/langchain-age-langgraph-agent) — LangGraph 연동
+
+## 이 글을 읽고 나면
+
+- 동일 Cypher 기준 Neo4j vs AGE의 성능 차이를 **수치로** 파악할 수 있다.
+- RAG 워크로드(1~2홉 + CRUD)에서 어떤 DB가 유리한지 데이터 기반으로 판단할 수 있다.
+- `traverse()` 최적화가 왜 깊은 탐색에서 중요한지, 그리고 어떻게 Neo4j를 역전하는지 이해할 수 있다.
+- 워크로드별로 Neo4j와 AGE 중 어느 쪽을 선택해야 하는지 근거를 갖고 결정할 수 있다.
 
 ## 왜 이 벤치마크가 필요한가
 
@@ -182,6 +191,12 @@ results = graph.traverse(
 | 4홉 이상 깊은 탐색 | `graph.traverse()` | 10~22x 성능 향상 |
 | 시작 노드 조건이 복잡 | `graph.create_property_index()` 선행 | 프로퍼티 인덱스로 시작 노드 룩업 가속 |
 
+## 벤치마크의 한계
+
+- **소규모 그래프 기준이다.** 이 벤치마크는 1K 노드/2K 엣지 그래프에서 실행됐다. 수백만~수십억 노드 규모에서는 인덱스 전략, 캐시 히트율, 디스크 I/O 패턴이 달라지므로 결과가 다를 수 있다.
+- **Docker 환경이다.** 양쪽 모두 기본 설정의 Docker 컨테이너에서 테스트했다. 프로덕션 환경에서 메모리, JVM(Neo4j), shared_buffers(PostgreSQL)를 튜닝하면 절대 수치가 달라진다.
+- **벡터 검색은 포함하지 않았다.** 이 벤치마크는 순수 그래프 쿼리 성능만 비교한다. pgvector vs Neo4j Vector Index 비교는 별도 벤치마크가 필요하다.
+
 ## 자주 묻는 질문
 
 ### Neo4j와 AGE의 Cypher 호환성은 어떤가?
@@ -231,6 +246,21 @@ python benchmarks/bench.py
 ```
 
 벤치마크 스크립트는 [benchmarks/bench.py](https://github.com/BAEM1N/langchain-age/blob/main/benchmarks/bench.py)에 공개되어 있다.
+
+## 외부 자료
+
+- [Apache AGE 공식 사이트](https://age.apache.org/) — PostgreSQL 그래프 확장 프로젝트
+- [pgvector](https://github.com/pgvector/pgvector) — PostgreSQL 벡터 검색 확장
+- [Neo4j Cypher Manual](https://neo4j.com/docs/cypher-manual/) — Neo4j 공식 Cypher 문서
+- [langchain-age GitHub](https://github.com/baem1n/langchain-age) — 이 벤치마크의 소스 코드
+
+## 핵심 정리
+
+- 1K 노드 그래프에서 동일한 Cypher를 실행하면, AGE는 8개 테스트 중 6개에서 Neo4j보다 **1.5~3.7배 빠르다** (포인트 룩업, 1홉 탐색, 집계, CREATE, 배치 CREATE, 스키마 조회).
+- 3홉 이상 깊은 탐색에서 Neo4j는 AGE Cypher보다 **11~15배 빠르다**. 이는 Neo4j의 index-free adjacency 아키텍처 때문이다.
+- AGE의 `traverse()` (WITH RECURSIVE CTE)를 사용하면 6홉 탐색이 28.2ms에서 1.4ms로 **19배 빨라지며**, Neo4j(2.4ms)보다 **1.7배 빠르다**.
+- RAG 워크로드의 핵심인 1~2홉 조회 + CRUD에서는 AGE가 Neo4j보다 일관되게 빠르고, 라이선스 비용은 $0이다.
+- `traverse()` 최적화는 AGE 데이터가 PostgreSQL 테이블에 저장되기 때문에 가능하다. Neo4j에는 동일한 최적화를 적용할 수 없다.
 
 ## 관련 포스트
 
