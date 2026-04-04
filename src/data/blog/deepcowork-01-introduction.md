@@ -32,37 +32,7 @@ Claude Cowork가 나왔을 때 "이걸 오픈소스로 만들 수 있겠다"고 
 
 ## 전체 아키텍처
 
-```
-┌──────────────────────────────────────────┐
-│             Tauri 2 Desktop              │
-│  ┌──────────┐ ┌──────────┐ ┌───────────┐│
-│  │  Thread   │ │   Chat   │ │   Right   ││
-│  │  List     │ │   Area   │ │   Panel   ││
-│  │          │ │          │ │ ─────────  ││
-│  │  🌙/☀️   │ │  Mode    │ │ Tasks     ││
-│  │  EN/한   │ │  Switch  │ │ Agents    ││
-│  │  ⚙️      │ │          │ │ Log       ││
-│  │          │ │ Messages │ │ Files     ││
-│  │          │ │          │ │ Memory    ││
-│  │          │ │  Input   │ │ Skills    ││
-│  └──────────┘ └──────────┘ └───────────┘│
-└────────────────────┬─────────────────────┘
-                     │ SSE (Server-Sent Events)
-┌────────────────────▼─────────────────────┐
-│           FastAPI Backend (Python)        │
-│  ┌────────────────────────────────────┐  │
-│  │        agent_core.py               │  │
-│  │  create_deep_agent()               │  │
-│  │  ├── LocalShellBackend (8 tools)   │  │
-│  │  ├── interrupt_on (HITL)           │  │
-│  │  ├── skills=["skills/"]            │  │
-│  │  └── tools (web, memory, task)     │  │
-│  └────────────────────────────────────┘  │
-│  routes/ │ stream.py │ state.py │ ...    │
-└────────────────────┬─────────────────────┘
-                     │
-           LLM API (5 providers)
-```
+![DeepCoWork 아키텍처](../../assets/images/deepcowork/architecture-ko.png)
 
 ### 3계층 구조
 

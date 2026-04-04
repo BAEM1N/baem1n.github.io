@@ -32,31 +32,7 @@ Building it myself means no model lock-in, local LLM support, and full control o
 
 ## Architecture
 
-```
-┌──────────────────────────────────────────┐
-│             Tauri 2 Desktop              │
-│  ┌──────────┐ ┌──────────┐ ┌───────────┐│
-│  │  Thread   │ │   Chat   │ │   Right   ││
-│  │  List     │ │   Area   │ │   Panel   ││
-│  │          │ │  Mode    │ │ Tasks     ││
-│  │  🌙/☀️   │ │  Switch  │ │ Agents    ││
-│  │  EN/한   │ │          │ │ Log/Files ││
-│  │  ⚙️      │ │ Messages │ │ Memory    ││
-│  │          │ │  Input   │ │ Skills    ││
-│  └──────────┘ └──────────┘ └───────────┘│
-└────────────────────┬─────────────────────┘
-                     │ SSE
-┌────────────────────▼─────────────────────┐
-│           FastAPI Backend (Python)        │
-│  create_deep_agent()                     │
-│  ├── LocalShellBackend (8 tools)         │
-│  ├── interrupt_on (HITL)                 │
-│  ├── skills=["skills/"]                  │
-│  └── custom tools (web, memory, task)    │
-└────────────────────┬─────────────────────┘
-                     │
-           LLM API (5 providers)
-```
+![DeepCoWork Architecture](../../../assets/images/deepcowork/architecture-en.png)
 
 ### Three Layers
 

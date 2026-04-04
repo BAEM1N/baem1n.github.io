@@ -29,21 +29,7 @@ Electron은 Chromium을 통째로 번들해서 150MB+지만, [Tauri](https://v2.
 
 ## 프로세스 구조
 
-```
-[사용자가 앱 실행]
-     │
-     ▼
-  Tauri (Rust)
-     │
-     ├── 1. 사용 가능한 포트 탐색 (8008~8108)
-     ├── 2. Python 서버 spawn (포트 전달)
-     ├── 3. /health 폴링 (최대 30초)
-     ├── 4. server_ready 이벤트 → 프론트엔드
-     └── 5. 주기적 헬스체크 (10초마다)
-            │
-            ▼ (크래시 감지 시)
-       agent_crashed 이벤트 → UI 에러 표시
-```
+![Tauri Sidecar 프로세스 흐름](../../assets/images/deepcowork/sidecar-flow-ko.png)
 
 ## 핵심 코드: spawn_python
 
