@@ -28,3 +28,6 @@ docs/
 
 # jetbrains setting folder
 .idea/
+
+# external tools
+geo-seo-claude/

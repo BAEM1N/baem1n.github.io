@@ -17,6 +17,16 @@ featured: true
 
 ## Table of contents
 
+## Series
+
+This is Part 2 of the langchain-age series.
+
+1. [GraphRAG with Just PostgreSQL](/en/posts/graphrag-with-postgresql) — Overview + Setup
+2. **Neo4j vs Apache AGE Benchmark** (this post)
+3. [Mastering Vector Search](/en/posts/langchain-age-hybrid-search) — Hybrid, MMR, Filtering
+4. [Building a GraphRAG Pipeline](/en/posts/langchain-age-graphrag-pipeline) — Vector + Graph Integration
+5. [Full AI Agent Stack on One PostgreSQL](/en/posts/langchain-age-langgraph-agent) — LangGraph Integration
+
 ## Why This Benchmark Matters
 
 Most comparisons between Neo4j and Apache AGE are qualitative — "AGE is convenient because it runs on PostgreSQL", "Neo4j is faster because it's a native graph database". No numbers.
@@ -224,7 +234,10 @@ The benchmark script is available at [benchmarks/bench.py](https://github.com/BA
 
 ## Related
 
-- [GraphRAG with Just PostgreSQL](/en/posts/graphrag-with-postgresql)
+- [GraphRAG with Just PostgreSQL](/en/posts/graphrag-with-postgresql) — Part 1: Overview and Quick Start
+- [Mastering Vector Search](/en/posts/langchain-age-hybrid-search) — Part 3: Hybrid, MMR, Filtering
+- [Building a GraphRAG Pipeline](/en/posts/langchain-age-graphrag-pipeline) — Part 4: Vector + Graph Integration
+- [Full AI Agent Stack on One PostgreSQL](/en/posts/langchain-age-langgraph-agent) — Part 5: LangGraph Integration
 
 ---
 

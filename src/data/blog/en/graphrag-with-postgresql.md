@@ -17,6 +17,16 @@ aiAssisted: true
 
 ## Table of contents
 
+## Series
+
+This is Part 1 of the langchain-age series.
+
+1. **GraphRAG with Just PostgreSQL** (this post)
+2. [Neo4j vs Apache AGE Benchmark](/en/posts/neo4j-vs-age-benchmark) — Performance Data
+3. [Mastering Vector Search](/en/posts/langchain-age-hybrid-search) — Hybrid, MMR, Filtering
+4. [Building a GraphRAG Pipeline](/en/posts/langchain-age-graphrag-pipeline) — Vector + Graph Integration
+5. [Full AI Agent Stack on One PostgreSQL](/en/posts/langchain-age-langgraph-agent) — LangGraph Integration
+
 ## The Problem: Do You Really Need Two Databases for GraphRAG?
 
 GraphRAG retrieves context from both a knowledge graph and vector embeddings before generating an answer. The most common approach uses Neo4j, but that means:
@@ -240,7 +250,10 @@ pip install "langchain-age[all]"
 
 ## Related
 
-- [Neo4j vs Apache AGE Benchmark](/en/posts/neo4j-vs-age-benchmark) — 8-test fair comparison with traverse() performance data
+- [Neo4j vs Apache AGE Benchmark](/en/posts/neo4j-vs-age-benchmark) — Part 2: Performance Comparison
+- [Mastering Vector Search](/en/posts/langchain-age-hybrid-search) — Part 3: Hybrid, MMR, Filtering
+- [Building a GraphRAG Pipeline](/en/posts/langchain-age-graphrag-pipeline) — Part 4: Vector + Graph Integration
+- [Full AI Agent Stack on One PostgreSQL](/en/posts/langchain-age-langgraph-agent) — Part 5: LangGraph Integration
 
 ---
 

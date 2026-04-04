@@ -17,6 +17,16 @@ featured: true
 
 ## Table of contents
 
+## 시리즈
+
+이 글은 langchain-age 시리즈의 2편이다.
+
+1. [GraphRAG를 PostgreSQL만으로 구축하기](/posts/graphrag-with-postgresql) — 개요 + 셋업
+2. **Neo4j vs Apache AGE 실측 벤치마크** (현재 글)
+3. [벡터 검색 완전 정복](/posts/langchain-age-hybrid-search) — Hybrid, MMR, 필터링
+4. [GraphRAG 파이프라인 실전 구축](/posts/langchain-age-graphrag-pipeline) — 벡터 + 그래프 통합
+5. [PostgreSQL 하나로 AI Agent 전체 스택](/posts/langchain-age-langgraph-agent) — LangGraph 연동
+
 ## 왜 이 벤치마크가 필요한가
 
 "Apache AGE는 Neo4j 대비 어떤가?"라는 질문에 대부분의 답변은 정성적이다 — "AGE는 PostgreSQL 확장이라 편하다", "Neo4j는 네이티브 그래프라 빠르다". 실측 데이터가 없다.
@@ -224,7 +234,10 @@ python benchmarks/bench.py
 
 ## 관련 포스트
 
-- [GraphRAG를 PostgreSQL만으로 구축하기](/posts/graphrag-with-postgresql)
+- [GraphRAG를 PostgreSQL만으로 구축하기](/posts/graphrag-with-postgresql) — 1편: 개요와 빠른 시작
+- [벡터 검색 완전 정복](/posts/langchain-age-hybrid-search) — 3편: Hybrid, MMR, 필터링
+- [GraphRAG 파이프라인 실전 구축](/posts/langchain-age-graphrag-pipeline) — 4편: 벡터 + 그래프 통합
+- [PostgreSQL 하나로 AI Agent 전체 스택](/posts/langchain-age-langgraph-agent) — 5편: LangGraph 연동
 
 ---
 

@@ -17,6 +17,16 @@ aiAssisted: true
 
 ## Table of contents
 
+## 시리즈
+
+이 글은 langchain-age 시리즈의 1편이다.
+
+1. **GraphRAG를 PostgreSQL만으로 구축하기** (현재 글)
+2. [Neo4j vs Apache AGE 실측 벤치마크](/posts/neo4j-vs-age-benchmark) — 성능 데이터
+3. [벡터 검색 완전 정복](/posts/langchain-age-hybrid-search) — Hybrid, MMR, 필터링
+4. [GraphRAG 파이프라인 실전 구축](/posts/langchain-age-graphrag-pipeline) — 벡터 + 그래프 통합
+5. [PostgreSQL 하나로 AI Agent 전체 스택](/posts/langchain-age-langgraph-agent) — LangGraph 연동
+
 ## 문제: GraphRAG를 위해 DB를 2개 운영해야 하나?
 
 GraphRAG는 지식 그래프와 벡터 임베딩을 함께 검색해서 LLM에 컨텍스트를 제공하는 패턴이다. 가장 많이 인용되는 접근법은 Neo4j를 사용하지만, 이는 곧:
@@ -247,7 +257,10 @@ pip install "langchain-age[all]"
 
 ## 관련 포스트
 
-- [Neo4j vs Apache AGE 실측 벤치마크](/posts/neo4j-vs-age-benchmark) — 8개 항목 공정 비교, traverse() 성능 데이터 포함
+- [Neo4j vs Apache AGE 실측 벤치마크](/posts/neo4j-vs-age-benchmark) — 2편: 성능 비교
+- [벡터 검색 완전 정복](/posts/langchain-age-hybrid-search) — 3편: Hybrid, MMR, 필터링
+- [GraphRAG 파이프라인 실전 구축](/posts/langchain-age-graphrag-pipeline) — 4편: 벡터 + 그래프 통합
+- [PostgreSQL 하나로 AI Agent 전체 스택](/posts/langchain-age-langgraph-agent) — 5편: LangGraph 연동
 
 ---
 
