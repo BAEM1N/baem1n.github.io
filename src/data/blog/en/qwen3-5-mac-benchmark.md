@@ -9,7 +9,8 @@ tags:
   - mlx
   - ollama
   - apple-silicon
-featured: true
+featured: false
+draft: true
 aiAssisted: true
 ---
 
