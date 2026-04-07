@@ -19,7 +19,7 @@ aiAssisted: true
 
 > Qwen3.5 모델을 4대 하드웨어에서 동일 조건으로 측정한 결과표. cold prefill, cache 차단, 실행 순서 랜덤화 적용. 각 조합 5회 측정 중앙값.
 >
-> 실험 설계 → [1편: 방법론](/posts/llm-bench-01-methodology) · 분석 → [2편: 상세 비교](/posts/llm-bench-02-results) · 코드 → [GitHub](https://github.com/baem1n/llm-bench)
+> 실험 설계 → [1편: 방법론](/posts/llm-bench-01-methodology) · 분석 → [2편: 상세 비교](/posts/llm-bench-02-results-analysis) · 코드 → [GitHub](https://github.com/baem1n/llm-bench)
 
 ## Table of contents
 
