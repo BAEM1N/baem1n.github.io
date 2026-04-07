@@ -1,6 +1,6 @@
 ---
 author: baem1n
-pubDatetime: 2026-04-05T00:00:00.000Z
+pubDatetime: 2026-04-05T09:00:00.000+09:00
 title: "로컬 LLM 추론 벤치마크: 4대 하드웨어 × 6개 엔진 실험 설계"
 description: "Qwen3.5 모델을 4개 플랫폼(M5 Max, RTX 3090×2, DGX Spark, Ryzen AI MAX 395+)에서 측정하는 크로스 플랫폼 벤치마크의 실험 설계, 방법론, 주의사항을 정리합니다."
 tags:

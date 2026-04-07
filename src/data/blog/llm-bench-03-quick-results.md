@@ -1,7 +1,7 @@
 ---
 author: baem1n
-pubDatetime: 2026-04-07T00:00:00.000Z
-modDatetime: 2026-04-07T16:00:00.000Z
+pubDatetime: 2026-04-07T09:00:00.000+09:00
+modDatetime: 2026-04-08T01:00:00.000+09:00
 title: "Qwen3.5 로컬 추론 벤치마크 결과표: 3대 하드웨어 × 4개 엔진, 4,700회 측정"
 description: "RTX 3090×2, DGX Spark GB10, Ryzen AI MAX 395에서 Qwen3.5 4개 모델(9B~122B)의 생성 속도, 프리필 속도, TTFT를 llama.cpp, Ollama, vLLM, Lemonade로 측정한 결과 비교표."
 tags:

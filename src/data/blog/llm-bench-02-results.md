@@ -1,7 +1,7 @@
 ---
 author: baem1n
-pubDatetime: 2026-04-05T00:00:00.000Z
-modDatetime: 2026-04-07T14:00:00.000Z
+pubDatetime: 2026-04-05T09:00:00.000+09:00
+modDatetime: 2026-04-07T23:00:00.000+09:00
 title: "Qwen3.5 크로스 플랫폼 벤치마크: 4대 하드웨어 × 6개 엔진 성능 비교"
 description: "Mac M5 Max, RTX 3090×2, DGX Spark, Ryzen AI MAX 395+에서 Qwen3.5를 동일 조건으로 측정한 벤치마크. 3,946회 정상 측정 (이상치·중복 제거). cold prefill, cache 차단 적용."
 tags:
