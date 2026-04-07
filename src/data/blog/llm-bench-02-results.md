@@ -11,7 +11,7 @@ tags:
   - apple-silicon
   - amd
   - cross-platform
-featured: true
+featured: false
 aiAssisted: true
 ---
 

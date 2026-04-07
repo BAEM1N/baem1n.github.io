@@ -47,8 +47,7 @@ Plain vector RAG finds text chunks similar to the question and passes them to th
 GraphRAG uses knowledge graph relationships to solve these problems:
 
 ```
-Plain RAG:   Question → Vector Search → [chunk1, chunk2] → LLM → Answer
-GraphRAG:    Question → Vector Search → [entities] → Graph Expansion → [entities+relations+neighbors] → LLM → Answer
+![Plain RAG vs GraphRAG pipeline comparison](../../../assets/images/langchain-age/rag-vs-graphrag-en.png)
 ```
 
 ## Prerequisites

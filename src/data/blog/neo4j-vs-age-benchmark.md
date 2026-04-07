@@ -117,8 +117,7 @@ AGE의 그래프 데이터는 PostgreSQL 테이블(`graph_name."LabelName"`)에 
 Neo4j는 관계를 **물리적 포인터**로 저장한다. 노드 A에서 노드 B로 이동할 때 인덱스 룩업이나 JOIN이 필요 없다 — 포인터를 따라가면 된다.
 
 ```
-Neo4j:   Node A → [pointer] → Node B → [pointer] → Node C  (O(1) per hop)
-AGE:     SELECT ... JOIN ... JOIN ... JOIN ...               (O(index) per hop)
+![Neo4j 포인터 탐색 vs AGE SQL JOIN 비교](../../assets/images/langchain-age/neo4j-vs-age-traversal-ko.png)
 ```
 
 1홉에서는 차이가 미미하지만, 3홉 이상에서는 지수적으로 벌어진다.

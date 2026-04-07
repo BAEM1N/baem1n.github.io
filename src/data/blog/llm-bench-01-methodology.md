@@ -10,7 +10,7 @@ tags:
   - nvidia
   - amd
   - methodology
-featured: true
+featured: false
 aiAssisted: true
 ---
 

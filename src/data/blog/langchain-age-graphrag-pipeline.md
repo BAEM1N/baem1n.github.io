@@ -47,8 +47,7 @@ aiAssisted: true
 GraphRAG는 지식 그래프의 관계를 활용해 이 문제를 해결한다:
 
 ```
-일반 RAG:  질문 → 벡터 검색 → [청크1, 청크2] → LLM → 답변
-GraphRAG:  질문 → 벡터 검색 → [엔티티] → 그래프 확장 → [엔티티+관계+이웃] → LLM → 답변
+![일반 RAG vs GraphRAG 파이프라인 비교](../../assets/images/langchain-age/rag-vs-graphrag-ko.png)
 ```
 
 ## 사전 준비

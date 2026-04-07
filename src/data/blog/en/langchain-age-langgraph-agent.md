@@ -53,22 +53,9 @@ Building a production AI agent typically requires:
 
 With langchain-age + LangGraph, you can consolidate to **one PostgreSQL**:
 
-```
-┌─────────────────────────────────────────────┐
-│              PostgreSQL 18                  │
-│                                             │
-│  ┌───────────┐  ┌──────────┐  ┌──────────┐  │
-│  │ Apache AGE│  │ pgvector │  │ LangGraph│  │
-│  │  (Graph)  │  │ (Vector) │  │  (State) │  │
-│  └───────────┘  └──────────┘  └──────────┘  │
-│                                             │
-│  ┌─────────────────────────────────────────┐ │
-│  │         Regular tables (app data)       │ │
-│  └─────────────────────────────────────────┘ │
-└─────────────────────────────────────────────┘
-  conn_str = "host=localhost port=5433 dbname=langchain_age ..."
-  Graph + Vector + Checkpoint + Memory + App Data = 1 connection
-```
+![PostgreSQL unified Agent architecture](../../../assets/images/langchain-age/agent-architecture-en.png)
+
+*Graph + Vector + Checkpoint + Memory + App Data = 1 connection*
 
 ## Prerequisites
 

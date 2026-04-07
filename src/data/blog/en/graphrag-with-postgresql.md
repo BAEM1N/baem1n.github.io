@@ -51,21 +51,9 @@ If you already run PostgreSQL, the same instance can handle both graph and vecto
 
 [Apache AGE](https://age.apache.org/) adds Cypher graph queries to PostgreSQL. [pgvector](https://github.com/pgvector/pgvector) adds vector similarity search. Both run inside the same PostgreSQL instance.
 
-```
-┌─────────────────────────────────────┐
-│          PostgreSQL 18              │
-│                                     │
-│  ┌───────────┐  ┌────────────────┐  │
-│  │ Apache AGE│  │   pgvector     │  │
-│  │  (Cypher) │  │  (Embeddings)  │  │
-│  └───────────┘  └────────────────┘  │
-│                                     │
-│  ┌────────────────────────────────┐  │
-│  │   LangGraph Store/Checkpoint  │  │
-│  └────────────────────────────────┘  │
-└─────────────────────────────────────┘
-     One database. One connection string.
-```
+![PostgreSQL unified architecture — AGE + pgvector + LangGraph](../../../assets/images/langchain-age/pg-architecture-en.png)
+
+*One database. One connection string.*
 
 ## Neo4j vs PostgreSQL+AGE Comparison
 

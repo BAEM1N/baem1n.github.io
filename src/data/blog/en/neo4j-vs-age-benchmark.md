@@ -117,8 +117,7 @@ AGE stores graph data in PostgreSQL tables (`graph_name."LabelName"`). All Postg
 Neo4j stores relationships as **physical pointers**. Moving from node A to node B requires no index lookup or JOIN — just follow the pointer.
 
 ```
-Neo4j:   Node A → [pointer] → Node B → [pointer] → Node C  (O(1) per hop)
-AGE:     SELECT ... JOIN ... JOIN ... JOIN ...               (O(index) per hop)
+![Neo4j pointer traversal vs AGE SQL JOIN comparison](../../../assets/images/langchain-age/neo4j-vs-age-traversal-en.png)
 ```
 
 The difference is negligible at 1 hop but grows exponentially at 3+ hops.
