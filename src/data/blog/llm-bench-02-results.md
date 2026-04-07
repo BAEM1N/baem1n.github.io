@@ -25,7 +25,7 @@ aiAssisted: true
 
 ## 하드웨어 스펙
 
-| | 🍎 Mac M5 Max | 🖥️ 3090 ×2 | 🔷 DGX Spark | 🔶 Ryzen AI MAX |
+| | M5 Max (128GB) | 3090×2 (48GB VRAM) | DGX Spark GB10 (128GB) | Ryzen AI MAX 395 (96GB) |
 |--|:--:|:--:|:--:|:--:|
 | GPU | Apple GPU 40C | RTX 3090 ×2 | GB10 Blackwell | Radeon 8060S 40CU |
 | 메모리 | 128GB unified | 128GB DDR4 + 48GB VRAM | 128GB unified | 128GB (96GB VRAM) |
@@ -41,7 +41,7 @@ aiAssisted: true
 
 **Q4_K_M:**
 
-| 모델 | 🍎 Mac | 🖥️ 3090 | 🔷 DGX | 🔶 Ryzen |
+| 모델 | M5 Max | 3090×2 | DGX Spark | Ryzen AI |
 |------|:------:|:-------:|:------:|:-------:|
 | **9B** Dense | 75.9 | **117.6** | 36.8 | 32.6 |
 | **27B** Dense | 24.8 | **41.4** | 11.5 | 10.3 |
@@ -50,7 +50,7 @@ aiAssisted: true
 
 **Q8_0:**
 
-| 모델 | 🍎 Mac | 🖥️ 3090 | 🔷 DGX | 🔶 Ryzen |
+| 모델 | M5 Max | 3090×2 | DGX Spark | Ryzen AI |
 |------|:------:|:-------:|:------:|:-------:|
 | **9B** | 50.8 | **82.2** | 24.3 | 21.7 |
 | **27B** | 16.9 | **27.5** | 7.6 | 7.1 |
@@ -62,10 +62,10 @@ aiAssisted: true
 
 | 플랫폼 | 9B Dense | 35B-A3B MoE | MoE 우위 |
 |--------|----------|-------------|---------|
-| 🍎 Mac | 75.9 | **94.1** | +24% |
-| 🖥️ 3090 | 117.6 | **138.9** | +18% |
-| 🔷 DGX | 36.8 | **59.6** | +62% |
-| 🔶 Ryzen | 32.6 | **58.0** | +78% |
+| M5 Max | 75.9 | **94.1** | +24% |
+| 3090×2 | 117.6 | **138.9** | +18% |
+| DGX Spark | 36.8 | **59.6** | +62% |
+| Ryzen AI | 32.6 | **58.0** | +78% |
 
 ---
 
@@ -73,7 +73,7 @@ aiAssisted: true
 
 > ⚠️ **같은 플랫폼 내부에서만 비교**. 다른 플랫폼의 다른 엔진끼리는 비교하지 않는다.
 
-### 🍎 Mac: MLX vs llama.cpp (gen-512, Q4_K_M)
+### M5 Max: MLX vs llama.cpp (gen-512, Q4_K_M)
 
 | 모델 | MLX | llama.cpp | MLX 우위 |
 |------|----:|----------:|---------:|
@@ -82,7 +82,7 @@ aiAssisted: true
 | 35B-A3B | **139.0** | 91.0 | +53% |
 | 122B | **66.8** | 38.5 | +73% |
 
-### 🖥️ 3090: vLLM vs llama.cpp vs Ollama (gen-512, Q4_K_M)
+### 3090×2: vLLM vs llama.cpp vs Ollama (gen-512, Q4_K_M)
 
 | 모델 | vLLM | llama.cpp | Ollama |
 |------|-----:|----------:|-------:|
@@ -92,7 +92,7 @@ aiAssisted: true
 
 - **vLLM 35B GPTQ-Marlin = 156.3 tok/s** — 전체 실험 최고 속도
 
-### 🔷 DGX: llamacpp vs Ollama vs vLLM Docker (gen-512, Q4_K_M)
+### DGX Spark: llamacpp vs Ollama vs vLLM Docker (gen-512, Q4_K_M)
 
 | 모델 | llama.cpp | Ollama | vLLM Docker |
 |------|----------:|-------:|------------:|
@@ -101,7 +101,7 @@ aiAssisted: true
 | 35B-A3B | **61.2** | 59.2 | 34.8 |
 | 122B | **22.0** | 6.6 | — |
 
-### 🔶 Ryzen: llama.cpp vs Ollama (gen-512, Q4_K_M)
+### Ryzen AI: llama.cpp vs Ollama (gen-512, Q4_K_M)
 
 | 모델 | llama.cpp | Ollama |
 |------|----------:|-------:|
@@ -127,11 +127,11 @@ aiAssisted: true
 
 | 플랫폼 | 조합 | 사유 |
 |--------|------|------|
-| 🖥️ 3090 | 122B llamacpp prefill | 48GB + 256K KV 초과 |
-| 🖥️ 3090 | vLLM 27B/35B Q8 BF16 | VRAM 초과 |
-| 🖥️ 3090 | Ollama 27B Q8, 122B | swap (5 tok/s) |
-| 🔷 DGX | vLLM pip | CUDA 13/12 호환 → Docker 해결 |
-| 🔶 Ryzen | Ollama 122B | swap (4.6 tok/s) |
+| 3090×2 | 122B llamacpp prefill | 48GB + 256K KV 초과 |
+| 3090×2 | vLLM 27B/35B Q8 BF16 | VRAM 초과 |
+| 3090×2 | Ollama 27B Q8, 122B | swap (5 tok/s) |
+| DGX Spark | vLLM pip | CUDA 13/12 호환 → Docker 해결 |
+| Ryzen AI | Ollama 122B | swap (4.6 tok/s) |
 
 ---
 
@@ -141,10 +141,10 @@ aiAssisted: true
 
 | 플랫폼 | 정상 데이터 |
 |--------|----------:|
-| 🖥️ 3090 | 994 |
-| 🔷 DGX | 1,094 |
-| 🍎 Mac | 940 |
-| 🔶 Ryzen | 918 |
+| 3090×2 | 994 |
+| DGX Spark | 1,094 |
+| M5 Max | 940 |
+| Ryzen AI | 918 |
 | **합계** | **3,946** |
 
 ---
