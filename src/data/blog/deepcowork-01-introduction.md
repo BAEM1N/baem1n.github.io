@@ -9,7 +9,7 @@ tags:
   - open-source
   - langchain
   - tauri
-featured: true
+featured: false
 aiAssisted: true
 ---
 

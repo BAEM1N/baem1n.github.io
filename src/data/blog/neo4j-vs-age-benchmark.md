@@ -10,7 +10,7 @@ tags:
   - postgresql
   - graphrag
   - langchain
-featured: true
+featured: false
 ---
 
 > **Disclosure**: 이 글의 저자는 [langchain-age](https://github.com/baem1n/langchain-age) 메인테이너입니다. 모든 벤치마크 코드는 오픈소스이며 재현 가능합니다.

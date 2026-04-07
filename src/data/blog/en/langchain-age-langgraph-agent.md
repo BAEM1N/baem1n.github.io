@@ -10,7 +10,7 @@ tags:
   - langchain
   - llm
   - ai-agent
-featured: true
+featured: false
 aiAssisted: true
 ---
 

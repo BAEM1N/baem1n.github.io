@@ -10,7 +10,7 @@ tags:
   - postgresql
   - graphrag
   - langchain
-featured: true
+featured: false
 ---
 
 > **Disclosure**: The author maintains [langchain-age](https://github.com/baem1n/langchain-age). All benchmark code is open-source and reproducible.
