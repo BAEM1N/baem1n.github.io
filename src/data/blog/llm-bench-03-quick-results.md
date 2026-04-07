@@ -2,13 +2,14 @@
 author: baem1n
 pubDatetime: 2026-04-07T09:00:00.000+09:00
 modDatetime: 2026-04-08T01:00:00.000+09:00
-title: "Qwen3.5 로컬 추론 벤치마크 결과표: 3대 하드웨어 × 4개 엔진, 4,700회 측정"
-description: "RTX 3090×2, DGX Spark GB10, Ryzen AI MAX 395에서 Qwen3.5 4개 모델(9B~122B)의 생성 속도, 프리필 속도, TTFT를 llama.cpp, Ollama, vLLM, Lemonade로 측정한 결과 비교표."
+title: "Qwen3.5 로컬 추론 벤치마크 결과표: 4대 하드웨어 × 5개 엔진"
+description: "M5 Max, RTX 3090×2, DGX Spark GB10, Ryzen AI MAX 395에서 Qwen3.5 4개 모델(9B~122B)의 생성 속도, 프리필 속도를 llama.cpp, MLX, Ollama, vLLM, Lemonade로 측정한 결과 비교표."
 tags:
   - llm
   - benchmark
   - nvidia
   - amd
+  - apple-silicon
   - qwen
   - inference
   - local-llm
@@ -16,7 +17,7 @@ featured: true
 aiAssisted: true
 ---
 
-> Qwen3.5 모델을 3대 하드웨어에서 동일 조건으로 측정한 결과표. cold prefill, cache 차단, 실행 순서 랜덤화 적용. 각 조합 5회 측정 중앙값.
+> Qwen3.5 모델을 4대 하드웨어에서 동일 조건으로 측정한 결과표. cold prefill, cache 차단, 실행 순서 랜덤화 적용. 각 조합 5회 측정 중앙값.
 >
 > 실험 설계 → [1편: 방법론](/posts/llm-bench-01-methodology) · 분석 → [2편: 상세 비교](/posts/llm-bench-02-results) · 코드 → [GitHub](https://github.com/baem1n/llm-bench)
 
@@ -24,12 +25,12 @@ aiAssisted: true
 
 ## 하드웨어
 
-| | RTX 3090×2 (48GB) | DGX Spark GB10 (128GB) | Ryzen AI MAX 395 (96GB) |
-|--|:--:|:--:|:--:|
-| GPU | RTX 3090 ×2 (Ampere) | GB10 Blackwell | Radeon 8060S (RDNA 3.5) |
-| 메모리 | 128GB DDR4 + 48GB VRAM | 128GB unified | 128GB unified (96GB VRAM) |
-| 대역폭 | ~936 GB/s (GDDR6X) | 273 GB/s | 256 GB/s |
-| 가격대 | ~$3,000 (중고) | ~$4,700 | ~$2,000 |
+| | M5 Max (128GB) | RTX 3090×2 (48GB) | DGX Spark GB10 (128GB) | Ryzen AI MAX 395 (96GB) |
+|--|:--:|:--:|:--:|:--:|
+| GPU | Apple GPU 40C | RTX 3090 ×2 | GB10 Blackwell | Radeon 8060S RDNA 3.5 |
+| 메모리 | 128GB unified | 128GB DDR4 + 48GB VRAM | 128GB unified | 128GB unified (96GB VRAM) |
+| 대역폭 | **546 GB/s** | ~936 GB/s GDDR6X | 273 GB/s | 256 GB/s |
+| 가격대 | ~$4,000 | ~$3,000 (중고) | ~$4,700 | ~$2,000 |
 
 ---
 
@@ -37,24 +38,22 @@ aiAssisted: true
 
 > 동일 llama.cpp + 동일 GGUF. 입력 64토큰, 출력 512토큰.
 
-### Q4_K_M (4-bit 양자화)
+### Q4_K_M (4-bit)
 
-| 모델 | RTX 3090×2 | DGX Spark GB10 | Ryzen AI MAX 395 |
-|------|----------:|---------------:|------------------:|
-| **Qwen3.5-9B** (Dense) | **117.6** | 36.8 | 32.6 |
-| **Qwen3.5-27B** (Dense) | **41.4** | 11.5 | 10.3 |
-| **Qwen3.5-35B-A3B** (MoE, 3B active) | **138.9** | 59.6 | 58.0 |
-| **Qwen3.5-122B-A10B** (MoE, 10B active) | OOM | 21.7 | **22.9** |
+| 모델 | M5 Max | RTX 3090×2 | DGX Spark | Ryzen AI |
+|------|-------:|----------:|----------:|---------:|
+| **9B** Dense | 75.9 | **117.6** | 36.8 | 32.6 |
+| **27B** Dense | 24.8 | **41.4** | 11.5 | 10.3 |
+| **35B-A3B** MoE | 94.1 | **138.9** | 59.6 | 58.0 |
+| **122B-A10B** MoE | 42.9 | OOM | 21.7 | 22.9 |
 
-### Q8_0 (8-bit 양자화)
+### Q8_0 (8-bit)
 
-| 모델 | RTX 3090×2 | DGX Spark GB10 | Ryzen AI MAX 395 |
-|------|----------:|---------------:|------------------:|
-| **9B** | **82.2** | 24.3 | 21.7 |
-| **27B** | **27.5** | 7.6 | 7.1 |
-| **35B-A3B** MoE | **130.3** | 52.6 | 50.8 |
-
-> 122B Q8_0은 GGUF 미제공.
+| 모델 | M5 Max | RTX 3090×2 | DGX Spark | Ryzen AI |
+|------|-------:|----------:|----------:|---------:|
+| **9B** | 50.8 | **82.2** | 24.3 | 21.7 |
+| **27B** | 16.9 | **27.5** | 7.6 | 7.1 |
+| **35B-A3B** MoE | 88.4 | **130.3** | 52.6 | 50.8 |
 
 ---
 
@@ -62,37 +61,46 @@ aiAssisted: true
 
 > llama.cpp, Q4_K_M. 단위: tok/s.
 
-### Qwen3.5-9B
+### 9B
 
-| 입력 길이 | RTX 3090×2 | DGX Spark | Ryzen AI |
-|----------|----------:|----------:|---------:|
-| 1K tokens | **3,258** | 2,217 | 205 |
-| 4K | **5,317** | 2,490 | 278 |
-| 16K | **6,244** | 2,239 | 915 |
-| 64K | **5,827** | 1,093 | 159 |
-| 128K | **4,952** | 986 | 56 |
+| 입력 길이 | M5 Max | RTX 3090×2 | DGX Spark | Ryzen AI |
+|----------|-------:|----------:|----------:|---------:|
+| 1K | 1,705 | **3,258** | 2,217 | 205 |
+| 16K | 1,590 | **6,244** | 2,239 | 915 |
+| 128K | 711 | **4,952** | 986 | 56 |
 
-### Qwen3.5-35B-A3B (MoE)
+### 35B-A3B MoE
 
-| 입력 길이 | RTX 3090×2 | DGX Spark | Ryzen AI |
-|----------|----------:|----------:|---------:|
-| 1K | **3,372** | 1,602 | 732 |
-| 16K | **6,131** | 1,696 | 960 |
-| 128K | **3,142** | 856 | 582 |
+| 입력 길이 | M5 Max | RTX 3090×2 | DGX Spark | Ryzen AI |
+|----------|-------:|----------:|----------:|---------:|
+| 1K | 2,302 | **3,372** | 1,602 | 732 |
+| 16K | 2,417 | **6,131** | 1,696 | 960 |
+| 128K | 732 | **3,142** | 856 | 582 |
 
-### Qwen3.5-122B-A10B (MoE)
+### 122B-A10B MoE
 
-| 입력 길이 | RTX 3090×2 | DGX Spark | Ryzen AI |
-|----------|----------:|----------:|---------:|
-| 1K | OOM | **536** | 215 |
-| 16K | OOM | **614** | 312 |
-| 128K | OOM | **341** | 205 |
+| 입력 길이 | M5 Max | RTX 3090×2 | DGX Spark | Ryzen AI |
+|----------|-------:|----------:|----------:|---------:|
+| 1K | **815** | OOM | 536 | 215 |
+| 16K | **722** | OOM | 614 | 312 |
+| 128K | 296 | OOM | **341** | 205 |
 
 ---
 
-## 엔진 비교 (Generation TPS, gen-512, Q4_K_M)
+## 엔진 비교 (gen-512, Q4_K_M)
 
-> 같은 하드웨어 안에서만 비교. 다른 하드웨어의 다른 엔진끼리는 비교하지 않음.
+> 같은 하드웨어 안에서만 비교.
+
+### M5 Max
+
+| 모델 | MLX | llama.cpp | Ollama |
+|------|----:|----------:|-------:|
+| 9B | **102.4** | 75.4 | 29.2* |
+| 27B | **28.8** | — | — |
+| 35B-A3B | **138.3** | 91.0 | — |
+| 122B | **66.8** | 38.5 | — |
+
+> \* Mac Ollama는 일부 모델만 측정 완료. 전체 결과 추후 업데이트.
 
 ### RTX 3090×2
 
@@ -128,13 +136,13 @@ aiAssisted: true
 | 엔진 × 하드웨어 | 9B | 27B | 35B MoE | 122B MoE |
 |----------------|---:|----:|--------:|---------:|
 | **3090 vLLM** | 8,398 | 2,845 | **13,146** | — |
-| 3090 llama.cpp | 6,236 | 1,799 | 4,186 | — |
-| 3090 Ollama | 3,101 | 998 | 2,239 | 141 |
 | DGX vLLM Docker | 6,773 | 1,614 | 4,331 | — |
+| 3090 llama.cpp | 6,236 | 1,799 | 4,186 | — |
+| Mac MLX | 3,011 | 784 | 3,774 | 1,281 |
+| 3090 Ollama | 3,101 | 998 | 2,239 | 141 |
 | DGX llama.cpp | 2,236 | 625 | 1,694 | 623 |
-| DGX Ollama | 1,904 | 601 | 1,424 | 507 |
+| Mac llama.cpp | 1,291 | 352 | 2,412 | 658 |
 | Ryzen llama.cpp | 915 | 298 | 960 | 313 |
-| Ryzen Ollama | 880 | 287 | 754 | — |
 
 ---
 
@@ -144,16 +152,10 @@ aiAssisted: true
 
 | 하드웨어 | 9B Dense | 35B MoE | MoE 우위 |
 |---------|----------|---------|---------|
+| M5 Max | 75.9 | **94.1** | +24% |
 | RTX 3090×2 | 117.6 | **138.9** | +18% |
 | DGX Spark | 36.8 | **59.6** | +62% |
 | Ryzen AI | 32.6 | **58.0** | +78% |
-
-122B MoE(10B active)도 27B Dense보다 빠르다:
-
-| 하드웨어 | 27B Dense | 122B MoE | MoE 우위 |
-|---------|-----------|----------|---------|
-| DGX Spark | 11.5 | **21.7** | +89% |
-| Ryzen AI | 10.3 | **22.9** | +122% |
 
 ---
 
@@ -161,19 +163,20 @@ aiAssisted: true
 
 | 하드웨어 | 조합 | 사유 |
 |---------|------|------|
-| 3090×2 | 122B llamacpp (gen OK, prefill OOM) | 48GB VRAM + 256K KV cache 초과 |
-| 3090×2 | vLLM 27B/35B Q8 BF16 | BF16 55~70GB > 48GB VRAM |
-| 3090×2 | Ollama 122B (4.7 tok/s) | VRAM swap |
-| Ryzen AI | Ollama 122B (4.6 tok/s) | KV pre-allocation swap |
+| 3090×2 | 122B llamacpp prefill | 48GB + 256K KV cache 초과 |
+| 3090×2 | vLLM 27B/35B Q8 BF16 | BF16 55~70GB > 48GB |
+| 3090×2 / Ryzen | Ollama 122B | swap (4.6~4.7 tok/s) |
+| Mac | Ollama 27B~122B | 측정 진행 중 |
 
 ---
 
 ## 데이터
 
+- **하드웨어**: 4대 (M5 Max, 3090×2, DGX Spark, Ryzen AI)
+- **모델**: Qwen3.5 4종 (9B, 27B, 35B-A3B MoE, 122B-A10B MoE)
+- **양자화**: Q4_K_M, Q8_0 (unsloth GGUF)
+- **엔진**: llama.cpp, MLX, Ollama, vLLM, Lemonade
 - **총 측정**: ~4,700회 (중복·이상치 제거 후 ~3,900회 유효)
-- **조합당**: 5회 측정, 중앙값
-- **필터**: CV(변동계수) < 0.3인 가장 안정적인 5회 세트
-- **캐시**: `--no-cache-prompt`, `--slot-prompt-similarity 0`, run별 nonce prefix
-- **cold prefill**: prefill track마다 서버 재시작
+- **필터**: CV < 0.3, cold prefill, `--no-cache-prompt`, run별 nonce
 
 > 실험 코드: [baem1n/llm-bench](https://github.com/baem1n/llm-bench)
