@@ -9,7 +9,7 @@ tags:
   - postgresql
   - langchain
   - llm
-featured: false
+featured: true
 aiAssisted: true
 ---
 
