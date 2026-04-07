@@ -30,7 +30,6 @@ aiAssisted: true
 | GPU | Apple GPU 40C | RTX 3090 ×2 | GB10 Blackwell | Radeon 8060S RDNA 3.5 |
 | 메모리 | 128GB unified | 128GB DDR4 + 48GB VRAM | 128GB unified | 128GB unified (96GB VRAM) |
 | 대역폭 | **546 GB/s** | ~936 GB/s GDDR6X | 273 GB/s | 256 GB/s |
-| 가격대 | ~$4,000 | ~$3,000 (중고) | ~$4,700 | ~$2,000 |
 
 ---
 
