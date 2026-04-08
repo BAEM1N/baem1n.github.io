@@ -181,7 +181,7 @@ aiAssisted: true
 - **모델**: Qwen3.5 4종 (9B, 27B, 35B-A3B MoE, 122B-A10B MoE)
 - **양자화**: Q4_K_M, Q8_0 (unsloth GGUF)
 - **엔진**: llama.cpp, MLX, Ollama, vLLM, Lemonade
-- **총 측정**: ~4,700회 (중복·이상치 제거 후 ~3,900회 유효)
+- **총 측정**: ~5,100회 (중복·이상치 제거 후 ~4,200회 유효)
 - **필터**: CV < 0.3, cold prefill, `--no-cache-prompt`, run별 nonce
 
 > 실험 코드: [baem1n/llm-bench](https://github.com/baem1n/llm-bench)

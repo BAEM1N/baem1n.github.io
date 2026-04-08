@@ -3,7 +3,7 @@ author: baem1n
 pubDatetime: 2026-04-05T09:00:00.000+09:00
 modDatetime: 2026-04-07T23:00:00.000+09:00
 title: "Qwen3.5 크로스 플랫폼 벤치마크: 4대 하드웨어 × 5개 엔진 성능 비교"
-description: "Mac M5 Max, RTX 3090×2, DGX Spark, Ryzen AI MAX 395+에서 Qwen3.5를 동일 조건으로 측정한 벤치마크. 3,946회 정상 측정 (이상치·중복 제거). cold prefill, cache 차단 적용."
+description: "Mac M5 Max, RTX 3090×2, DGX Spark, Ryzen AI MAX 395+에서 Qwen3.5를 동일 조건으로 측정한 벤치마크. 4,200회 정상 측정 (이상치·중복 제거). cold prefill, cache 차단 적용."
 tags:
   - llm
   - benchmark
@@ -19,7 +19,7 @@ aiAssisted: true
 
 > 실험 설계는 [1편: 실험 방법론](/posts/llm-bench-01-methodology)을 참고.
 >
-> **데이터 기준**: 각 조합별 가장 안정적인 5회 측정 세트 선택 (CV<0.3). 중복 실행·이상치 제거 후 3,946회 유효.
+> **데이터 기준**: 각 조합별 가장 안정적인 5회 측정 세트 선택 (CV<0.3). 중복 실행·이상치 제거 후 4,200회 유효.
 
 ## Table of contents
 
@@ -137,7 +137,7 @@ aiAssisted: true
 
 ## 데이터
 
-3,946회 유효 측정 (이상치·중복 제거, CV<0.3 필터)
+4,200회 유효 측정 (이상치·중복 제거, CV<0.3 필터)
 
 | 플랫폼 | 정상 데이터 |
 |--------|----------:|
