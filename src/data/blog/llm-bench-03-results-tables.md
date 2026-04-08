@@ -25,7 +25,7 @@ aiAssisted: true
 
 ## 하드웨어
 
-| | [M5 Max](https://www.apple.com/macbook-pro/) (128GB) | [RTX 3090](https://www.nvidia.com/en-us/geforce/graphics-cards/30-series/rtx-3090-3090ti/)×2 (48GB) | [DGX Spark GB10](https://www.nvidia.com/en-us/products/workstations/dgx-spark/) (128GB) | [Ryzen AI MAX 395](https://www.amd.com/en/products/processors/workstations/ryzen-ai-max-pro/ryzen-ai-max-pro-395.html) (96GB) |
+| | [M5 Max](https://www.apple.com/macbook-pro/) (128GB) | [RTX 3090](https://www.nvidia.com/en-us/geforce/graphics-cards/30-series/rtx-3090-3090ti/)×2 (48GB) | [DGX Spark GB10](https://www.nvidia.com/en-us/products/workstations/dgx-spark/) (128GB) | [Ryzen AI MAX 395](https://www.amd.com/en/products/processors/laptop/ryzen-pro/ai-max-pro-300-series/amd-ryzen-ai-max-plus-pro-395.html) (96GB) |
 |--|:--:|:--:|:--:|:--:|
 | GPU | Apple GPU 40C | RTX 3090 ×2 | GB10 Blackwell | Radeon 8060S RDNA 3.5 |
 | 메모리 | 128GB unified | 128GB DDR4 + 48GB VRAM | 128GB unified | 128GB unified (96GB VRAM) |
@@ -178,7 +178,7 @@ aiAssisted: true
 ## 데이터
 
 - **하드웨어**: 4대 (M5 Max, 3090×2, DGX Spark, Ryzen AI)
-- **모델**: [Qwen3.5](https://huggingface.co/collections/Qwen/qwen35-685b8e0ce2e5289dfa8bcebf) 4종 (9B, 27B, 35B-A3B MoE, 122B-A10B MoE)
+- **모델**: [Qwen3.5](https://huggingface.co/collections/Qwen/qwen35) 4종 (9B, 27B, 35B-A3B MoE, 122B-A10B MoE)
 - **양자화**: Q4_K_M, Q8_0 ([unsloth](https://huggingface.co/unsloth) Dynamic 2.0 GGUF)
 - **엔진**: [llama.cpp](https://github.com/ggml-org/llama.cpp), [MLX](https://github.com/ml-explore/mlx), [Ollama](https://ollama.com/), [vLLM](https://github.com/vllm-project/vllm), [Lemonade](https://lemonade-server.ai/)
 - **총 측정**: ~5,100회 (중복·이상치 제거 후 ~4,200회 유효)

@@ -137,7 +137,7 @@ aiAssisted: true
 
 ## 데이터
 
-~4,200회 유효 측정 (이상치·중복 제거, CV<0.3 필터). 모델: [Qwen3.5](https://huggingface.co/collections/Qwen/qwen35-685b8e0ce2e5289dfa8bcebf), 양자화: [unsloth](https://huggingface.co/unsloth) GGUF.
+~4,200회 유효 측정 (이상치·중복 제거, CV<0.3 필터). 모델: [Qwen3.5](https://huggingface.co/collections/Qwen/qwen35), 양자화: [unsloth](https://huggingface.co/unsloth) GGUF.
 
 | 플랫폼 | 정상 데이터 |
 |--------|----------:|
