@@ -40,10 +40,45 @@ const socialImageURL = new URL(ogImage, Astro.url);
 
 const isArticle = !!pubDatetime;
 
+const publisherEntity = {
+  "@type": "Organization",
+  name: "BAEM1N.DEV",
+  url: SITE.website,
+  logo: {
+    "@type": "ImageObject",
+    url: `${SITE.website}favicon.svg`,
+  },
+};
+
 const authorEntity = {
   "@type": "Person",
-  name: `${author}`,
-  ...(profile && { url: profile }),
+  name: "배기민 (BAEM1N)",
+  alternateName: "baem1n",
+  url: `${SITE.website}about/`,
+  jobTitle: "AI/Data Educator & Engineer",
+  worksFor: {
+    "@type": "Organization",
+    name: "DDOK.AI",
+  },
+  sameAs: [
+    "https://github.com/baem1n",
+    "https://www.linkedin.com/in/baem1n/",
+  ],
+};
+
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "BAEM1N.DEV",
+  alternateName: "baem1n",
+  url: SITE.website,
+  logo: `${SITE.website}favicon.svg`,
+  description: SITE.desc,
+  founder: authorEntity,
+  sameAs: [
+    "https://github.com/baem1n",
+    "https://www.linkedin.com/in/baem1n/",
+  ],
 };
 
 const structuredData = isArticle
@@ -54,20 +89,20 @@ const structuredData = isArticle
       description: `${description}`,
       image: `${socialImageURL}`,
       datePublished: `${pubDatetime?.toISOString()}`,
-      ...(modDatetime && { dateModified: modDatetime.toISOString() }),
+      dateModified: modDatetime ? modDatetime.toISOString() : pubDatetime?.toISOString(),
       url: `${canonicalURL}`,
       author: [authorEntity],
-      publisher: {
-        "@type": "Person",
-        name: SITE.author,
-        url: SITE.website,
-      },
+      publisher: publisherEntity,
       mainEntityOfPage: {
         "@type": "WebPage",
         "@id": `${canonicalURL}`,
       },
       inLanguage: lang,
       ...(tags.length > 0 && { keywords: tags.join(", ") }),
+      speakable: {
+        "@type": "SpeakableSpecification",
+        cssSelector: ["article h1", "article > p:first-of-type", "article h2"],
+      },
     }
   : {
       "@context": "https://schema.org",
@@ -92,18 +127,24 @@ const structuredData = isArticle
 <html
   dir={SITE.dir}
   lang={lang}
-  class={`${scrollSmooth && "scroll-smooth"}`}
+  class={scrollSmooth ? "scroll-smooth" : ""}
 >
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href={canonicalURL} />
-    {alternateUrl && alternateLang && (
+    {alternateUrl && alternateLang ? (
       <>
         <link rel="alternate" hreflang={lang} href={canonicalURL.toString()} />
         <link rel="alternate" hreflang={alternateLang} href={alternateUrl} />
         <link rel="alternate" hreflang="x-default" href={lang === "ko" ? canonicalURL.toString() : alternateUrl} />
+      </>
+    ) : lang === "ko" && (
+      <>
+        <link rel="alternate" hreflang="ko" href={canonicalURL.toString()} />
+        <link rel="alternate" hreflang="en" href={canonicalURL.toString().replace(SITE.website, `${SITE.website}en/`)} />
+        <link rel="alternate" hreflang="x-default" href={canonicalURL.toString()} />
       </>
     )}
     <meta name="generator" content={Astro.generator} />
@@ -162,6 +203,13 @@ const structuredData = isArticle
       is:inline
       set:html={JSON.stringify(structuredData)}
     />
+    {!isArticle && (
+      <script
+        type="application/ld+json"
+        is:inline
+        set:html={JSON.stringify(organizationSchema)}
+      />
+    )}
 
     <!-- Enable RSS feed auto-discovery  -->
     <!-- https://docs.astro.build/en/recipes/rss/#enabling-rss-feed-auto-discovery -->

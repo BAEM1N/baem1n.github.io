@@ -1,9 +1,9 @@
 export const SITE = {
-  website: "https://baem1n.github.io/",
+  website: "https://baem1n.dev/",
   author: "baem1n",
   profile: "https://github.com/baem1n",
   desc: "AI, 데이터, 자동화, 개발 기록을 공유하는 개인 개발 블로그",
-  title: "BAEM1N.DEV",
+  title: "BAEM1N.DEV — AI, RAG, LLMOps 개발 블로그",
   ogImage: "og-default.png",
   lightAndDarkMode: true,
   postPerIndex: 5,
