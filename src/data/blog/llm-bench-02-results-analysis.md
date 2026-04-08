@@ -35,7 +35,7 @@ aiAssisted: true
 
 ## Track B: 하드웨어 비교
 
-> 변수는 **하드웨어뿐**. llama.cpp + 동일 GGUF + 동일 설정.
+> 변수는 **하드웨어뿐**. [llama.cpp](https://github.com/ggml-org/llama.cpp) + 동일 [unsloth](https://huggingface.co/unsloth) GGUF + 동일 설정.
 
 ### Generation 속도 (gen-512, 중앙값 tok/s)
 
@@ -137,15 +137,17 @@ aiAssisted: true
 
 ## 데이터
 
-4,200회 유효 측정 (이상치·중복 제거, CV<0.3 필터)
+~4,200회 유효 측정 (이상치·중복 제거, CV<0.3 필터). 모델: [Qwen3.5](https://huggingface.co/collections/Qwen/qwen35-685b8e0ce2e5289dfa8bcebf), 양자화: [unsloth](https://huggingface.co/unsloth) GGUF.
 
 | 플랫폼 | 정상 데이터 |
 |--------|----------:|
-| 3090×2 | 994 |
-| DGX Spark | 1,094 |
-| M5 Max | 940 |
-| Ryzen AI | 918 |
-| **합계** | **3,946** |
+| 3090×2 | ~1,150 |
+| DGX Spark | ~1,190 |
+| M5 Max | ~1,470 |
+| Ryzen AI | ~1,310 |
+| **합계** | **~5,100** |
+
+> 실험 코드 + raw data: [baem1n/llm-bench](https://github.com/baem1n/llm-bench)
 
 ---
 

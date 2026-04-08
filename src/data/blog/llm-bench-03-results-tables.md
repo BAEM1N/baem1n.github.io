@@ -25,7 +25,7 @@ aiAssisted: true
 
 ## 하드웨어
 
-| | M5 Max (128GB) | RTX 3090×2 (48GB) | DGX Spark GB10 (128GB) | Ryzen AI MAX 395 (96GB) |
+| | [M5 Max](https://www.apple.com/macbook-pro/) (128GB) | [RTX 3090](https://www.nvidia.com/en-us/geforce/graphics-cards/30-series/rtx-3090-3090ti/)×2 (48GB) | [DGX Spark GB10](https://www.nvidia.com/en-us/products/workstations/dgx-spark/) (128GB) | [Ryzen AI MAX 395](https://www.amd.com/en/products/processors/workstations/ryzen-ai-max-pro/ryzen-ai-max-pro-395.html) (96GB) |
 |--|:--:|:--:|:--:|:--:|
 | GPU | Apple GPU 40C | RTX 3090 ×2 | GB10 Blackwell | Radeon 8060S RDNA 3.5 |
 | 메모리 | 128GB unified | 128GB DDR4 + 48GB VRAM | 128GB unified | 128GB unified (96GB VRAM) |
@@ -35,7 +35,7 @@ aiAssisted: true
 
 ## 생성 속도 (Generation TPS)
 
-> 동일 llama.cpp + 동일 GGUF. 입력 64토큰, 출력 512토큰.
+> Track B: 동일 [llama.cpp](https://github.com/ggml-org/llama.cpp) + 동일 [unsloth](https://huggingface.co/unsloth) GGUF. 입력 64토큰, 출력 512토큰.
 
 ### Q4_K_M (4-bit)
 
@@ -94,7 +94,7 @@ aiAssisted: true
 
 ## 엔진 비교 (gen-512, Q4_K_M)
 
-> 같은 하드웨어 안에서만 비교.
+> Track A: 같은 하드웨어 안에서 사용 가능한 엔진끼리만 비교. 크로스 하드웨어 비교는 위 Track B 참조.
 
 ### M5 Max
 
@@ -178,10 +178,10 @@ aiAssisted: true
 ## 데이터
 
 - **하드웨어**: 4대 (M5 Max, 3090×2, DGX Spark, Ryzen AI)
-- **모델**: Qwen3.5 4종 (9B, 27B, 35B-A3B MoE, 122B-A10B MoE)
-- **양자화**: Q4_K_M, Q8_0 (unsloth GGUF)
-- **엔진**: llama.cpp, MLX, Ollama, vLLM, Lemonade
+- **모델**: [Qwen3.5](https://huggingface.co/collections/Qwen/qwen35-685b8e0ce2e5289dfa8bcebf) 4종 (9B, 27B, 35B-A3B MoE, 122B-A10B MoE)
+- **양자화**: Q4_K_M, Q8_0 ([unsloth](https://huggingface.co/unsloth) Dynamic 2.0 GGUF)
+- **엔진**: [llama.cpp](https://github.com/ggml-org/llama.cpp), [MLX](https://github.com/ml-explore/mlx), [Ollama](https://ollama.com/), [vLLM](https://github.com/vllm-project/vllm), [Lemonade](https://lemonade-server.ai/)
 - **총 측정**: ~5,100회 (중복·이상치 제거 후 ~4,200회 유효)
 - **필터**: CV < 0.3, cold prefill, `--no-cache-prompt`, run별 nonce
 
-> 실험 코드: [baem1n/llm-bench](https://github.com/baem1n/llm-bench)
+> 실험 코드 + raw data: [baem1n/llm-bench](https://github.com/baem1n/llm-bench)
