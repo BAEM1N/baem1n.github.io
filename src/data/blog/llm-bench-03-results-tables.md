@@ -25,7 +25,7 @@ aiAssisted: true
 
 ## 하드웨어
 
-| | [M5 Max](https://www.apple.com/macbook-pro/) (128GB) | [RTX 3090](https://www.nvidia.com/en-us/geforce/graphics-cards/30-series/rtx-3090-3090ti/)×2 (48GB) | [DGX Spark GB10](https://www.nvidia.com/en-us/products/workstations/dgx-spark/) (128GB) | [Ryzen AI MAX 395](https://www.amd.com/en/products/processors/laptop/ryzen-pro/ai-max-pro-300-series/amd-ryzen-ai-max-plus-pro-395.html) (96GB) |
+| | [M5 Max](https://www.apple.com/macbook-pro/) (128GB) | [RTX 3090](https://www.nvidia.com/en-us/geforce/graphics-cards/30-series/rtx-3090-3090ti/)×2 (48GB) | [DGX Spark GB10](https://www.nvidia.com/en-us/products/workstations/dgx-spark/) (128GB) | [Ryzen AI MAX 395](https://www.hp.com/us-en/workstations/z2-mini-a.html) (96GB) |
 |--|:--:|:--:|:--:|:--:|
 | GPU | Apple GPU 40C | RTX 3090 ×2 | GB10 Blackwell | Radeon 8060S RDNA 3.5 |
 | 메모리 | 128GB unified | 128GB DDR4 + 48GB VRAM | 128GB unified | 128GB unified (96GB VRAM) |
