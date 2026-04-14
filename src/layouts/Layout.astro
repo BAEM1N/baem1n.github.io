@@ -18,6 +18,9 @@ type Props = {
   tags?: string[];
   alternateUrl?: string;
   alternateLang?: string;
+  articleType?: "BlogPosting" | "TechArticle";
+  proficiencyLevel?: string;
+  dependencies?: string;
 };
 
 const {
@@ -34,6 +37,9 @@ const {
   tags = [],
   alternateUrl,
   alternateLang,
+  articleType = "BlogPosting",
+  proficiencyLevel,
+  dependencies,
 } = Astro.props;
 
 const socialImageURL = new URL(ogImage, Astro.url);
@@ -63,6 +69,7 @@ const authorEntity = {
   sameAs: [
     "https://github.com/baem1n",
     "https://www.linkedin.com/in/baem1n/",
+    "https://huggingface.co/baem1n",
   ],
 };
 
@@ -78,13 +85,14 @@ const organizationSchema = {
   sameAs: [
     "https://github.com/baem1n",
     "https://www.linkedin.com/in/baem1n/",
+    "https://huggingface.co/baem1n",
   ],
 };
 
 const structuredData = isArticle
   ? {
       "@context": "https://schema.org",
-      "@type": "BlogPosting",
+      "@type": articleType,
       headline: `${title}`,
       description: `${description}`,
       image: `${socialImageURL}`,
@@ -99,6 +107,8 @@ const structuredData = isArticle
       },
       inLanguage: lang,
       ...(tags.length > 0 && { keywords: tags.join(", ") }),
+      ...(articleType === "TechArticle" && proficiencyLevel && { proficiencyLevel }),
+      ...(articleType === "TechArticle" && dependencies && { dependencies }),
       speakable: {
         "@type": "SpeakableSpecification",
         cssSelector: ["article h1", "article > p:first-of-type", "article h2"],
@@ -132,19 +142,14 @@ const structuredData = isArticle
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href={canonicalURL} />
-    {alternateUrl && alternateLang ? (
+    {alternateUrl && alternateLang && (
       <>
         <link rel="alternate" hreflang={lang} href={canonicalURL.toString()} />
         <link rel="alternate" hreflang={alternateLang} href={alternateUrl} />
         <link rel="alternate" hreflang="x-default" href={lang === "ko" ? canonicalURL.toString() : alternateUrl} />
-      </>
-    ) : lang === "ko" && (
-      <>
-        <link rel="alternate" hreflang="ko" href={canonicalURL.toString()} />
-        <link rel="alternate" hreflang="en" href={canonicalURL.toString().replace(SITE.website, `${SITE.website}en/`)} />
-        <link rel="alternate" hreflang="x-default" href={canonicalURL.toString()} />
       </>
     )}
     <meta name="generator" content={Astro.generator} />

@@ -20,6 +20,9 @@ const blogSchema = ({ image }: { image: () => any }) =>
     hideEditPost: z.boolean().optional(),
     timezone: z.string().optional(),
     aiAssisted: z.boolean().optional(),
+    articleType: z.enum(["BlogPosting", "TechArticle"]).optional(),
+    proficiencyLevel: z.string().optional(),
+    dependencies: z.string().optional(),
   });
 
 const blog = defineCollection({

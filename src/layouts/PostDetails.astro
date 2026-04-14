@@ -39,6 +39,9 @@ const {
   tags,
   hideEditPost,
   aiAssisted,
+  articleType,
+  proficiencyLevel,
+  dependencies,
 } = post.data;
 
 const { Content } = await render(post);
@@ -78,6 +81,9 @@ const layoutProps = {
   tags,
   alternateUrl,
   alternateLang,
+  articleType,
+  proficiencyLevel,
+  dependencies,
 };
 
 /* ========== Prev/Next Posts ========== */

@@ -5,7 +5,7 @@
 
 Author: baem1n (배기민) — AI/Data Educator & Engineer, DDOK.AI Founder
 Full content: /llms-full.txt
-Last updated: 2026-04-04
+Last updated: 2026-04-14
 
 ## Expertise
 
@@ -30,8 +30,11 @@ Topics: GraphRAG, LLM Benchmarking, Apache AGE, PostgreSQL, Apple Silicon Infere
 - /posts/langchain-age-graphrag-pipeline/ : GraphRAG 파이프라인 실전 구축 — 벡터 검색 → 그래프 확장 → LLM 답변 end-to-end
 - /posts/langchain-age-langgraph-agent/ : PostgreSQL 하나로 AI Agent 전체 스택 — LangGraph + langchain-age, DB 1개 완결판
 
-### LLM Benchmarks
-- /posts/qwen3-5-mac-benchmark/ : Qwen3.5 로컬 추론 벤치마크 — M5 Max에서 692회 측정. MoE 139 tok/s, llama.cpp FA 204x faster prefill
+### LLM Benchmarks (Cross-Platform Qwen3.5 Series)
+- /posts/llm-bench-01-methodology/ : Qwen3.5 크로스 플랫폼 벤치마크 실험 설계 — prompt cache 차단, nonce prefix, cold prefill, 실행 순서 랜덤화. 함정 6종 차단 방법론
+- /posts/llm-bench-02-results-analysis/ : Qwen3.5 4대 하드웨어 × 5개 엔진 성능 분석 — 3090×2 35B MoE 139 tok/s 1위, vLLM GPTQ-Marlin 156 tok/s 최고, MoE가 전 플랫폼 Dense보다 빠름
+- /posts/llm-bench-03-results-tables/ : Qwen3.5 벤치마크 결과표 — 4대 하드웨어 × 5엔진 × 9트랙 전체 수치. 122B MoE 3대 실행 가능(Mac 42.9 / DGX 21.7 / Ryzen 22.9 tok/s)
+- /posts/qwen3-5-mac-benchmark/ : Qwen3.5 M5 Max 단일 벤치마크 — 692회 측정. llama.cpp FA 204x faster prefill (아카이브)
 
 ### DeepCoWork Series (AI Agent Desktop App)
 - /posts/deepcowork-01-introduction/ : DeepCoWork 소개 — DeepAgents SDK + Tauri 2 오픈소스 AI 에이전트 데스크톱 앱

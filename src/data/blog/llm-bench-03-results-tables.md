@@ -17,13 +17,17 @@ featured: true
 aiAssisted: true
 ---
 
-> Qwen3.5 모델을 4대 하드웨어에서 동일 조건으로 측정한 결과표. cold prefill, cache 차단, 실행 순서 랜덤화 적용. 각 조합 5회 측정 중앙값.
+> **TL;DR** — Qwen3.5 4개 모델을 4대 하드웨어 × 5개 엔진으로 측정한 결과: 생성 속도 1위는 **vLLM GPTQ-Marlin on RTX 3090×2의 35B-A3B MoE = 156.3 tok/s**. 같은 llama.cpp 기준 크로스 하드웨어로는 **3090×2 > M5 Max > DGX Spark ≈ Ryzen AI**. 122B MoE는 3090×2에선 OOM, 나머지 3대(128GB 유니파이드 메모리)에선 실행 가능 — Ryzen AI MAX 395+에서도 **22.9 tok/s**.
 >
-> 실험 설계 → [1편: 방법론](/posts/llm-bench-01-methodology) · 분석 → [2편: 상세 비교](/posts/llm-bench-02-results-analysis) · 코드 → [GitHub](https://github.com/baem1n/llm-bench)
+> cold prefill (`--no-cache-prompt`) + per-run random nonce + 서버 재시작 + 실행 순서 랜덤화. 각 조합 warmup 1회 + measure 5회 중앙값.
+>
+> 실험 설계 → [1편: 방법론](/posts/llm-bench-01-methodology) · 분석 → [2편: 상세 비교](/posts/llm-bench-02-results-analysis) · 코드 & raw CSV → [GitHub: baem1n/llm-bench](https://github.com/baem1n/llm-bench)
 
 ## Table of contents
 
 ## 하드웨어
+
+_메모리 대역폭이 LLM 생성 속도를 결정한다. 이 표의 `대역폭` 행이 아래 모든 벤치마크 결과를 설명한다._
 
 | | [M5 Max](https://www.apple.com/macbook-pro/) (128GB) | [RTX 3090](https://www.nvidia.com/en-us/geforce/graphics-cards/30-series/rtx-3090-3090ti/)×2 (48GB) | [DGX Spark GB10](https://www.nvidia.com/en-us/products/workstations/dgx-spark/) (128GB) | [Ryzen AI MAX 395](https://www.hp.com/us-en/workstations/z2-mini-a.html) (96GB) |
 |--|:--:|:--:|:--:|:--:|
@@ -39,6 +43,8 @@ aiAssisted: true
 
 ### Q4_K_M (4-bit)
 
+_**Q4_K_M 생성 속도**: RTX 3090×2가 VRAM에 올라가는 모든 모델에서 1위. 122B MoE는 3090 48GB 초과로 OOM — Mac M5 Max가 42.9 tok/s로 최고, Ryzen AI MAX 395+가 22.9 tok/s로 DGX Spark(21.7)를 근소하게 앞선다._
+
 | 모델 | M5 Max | RTX 3090×2 | DGX Spark | Ryzen AI |
 |------|-------:|----------:|----------:|---------:|
 | **9B** Dense | 75.9 | **117.6** | 36.8 | 32.6 |
@@ -47,6 +53,8 @@ aiAssisted: true
 | **122B-A10B** MoE | 42.9 | OOM | 21.7 | **22.9** |
 
 ### Q8_0 (8-bit)
+
+_**Q8_0 생성 속도**: 양자화를 Q4→Q8로 올리면 가중치 크기가 2배가 되어 대역폭 제약이 심해진다. 3090×2가 9B에서 82.2 tok/s로 여전히 1위지만 Q4 대비 -30% 수준._
 
 | 모델 | M5 Max | RTX 3090×2 | DGX Spark | Ryzen AI |
 |------|-------:|----------:|----------:|---------:|
@@ -62,6 +70,8 @@ aiAssisted: true
 
 ### 9B
 
+_**9B prefill**: 3090×2가 16K 입력에서 6,244 tok/s로 최고. Ryzen AI는 16K까지는 버티지만 64K/128K에서 급락 (159/56 tok/s) — Strix Halo iGPU의 긴 컨텍스트 약점._
+
 | 입력 길이 | M5 Max | RTX 3090×2 | DGX Spark | Ryzen AI |
 |----------|-------:|----------:|----------:|---------:|
 | 1K | 1,705 | **3,258** | 2,217 | 205 |
@@ -72,6 +82,8 @@ aiAssisted: true
 
 ### 35B-A3B MoE
 
+_**35B MoE prefill**: 3090×2가 16K에서 6,131 tok/s로 1위. Ryzen AI는 9B 대비 MoE에서 훨씬 안정적(128K에서 582 tok/s) — MoE의 active param 감소가 iGPU에 유리._
+
 | 입력 길이 | M5 Max | RTX 3090×2 | DGX Spark | Ryzen AI |
 |----------|-------:|----------:|----------:|---------:|
 | 1K | 2,302 | **3,372** | 1,602 | 732 |
@@ -81,6 +93,8 @@ aiAssisted: true
 | 128K | 732 | **3,142** | 856 | 582 |
 
 ### 122B-A10B MoE
+
+_**122B MoE prefill**: 3090×2는 KV cache 256K 초과로 전 트랙 OOM. 짧은 컨텍스트는 M5 Max(546 GB/s)가 유리, 64K 이상부터는 DGX Spark가 역전 — GB10 Blackwell의 긴 컨텍스트 효율._
 
 | 입력 길이 | M5 Max | RTX 3090×2 | DGX Spark | Ryzen AI |
 |----------|-------:|----------:|----------:|---------:|
@@ -98,16 +112,18 @@ aiAssisted: true
 
 ### M5 Max
 
+_**Mac에서는 MLX가 전 모델 1위.** 122B MoE에서 llama.cpp 대비 +73% 격차 — Apple Silicon 전용 최적화의 힘._
+
 | 모델 | MLX | llama.cpp | Ollama |
 |------|----:|----------:|-------:|
-| 9B | **102.4** | 75.4 | 29.2 |
-| 27B | **28.8** | — | — |
-| 35B-A3B | **138.3** | 91.0 | — |
-| 122B | **66.8** | 38.5 | — |
-
-> Mac Ollama/llama.cpp 일부 모델 측정 진행 중. `—` = 미측정.
+| 9B | **102.4** | 75.4 | 52.2 |
+| 27B | **28.8** | 20.6 | 15.7 |
+| 35B-A3B | **138.3** | 91.0 | 57.0 |
+| 122B | **66.8** | 38.5 | 28.6 |
 
 ### RTX 3090×2
+
+_**3090×2에서는 vLLM GPTQ-Marlin이 35B MoE에서 156.3 tok/s로 전체 실험 최고 속도.** Dense 모델에선 llama.cpp가 더 빠름 — vLLM은 MoE + GPTQ 조합에서만 우위._
 
 | 모델 | llama.cpp | Ollama | vLLM GPTQ |
 |------|----------:|-------:|----------:|
@@ -118,6 +134,8 @@ aiAssisted: true
 
 ### DGX Spark GB10
 
+_**DGX Spark는 llama.cpp = Ollama 동률.** 둘 다 동일 CUDA 경로 사용. vLLM Docker는 CUDA 13/12 호환 이슈로 -40% 성능._
+
 | 모델 | llama.cpp | Ollama | vLLM Docker |
 |------|----------:|-------:|------------:|
 | 9B | **35.7** | 35.1 | 12.9 |
@@ -126,6 +144,8 @@ aiAssisted: true
 | 122B | **22.0** | 6.6 | N/A |
 
 ### Ryzen AI MAX 395
+
+_**Ryzen AI는 llama.cpp가 전 모델 1위**, Lemonade(AMD 공식)가 2위, Ollama는 122B에서 swap으로 추락(4.6 tok/s). 122B도 llama.cpp로 22.8 tok/s로 실사용 가능._
 
 | 모델 | llama.cpp | Ollama | Lemonade |
 |------|----------:|-------:|---------:|
@@ -137,6 +157,8 @@ aiAssisted: true
 ---
 
 ## 프리필 엔진 비교 (prefill-16k, Q4_K_M, tok/s)
+
+_**프리필은 compute-bound → vLLM CUDA Graph + FlashAttention의 독무대.** 3090 vLLM의 35B MoE prefill = 13,146 tok/s, llama.cpp 대비 +214%. 122B MoE prefill은 Mac MLX(1,281)가 단독 최고 — 다른 엔진은 OOM 또는 N/A._
 
 | 엔진 × 하드웨어 | 9B | 27B | 35B MoE | 122B MoE |
 |----------------|---:|----:|--------:|---------:|
@@ -153,7 +175,7 @@ aiAssisted: true
 
 ## MoE 효율
 
-35B-A3B MoE(3B active)는 **전 플랫폼에서** 9B Dense보다 빠르다:
+_**35B-A3B MoE(3B active)가 9B Dense보다 빠르다 — 전 플랫폼 예외 없음.** 대역폭이 낮을수록 MoE 우위가 커진다 (Ryzen AI +78%). active param 수가 총 param 수보다 중요하다는 걸 보여주는 핵심 데이터._
 
 | 하드웨어 | 9B Dense | 35B MoE | MoE 우위 |
 |---------|----------|---------|---------|
@@ -181,7 +203,39 @@ aiAssisted: true
 - **모델**: [Qwen3.5](https://huggingface.co/collections/Qwen/qwen35) 4종 (9B, 27B, 35B-A3B MoE, 122B-A10B MoE)
 - **양자화**: Q4_K_M, Q8_0 ([unsloth](https://huggingface.co/unsloth) Dynamic 2.0 GGUF)
 - **엔진**: [llama.cpp](https://github.com/ggml-org/llama.cpp), [MLX](https://github.com/ml-explore/mlx), [Ollama](https://ollama.com/), [vLLM](https://github.com/vllm-project/vllm), [Lemonade](https://lemonade-server.ai/)
-- **총 측정**: ~5,100회 (중복·이상치 제거 후 ~4,200회 유효)
-- **필터**: CV < 0.3, cold prefill, `--no-cache-prompt`, run별 nonce
+- **집계**: 각 조합 warmup 1회 + measure 5회, 중앙값. CV < 0.3 필터, cold prefill, `--no-cache-prompt`, run별 nonce prefix
+- **Raw CSV**: [results/consolidated/](https://github.com/baem1n/llm-bench/tree/main/results/consolidated) — 디바이스별 CSV + 전체 통합 파일
 
 > 실험 코드 + raw data: [baem1n/llm-bench](https://github.com/baem1n/llm-bench)
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Dataset",
+  "name": "Qwen3.5 Cross-Platform Inference Benchmark (Mac M5 Max · RTX 3090×2 · DGX Spark · Ryzen AI MAX 395+)",
+  "description": "Controlled benchmark of Qwen3.5 9B/27B/35B-A3B MoE/122B-A10B MoE across 4 hardware platforms and 5 inference engines (llama.cpp, MLX, Ollama, vLLM, Lemonade). Cold prefill with --no-cache-prompt, per-run random nonce prefix, server restart between prefill tracks, randomized execution order. 5 runs per combination, median aggregation.",
+  "url": "https://baem1n.dev/posts/llm-bench-03-results-tables/",
+  "sameAs": "https://github.com/baem1n/llm-bench",
+  "keywords": ["LLM benchmark", "Qwen3.5", "Apple Silicon", "NVIDIA", "AMD", "MoE", "inference", "llama.cpp", "MLX", "vLLM"],
+  "license": "https://opensource.org/licenses/MIT",
+  "creator": {
+    "@type": "Person",
+    "name": "배기민 (BAEM1N)",
+    "url": "https://baem1n.dev/about/",
+    "sameAs": [
+      "https://github.com/baem1n",
+      "https://www.linkedin.com/in/baem1n/",
+      "https://huggingface.co/baem1n"
+    ]
+  },
+  "distribution": [{
+    "@type": "DataDownload",
+    "encodingFormat": "text/csv",
+    "contentUrl": "https://github.com/baem1n/llm-bench/tree/main/results/consolidated"
+  }],
+  "variableMeasured": ["TTFT (ms)", "Prefill TPS (tok/s)", "Generation TPS (tok/s)", "Peak Memory (GB)", "CPU Temperature (°C)"],
+  "measurementTechnique": "Cold prefill (--no-cache-prompt), per-run random nonce prefix, 5-iteration median, 85°C thermal guard with 60s cooldown, randomized backend/model/track order",
+  "isAccessibleForFree": true
+}
+</script>
+

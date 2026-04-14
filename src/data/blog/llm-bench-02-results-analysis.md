@@ -1,9 +1,9 @@
 ---
 author: baem1n
 pubDatetime: 2026-04-05T09:00:00.000+09:00
-modDatetime: 2026-04-07T23:00:00.000+09:00
+modDatetime: 2026-04-14T00:00:00.000+09:00
 title: "Qwen3.5 크로스 플랫폼 벤치마크: 4대 하드웨어 × 5개 엔진 성능 비교"
-description: "Mac M5 Max, RTX 3090×2, DGX Spark, Ryzen AI MAX 395+에서 Qwen3.5를 동일 조건으로 측정한 벤치마크. 4,200회 정상 측정 (이상치·중복 제거). cold prefill, cache 차단 적용."
+description: "Mac M5 Max, RTX 3090×2, DGX Spark, Ryzen AI MAX 395+에서 Qwen3.5를 동일 조건으로 측정한 벤치마크. cold prefill, cache 차단, 실행 순서 랜덤화 적용."
 tags:
   - llm
   - benchmark
@@ -19,7 +19,7 @@ aiAssisted: true
 
 > 실험 설계는 [1편: 실험 방법론](/posts/llm-bench-01-methodology)을 참고.
 >
-> **데이터 기준**: 각 조합별 가장 안정적인 5회 측정 세트 선택 (CV<0.3). 중복 실행·이상치 제거 후 4,200회 유효.
+> **데이터 기준**: 각 조합별 warmup 1회 + measure 5회 중앙값, CV<0.3 필터, 이상치·중복 제거. Raw CSV: [baem1n/llm-bench](https://github.com/baem1n/llm-bench/tree/main/results/consolidated).
 
 ## Table of contents
 
@@ -56,7 +56,7 @@ aiAssisted: true
 | **27B** | 16.9 | **27.5** | 7.6 | 7.1 |
 | **35B-A3B** | 88.4 | **130.3** | 52.6 | 50.8 |
 
-### MoE의 보편적 효율
+### MoE(35B-A3B)는 정말 9B Dense보다 빠른가?
 
 **전 플랫폼에서** 35B-A3B MoE(3B active)가 9B Dense보다 빠르다:
 
@@ -69,11 +69,11 @@ aiAssisted: true
 
 ---
 
-## Track A: 엔진 비교 (플랫폼 내부)
+## 어떤 엔진이 각 하드웨어에서 가장 빠른가?
 
 > ⚠️ **같은 플랫폼 내부에서만 비교**. 다른 플랫폼의 다른 엔진끼리는 비교하지 않는다.
 
-### M5 Max: MLX vs llama.cpp (gen-512, Q4_K_M)
+### M5 Max에서 MLX는 llama.cpp보다 얼마나 빠른가? (gen-512, Q4_K_M)
 
 | 모델 | MLX | llama.cpp | MLX 우위 |
 |------|----:|----------:|---------:|
@@ -82,7 +82,7 @@ aiAssisted: true
 | 35B-A3B | **139.0** | 91.0 | +53% |
 | 122B | **66.8** | 38.5 | +73% |
 
-### 3090×2: vLLM vs llama.cpp vs Ollama (gen-512, Q4_K_M)
+### RTX 3090×2에서 vLLM GPTQ-Marlin은 llama.cpp를 이기는가? (gen-512, Q4_K_M)
 
 | 모델 | vLLM | llama.cpp | Ollama |
 |------|-----:|----------:|-------:|
@@ -137,15 +137,15 @@ aiAssisted: true
 
 ## 데이터
 
-~4,200회 유효 측정 (이상치·중복 제거, CV<0.3 필터). 모델: [Qwen3.5](https://huggingface.co/collections/Qwen/qwen35), 양자화: [unsloth](https://huggingface.co/unsloth) GGUF.
+각 조합 warmup 1회 + measure 5회 중앙값. 이상치·중복 제거, CV<0.3 필터. 모델: [Qwen3.5](https://huggingface.co/collections/Qwen/qwen35), 양자화: [unsloth](https://huggingface.co/unsloth) GGUF.
 
-| 플랫폼 | 정상 데이터 |
-|--------|----------:|
-| 3090×2 | ~1,150 |
-| DGX Spark | ~1,190 |
-| M5 Max | ~1,470 |
-| Ryzen AI | ~1,310 |
-| **합계** | **~5,100** |
+| 플랫폼 | 디바이스 CSV |
+|--------|:----------:|
+| M5 Max (macbook-m-series) | [mac.csv](https://github.com/baem1n/llm-bench/blob/main/results/consolidated/mac.csv) |
+| RTX 3090×2 (linux-3090x2) | [linux-3090x2.csv](https://github.com/baem1n/llm-bench/blob/main/results/consolidated/linux-3090x2.csv) |
+| DGX Spark GB10 | [dgx-spark.csv](https://github.com/baem1n/llm-bench/blob/main/results/consolidated/dgx-spark.csv) |
+| Ryzen AI MAX 395+ | [ryzen-ai.csv](https://github.com/baem1n/llm-bench/blob/main/results/consolidated/ryzen-ai.csv) |
+| **전체 통합** | [all_devices.csv](https://github.com/baem1n/llm-bench/blob/main/results/consolidated/all_devices.csv) |
 
 > 실험 코드 + raw data: [baem1n/llm-bench](https://github.com/baem1n/llm-bench)
 

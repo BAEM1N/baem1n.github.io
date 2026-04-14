@@ -23,7 +23,12 @@ const { post } = Astro.props;
 const posts = await getCollection("blog");
 const sortedPosts = getSortedPosts(posts);
 
-const enAlternateUrl = `${import.meta.env.SITE}en/posts/${post.id}/`;
+// Only emit hreflang=en when an actual English translation exists.
+const enPosts = await getCollection("blog-en", ({ data }) => !data.draft);
+const hasEnglish = enPosts.some(p => p.id === post.id);
+const enAlternateUrl = hasEnglish
+  ? `${import.meta.env.SITE}en/posts/${post.id}/`
+  : undefined;
 ---
 
 <PostDetails
@@ -31,5 +36,5 @@ const enAlternateUrl = `${import.meta.env.SITE}en/posts/${post.id}/`;
   posts={sortedPosts}
   lang="ko"
   alternateUrl={enAlternateUrl}
-  alternateLang="en"
+  alternateLang={hasEnglish ? "en" : undefined}
 />
