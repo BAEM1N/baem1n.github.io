@@ -10,6 +10,7 @@ tags:
   - benchmark
   - korean-nlp
 featured: true
+draft: true
 aiAssisted: true
 ---
 

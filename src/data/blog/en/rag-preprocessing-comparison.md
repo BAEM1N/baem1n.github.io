@@ -10,6 +10,7 @@ tags:
   - vector-database
   - korean-nlp
 featured: false
+draft: true
 aiAssisted: true
 ---
 
