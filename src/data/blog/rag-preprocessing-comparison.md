@@ -9,7 +9,7 @@ tags:
   - benchmark
   - vector-database
   - korean-nlp
-featured: true
+featured: false
 aiAssisted: true
 ---
 

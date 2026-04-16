@@ -9,7 +9,7 @@ tags:
   - benchmark
   - korean-nlp
   - llm
-featured: true
+featured: false
 aiAssisted: true
 ---
 
