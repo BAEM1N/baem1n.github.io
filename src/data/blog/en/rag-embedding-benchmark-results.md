@@ -201,9 +201,19 @@ All tested models are **text embeddings**. When a question references chart/grap
 
 ## Next steps
 
-1. Experiment B: fixed embedding (gemma-embed-300m) × ~30 LLMs
-2. Reranker experiments (Qwen3-Reranker, BCE, BGE)
-3. Rescue the Hard-50: vision embedding + OCR preprocessing
-4. RAGAS-based LLM-as-judge for answer quality
+1. Parser/Chunking/VectorStore impact → [Why preprocessing matters more than embeddings](/en/posts/rag-preprocessing-comparison)
+2. Experiment B: fixed embedding (gemma-embed-300m) × ~30 LLMs
+3. Reranker experiments (Qwen3-Reranker, BCE, BGE)
+4. Rescue the Hard-50: vision embedding + OCR preprocessing
+5. RAGAS-based LLM-as-judge for answer quality
 
-Raw JSON outputs are published under `results/phase4_embedding/` in the [GitHub repository](https://github.com/baem1n/RAG-Evaluation).
+---
+
+## Code & raw data
+
+- **GitHub**: [github.com/BAEM1N/RAG-Evaluation](https://github.com/BAEM1N/RAG-Evaluation)
+- **Phase 4 JSON**: [results/phase4_embedding/](https://github.com/BAEM1N/RAG-Evaluation/tree/main/results/phase4_embedding) — full MRR / Hit / domain breakdowns for all 21 embeddings
+- **Deep analysis CSV**: [results/retrieval_analysis/](https://github.com/BAEM1N/RAG-Evaluation/tree/main/results/retrieval_analysis) — heatmaps, failure modes, consensus, 21×21 pairwise overlap
+- **Analysis script**: [scripts/analyze_retrieval_deep.py](https://github.com/BAEM1N/RAG-Evaluation/blob/main/scripts/analyze_retrieval_deep.py) — reproducible by anyone
+
+You can inspect every raw result directly when you need hard evidence for a RAG design choice.

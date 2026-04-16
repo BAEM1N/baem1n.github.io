@@ -193,9 +193,20 @@ This combination is the only way to compare "local-quantized" vs "commercial ful
 
 ## Next steps
 
-1. Embedding deep dive → [Embedding benchmark results post](/en/posts/rag-embedding-benchmark-results)
-2. Experiment B LLM comparison (in progress)
-3. RAGAS-based LLM-as-judge evaluation
-4. Per-domain optimal configuration
+1. Embedding deep dive → [Embedding benchmark results](/en/posts/rag-embedding-benchmark-results)
+2. Parser/Chunking/VectorStore comparison → [Why preprocessing matters more than embeddings](/en/posts/rag-preprocessing-comparison)
+3. Experiment B LLM comparison (in progress)
+4. RAGAS-based LLM-as-judge evaluation
+5. Per-domain optimal configuration
 
-Full code and data will be published at the [RAG-Evaluation GitHub repository](https://github.com/baem1n/RAG-Evaluation).
+---
+
+## Code & raw data
+
+- **GitHub**: [github.com/BAEM1N/RAG-Evaluation](https://github.com/BAEM1N/RAG-Evaluation)
+- **Experiment design doc**: [docs/experiment-design.md](https://github.com/BAEM1N/RAG-Evaluation/blob/main/docs/experiment-design.md)
+- **Model inventory**: [docs/model-inventory-full.md](https://github.com/BAEM1N/RAG-Evaluation/blob/main/docs/model-inventory-full.md)
+- **Result JSON**: `results/phase1~4_*/` — all raw data per phase
+- **Analysis CSV**: `results/retrieval_analysis/` — heatmaps, failure modes, consensus
+
+Every benchmark is fully reproducible — single-command Phase reruns.
