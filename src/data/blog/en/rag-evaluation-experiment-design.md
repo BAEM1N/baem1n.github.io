@@ -47,6 +47,8 @@ We use the [allganize/RAG-Evaluation-Dataset-KO](https://huggingface.co/datasets
 
 Each phase's winner is frozen for subsequent phases. We vary exactly one component at a time to isolate causality.
 
+![5-Phase cascade structure](../../../assets/images/blog/rag-design/phase-cascade-en.png)
+
 ### Phase 1 — Parser (3 options)
 
 **Fixed:** chunking=1000/200, embedding=qwen3-embed-8b, vector store=pgvector  
@@ -108,6 +110,8 @@ Top: **google/gemma-embed-300m (MRR 0.6682)** — a 314MB model beating 7–8B d
 - **Experiment A**: 21 embeddings × 4 local LLMs → measure embedding impact
 - **Experiment B**: gemma-embed-300m fixed × ~30 LLMs → measure LLM impact
 
+![Experiment A vs B structure](../../../assets/images/blog/rag-design/exp-ab-en.png)
+
 ## Infrastructure
 
 | Server | Role | Spec |
@@ -116,6 +120,8 @@ Top: **google/gemma-embed-300m (MRR 0.6682)** — a 314MB model beating 7–8B d
 | DGX Spark | LLM (Ollama) | GB10 128GB unified, 3.7TB SSD |
 | T7910 | 7 vector stores in Docker | Dual Xeon 72T, 128GB RAM |
 | Mac mini | Experiment orchestration | M2 16GB |
+
+![Infrastructure topology](../../../assets/images/blog/rag-design/infrastructure-en.png)
 
 ## Three critical pitfalls
 

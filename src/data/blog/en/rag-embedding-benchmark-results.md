@@ -55,6 +55,8 @@ Full experiment design in [RAG Benchmark Experiment Design](/en/posts/rag-evalua
 | 20 | google/LaBSE | 768 | 492MB | 0.0468 | 2.7% | 8.0% | 27.0% | 92.0% |
 | 21 | Microsoft/harrier-oss-27b | 4096 | **27GB** | 0.0044 | 0.0% | 1.0% | 11.3% | 99.0% |
 
+![Top 10 embeddings — MRR ranking](../../../assets/images/blog/rag-embedding/top10-mrr-en.png)
+
 ### Three key observations
 
 1. **Top 5 are all small (300MB–606MB)**. qwen3-embed-8b (7.5GB) is #14.
@@ -108,6 +110,8 @@ labse fails structurally at the file level (shallow Korean representation across
 | nomic-embed-v2-moe | 0.773 | 0.545 | 0.647 | 0.628 | 0.650 | 0.649 |
 | kure-v1 | 0.716 | 0.555 | 0.605 | 0.690 | 0.640 | 0.641 |
 
+![Embedding x Domain MRR heatmap](../../../assets/images/blog/rag-embedding/domain-heatmap-en.png)
+
 - **Finance is hardest**: everyone drops below average. Lots of numbers, tables, charts.
 - **Commerce is easiest**: mostly natural-language explanations.
 
@@ -118,6 +122,8 @@ labse fails structurally at the file level (shallow Korean representation across
 | gemma-embed-300m | 0.737 | 0.667 | 0.720 | **0.486** |
 | jina-v4-retrieval | 0.700 | 0.656 | 0.686 | **0.474** |
 | kure-v1 | 0.717 | 0.617 | 0.687 | **0.464** |
+
+![Performance by context type](../../../assets/images/blog/rag-embedding/context-type-en.png)
 
 **Image-type questions fail universally (MRR ≤ 0.5)**. Text embeddings can't query image content — needs vision embedding + OCR captioning upstream.
 
@@ -136,6 +142,8 @@ labse fails structurally at the file level (shallow Korean representation across
 - **Domain**: finance 20, public 12, law 8, commerce 7, medical 3
 - **Context type**: **image 26 (52%)**, paragraph 17, table 4, text 3
 
+![Question difficulty clusters](../../../assets/images/blog/rag-embedding/difficulty-donut-en.png)
+
 **52% of hard questions are image-context**. Image-grounded questions can't be solved by current text RAG — a hard upper bound, not a model problem.
 
 ## Consensus-based pseudo-GT
@@ -147,6 +155,8 @@ If we aggregate every embedding's top-1 into a majority vote, how often does the
 | Strong (15+/21 agree) | 102 | **82.4%** |
 | Medium (8–14/21) | 120 | 63.3% |
 | Weak (<8/21) | 78 | 23.1% |
+
+![Consensus-based pseudo-GT](../../../assets/images/blog/rag-embedding/consensus-en.png)
 
 **When many embeddings agree on the same chunk, it's the right answer 82.4% of the time.** Useful later to cut LLM-as-judge cost.
 
@@ -161,6 +171,8 @@ If we aggregate every embedding's top-1 into a majority vote, how often does the
 | kure-v1 | 0.6412 | 1.0GB | 0.641 |
 | qwen3-embed-8b | 0.5325 | 9.0GB | 0.059 |
 | harrier-27b | 0.0044 | 20.0GB | 0.000 |
+
+![Embedding efficiency (MRR vs VRAM)](../../../assets/images/blog/rag-embedding/efficiency-scatter-en.png)
 
 Sub-500MB models dominate on efficiency. qwen3-embed-8b delivers ~1/22 the efficiency of gemma-embed-300m.
 

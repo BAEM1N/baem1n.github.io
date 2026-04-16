@@ -77,12 +77,7 @@ pages = [pymupdf4llm.to_markdown(doc, pages=[i]) for i in range(len(doc))]
 
 **MRR 0.4302 → 0.5315 (+23.5%)** — the biggest delta across all phases.
 
-```
-small (500)     ████████████████████████████████████████████████████████  0.5315
-baseline (1000) ████████████████████████████████████████████████          0.4713
-medium (1500)   █████████████████████████████████████████████             0.4458
-large (2000)    ███████████████████████████████████████████               0.4302
-```
+![Chunking MRR comparison](../../../assets/images/blog/rag-preprocessing/chunking-mrr-en.png)
 
 ### Why small wins
 
@@ -128,25 +123,9 @@ Exception: Chroma (0.5271) lags slightly because the default HNSW `ef=10` misses
 
 ### Latency spans 200x
 
-```
-Insert time (3,166 chunks):
-  FAISS        ▏ 0.8s
-  LanceDB      ███ 6.0s
-  Weaviate     █████████ 12.0s
-  Chroma       ████████████ 16.7s
-  Milvus       ████████████████ 22.4s
-  Qdrant       █████████████████████████████████████████████ 58.6s
-  pgvector     ██████████████████████████████████████████████████████████████████████ 92.3s
+![Vector store insert time](../../../assets/images/blog/rag-preprocessing/vectorstore-insert-en.png)
 
-Query latency (single query):
-  FAISS        ▏ 0.7ms
-  LanceDB      █ 6.3ms
-  Weaviate     ████ 23.3ms
-  Chroma       █████ 40.0ms
-  Milvus       ██████ 53.7ms
-  Qdrant       ████████████ 112.8ms
-  pgvector     ███████████████ 142.9ms
-```
+![Vector store query latency](../../../assets/images/blog/rag-preprocessing/vectorstore-latency-en.png)
 
 ### Why FAISS is fastest
 
@@ -169,11 +148,7 @@ Query latency (single query):
 
 ### MRR contribution
 
-```
-Chunking (500→2000)          +23.5%  ████████████████████████████
-Parser (pypdf→pymupdf4llm)   +5.4%   ██████
-Vector store (7 options)     +0.6%   ▌
-```
+![MRR improvement per phase](../../../assets/images/blog/rag-preprocessing/phase-contribution-en.png)
 
 ### Speed impact
 

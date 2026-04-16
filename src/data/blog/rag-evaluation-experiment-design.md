@@ -47,6 +47,8 @@ aiAssisted: true
 
 각 단계의 **최적 설정은 이전 Phase 결과**에서 고정한다. 한 번에 한 변수만 바꿔 인과를 분리한다.
 
+![5-Phase 캐스케이드 구조](../../assets/images/blog/rag-design/phase-cascade-ko.png)
+
 ### Phase 1: Parser 비교 (3종)
 
 **고정:** Chunking=1000/200, Embedding=qwen3-embed-8b, VectorStore=pgvector  
@@ -113,6 +115,8 @@ MRR 1위: **google/gemma-embed-300m (0.6682)** — 모델 크기 314MB로 대형
 **실험 A**: 21 임베딩 × 4 로컬 LLM → 임베딩 영향 측정  
 **실험 B**: gemma-embed-300m 고정 × 약 30 LLM → LLM 영향 측정
 
+![실험 A vs 실험 B 구조](../../assets/images/blog/rag-design/exp-ab-ko.png)
+
 ## 인프라 구성
 
 | 서버 | 역할 | 사양 |
@@ -121,6 +125,8 @@ MRR 1위: **google/gemma-embed-300m (0.6682)** — 모델 크기 314MB로 대형
 | DGX Spark | LLM (Ollama) | GB10 128GB unified, 3.7TB SSD |
 | T7910 | 벡터스토어 7종 Docker | Dual Xeon 72T, 128GB RAM |
 | Mac Mini | 실험 스크립트 오케스트레이션 | M2 16GB |
+
+![인프라 토폴로지](../../assets/images/blog/rag-design/infrastructure-ko.png)
 
 ## 핵심 함정 3가지
 

@@ -91,12 +91,7 @@ for i in range(len(doc)):
 
 **MRR 0.4302 → 0.5315 (+23.5%)** — 모든 Phase 중 가장 큰 차이.
 
-```
-small (500)     ████████████████████████████████████████████████████████  0.5315
-baseline (1000) ████████████████████████████████████████████████          0.4713
-medium (1500)   █████████████████████████████████████████████             0.4458
-large (2000)    ███████████████████████████████████████████               0.4302
-```
+![청킹 전략별 MRR 비교](../../assets/images/blog/rag-preprocessing/chunking-mrr-ko.png)
 
 ### 왜 small이 이기는가
 
@@ -144,25 +139,9 @@ chunks = splitter.split_documents(docs)
 
 ### 속도는 200배 차이
 
-```
-Insert 시간 (3,166 청크):
-  FAISS        ▏ 0.8s
-  LanceDB      ███ 6.0s
-  Weaviate     █████████ 12.0s
-  Chroma       ████████████ 16.7s
-  Milvus       ████████████████ 22.4s
-  Qdrant       █████████████████████████████████████████████ 58.6s
-  pgvector     ██████████████████████████████████████████████████████████████████████ 92.3s
+![벡터스토어 Insert 시간](../../assets/images/blog/rag-preprocessing/vectorstore-insert-ko.png)
 
-쿼리 지연 (single query):
-  FAISS        ▏ 0.7ms
-  LanceDB      █ 6.3ms
-  Weaviate     ████ 23.3ms
-  Chroma       █████ 40.0ms
-  Milvus       ██████ 53.7ms
-  Qdrant       ████████████ 112.8ms
-  pgvector     ███████████████ 142.9ms
-```
+![벡터스토어 쿼리 지연](../../assets/images/blog/rag-preprocessing/vectorstore-latency-ko.png)
 
 ### 왜 FAISS가 빠른가
 
@@ -185,11 +164,7 @@ Insert 시간 (3,166 청크):
 
 ### MRR 개선 기여도
 
-```
-청킹 (500→2000)     +23.5%  ████████████████████████████
-파서 (pypdf→pymupdf4llm) +5.4%  ██████
-벡터스토어 (7종 전부)   +0.6%  ▌
-```
+![Phase별 MRR 기여도](../../assets/images/blog/rag-preprocessing/phase-contribution-ko.png)
 
 ### 속도 영향
 
