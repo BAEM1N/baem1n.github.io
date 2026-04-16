@@ -23,6 +23,8 @@ aiAssisted: true
 >
 > 실험 설계 → [1편: 방법론](/posts/llm-bench-01-methodology) · 분석 → [2편: 상세 비교](/posts/llm-bench-02-results-analysis) · 코드 & raw CSV → [GitHub: baem1n/llm-bench](https://github.com/baem1n/llm-bench)
 
+![메모리 대역폭이 Qwen3.5 생성 속도를 예측한다 — 4대 하드웨어 × llama.cpp × 35B-A3B MoE Q4_K_M 선형 회귀 R²=0.999](../../assets/images/llm-bench/bandwidth-vs-gen-tps.png)
+
 ## Table of contents
 
 ## 하드웨어

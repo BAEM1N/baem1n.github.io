@@ -23,6 +23,8 @@ aiAssisted: true
 >
 > Methodology → [Part 1](/en/posts/llm-bench-01-methodology) · Analysis → [Part 2](/en/posts/llm-bench-02-results-analysis) · Code & raw CSV → [GitHub: baem1n/llm-bench](https://github.com/baem1n/llm-bench)
 
+![Memory bandwidth predicts Qwen3.5 generation speed — linear fit across 4 hardware targets (llama.cpp, 35B-A3B MoE Q4_K_M) with R²=0.999](../../../assets/images/llm-bench/bandwidth-vs-gen-tps.png)
+
 ## Table of contents
 
 ## Hardware
