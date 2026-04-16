@@ -125,7 +125,7 @@ MRR 1위: **google/gemma-embed-300m (0.6682)** — 모델 크기 314MB로 대형
 | AI-395 | 임베딩 + LLM (llama.cpp 게이트웨이) | MI100 96GB VRAM |
 | DGX Spark | LLM (Ollama) | GB10 128GB unified, 3.7TB SSD |
 | T7910 | 벡터스토어 7종 Docker | Dual Xeon 72T, 128GB RAM |
-| Mac Mini | 실험 스크립트 오케스트레이션 | M2 16GB |
+| Mac Mini | 실험 스크립트 오케스트레이션 | M4 16GB |
 
 ![인프라 토폴로지](../../assets/images/blog/rag-design/infrastructure-ko.png)
 

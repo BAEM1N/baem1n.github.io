@@ -120,7 +120,7 @@ Top: **google/gemma-embed-300m (MRR 0.6682)** — a 314MB model beating 7–8B d
 | AI-395 | Embedding + LLM (llama.cpp gateway) | MI100 96GB VRAM |
 | DGX Spark | LLM (Ollama) | GB10 128GB unified, 3.7TB SSD |
 | T7910 | 7 vector stores in Docker | Dual Xeon 72T, 128GB RAM |
-| Mac mini | Experiment orchestration | M2 16GB |
+| Mac mini | Experiment orchestration | M4 16GB |
 
 ![Infrastructure topology](../../../assets/images/blog/rag-design/infrastructure-en.png)
 
