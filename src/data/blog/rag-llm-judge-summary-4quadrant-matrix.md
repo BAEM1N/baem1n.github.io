@@ -3,6 +3,10 @@ title: "한국어 RAG LLM-as-Judge 4-Quadrant 종합 — RRF 로 통합한 cross
 description: "로컬 LLM 12종 + API LLM 34종 = 46개 candidate를 로컬 8 + API 9 = 17개 judge로 채점하는 4-quadrant 매트릭스. Q3 (12 cand × 9 judge × 4 metric × 300 Q = 129,600) + Q4 (34 cand × 8 judge × 4 metric × 300 Q = 326,400) 100% 완료. 각 judge 별 ranking 을 RRF 로 통합 — Q3 1위 gpt-oss:120b, Q4 1위 gpt-5.4. 모든 judge 가 동일한 top tier 를 도출하는 strong cross-judge consensus 확인."
 pubDatetime: 2026-04-27T12:04:00.000Z
 tags:
+  - rag
+  - llm-judge
+  - evaluation
+  - korean-nlp
 featured: false
 draft: false
 ---

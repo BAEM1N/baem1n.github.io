@@ -3,6 +3,10 @@ title: "Q4 — API LLM 답변 34종을 API judge 8종이 채점한 self-evaluati
 description: "Anthropic 6종 + OpenAI 4종 + Google 5종 + OpenRouter 19종이 만든 RAG 답변을 8개 flagship API judge로 cross-validate. 40,792 calls × 8 judge = 326,336 calls 100% 완료. gpt-5.4와 gpt-5.4-pro가 공동 1위(Avg 0.76), self-judge bias는 ranking 안정성 대비 미미한 수준 (+1~2%p)."
 pubDatetime: 2026-04-27T12:03:00.000Z
 tags:
+  - rag
+  - llm-judge
+  - evaluation
+  - korean-nlp
 featured: false
 draft: false
 ---

@@ -3,6 +3,10 @@ title: "Q3 — 로컬 LLM 답변을 API flagship judge 9종이 채점한 결과"
 description: "12개 로컬 LLM이 만든 RAG 답변을 Anthropic Opus 4.7 / Sonnet 4.6, OpenAI gpt-5.5 / gpt-5.4 family, Google Gemini 3 Pro / Flash / Flash Lite — 총 9개 API judge가 cross-judge. 14,400 calls × 9 judge = 129,600 calls 100% 완료. 모든 judge가 gpt-oss:120b, qwen3.5_122b-think, gpt-oss:20b 를 상위 3개로 일치 평가."
 pubDatetime: 2026-04-27T12:02:00.000Z
 tags:
+  - rag
+  - llm-judge
+  - evaluation
+  - korean-nlp
 featured: false
 draft: false
 ---
