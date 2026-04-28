@@ -9,7 +9,7 @@ tags:
   - langchain
   - benchmark
   - korean-nlp
-featured: true
+featured: false
 draft: true
 aiAssisted: true
 ---
