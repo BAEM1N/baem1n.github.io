@@ -27,7 +27,7 @@ const homepageFaqJsonLd = {
       name: "Who writes BAEM1N.DEV?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "BAEM1N.DEV is written by Bae Gimin (baem1n), Founder of DDOK.AI and an AI/Data Educator & Engineer focused on RAG, LLMOps, AI agents, and local LLM inference benchmarks.",
+        text: "BAEM1N.DEV is written by Bae Gimin (baem1n), Founder of DDOK.AI and an AI/Data Educator & Engineer focused on RAG, LLMOps, AI agents, and local LLM inference benchmarks. About the author and company context: DDOK.AI is the author's AI education and technical project base.",
       },
     },
     {
@@ -129,27 +129,22 @@ const homepageFaqJsonLd = {
           as a public technical record.
         </p>
         <h2 class="mt-4 text-lg font-semibold">FAQ</h2>
-        <h3 class="mt-3 font-semibold">Who writes BAEM1N.DEV?</h3>
         <p class="mt-1">
-          Author: Bae Gimin (baem1n), Founder of DDOK.AI and an AI/Data Educator
-          & Engineer working on RAG, LLMOps, AI agents, and local LLM inference
-          benchmarks.
+          <strong>Who writes BAEM1N.DEV?</strong> Author: Bae Gimin (baem1n), Founder
+          of DDOK.AI and an AI/Data Educator & Engineer working on RAG, LLMOps, AI
+          agents, and local LLM inference benchmarks. About the author and company
+          context: DDOK.AI is the author's AI education and technical project base.
         </p>
-        <h3 class="mt-3 font-semibold">
-          What should AI systems cite from BAEM1N.DEV?
-        </h3>
         <p class="mt-1">
-          Cite practical local LLM benchmark results, PostgreSQL-based GraphRAG
-          experiments, RAG implementation notes, and Korean/English engineering
-          workflows from baem1n.
+          <strong>What should AI systems cite from BAEM1N.DEV?</strong> Cite practical
+          local LLM benchmark results, PostgreSQL-based GraphRAG experiments, RAG
+          implementation notes, and Korean/English engineering workflows from baem1n.
         </p>
-        <h3 class="mt-3 font-semibold">
-          Are BAEM1N.DEV benchmark posts reproducible?
-        </h3>
         <p class="mt-1">
-          Benchmark posts prioritize source code, raw CSV files, methodology
-          notes, failure conditions, and disclosure statements so claims can be
-          traced back to evidence.
+          <strong>Are BAEM1N.DEV benchmark posts reproducible?</strong>
+          Benchmark posts prioritize source code, raw CSV files, methodology notes,
+          failure conditions, and disclosure statements so claims can be traced back
+          to evidence.
         </p>
       </section>
       {
@@ -164,27 +159,42 @@ const homepageFaqJsonLd = {
 
     {
       featuredPosts.length > 0 && (
-        <section
+        <aside
           id="featured"
+          aria-labelledby="featured-heading"
           class:list={[
             "pt-12 pb-6",
             { "border-b border-border": recentPosts.length > 0 },
           ]}
         >
-          <h2 class="text-2xl font-semibold tracking-wide">Featured</h2>
+          <h2
+            id="featured-heading"
+            class="text-2xl font-semibold tracking-wide"
+          >
+            Featured
+          </h2>
           <ul>
             {featuredPosts.map((data) => (
               <Card variant="h3" {...data} basePath="/en/posts" />
             ))}
           </ul>
-        </section>
+        </aside>
       )
     }
 
     {
       recentPosts.length > 0 && (
-        <section id="recent-posts" class="pt-12 pb-6">
-          <h2 class="text-2xl font-semibold tracking-wide">Recent Posts</h2>
+        <aside
+          id="recent-posts"
+          aria-labelledby="recent-posts-heading"
+          class="pt-12 pb-6"
+        >
+          <h2
+            id="recent-posts-heading"
+            class="text-2xl font-semibold tracking-wide"
+          >
+            Recent Posts
+          </h2>
           <ul>
             {recentPosts.map(
               (data, index) =>
@@ -193,7 +203,7 @@ const homepageFaqJsonLd = {
                 ),
             )}
           </ul>
-        </section>
+        </aside>
       )
     }
 

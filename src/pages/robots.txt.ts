@@ -1,6 +1,9 @@
 import type { APIRoute } from "astro";
 
-const getRobotsTxt = (sitemapURL: URL) => `# Default
+const getRobotsTxt = (
+  prioritySitemapURL: URL,
+  fullSitemapURL: URL,
+) => `# Default
 User-agent: *
 Allow: /
 
@@ -41,10 +44,12 @@ Allow: /
 User-agent: FacebookBot
 Allow: /
 
-Sitemap: ${sitemapURL.href}
+Sitemap: ${prioritySitemapURL.href}
+Sitemap: ${fullSitemapURL.href}
 `;
 
 export const GET: APIRoute = ({ site }) => {
-  const sitemapURL = new URL("sitemap-index.xml", site);
-  return new Response(getRobotsTxt(sitemapURL));
+  const prioritySitemapURL = new URL("sitemap.xml", site);
+  const fullSitemapURL = new URL("sitemap-index.xml", site);
+  return new Response(getRobotsTxt(prioritySitemapURL, fullSitemapURL));
 };

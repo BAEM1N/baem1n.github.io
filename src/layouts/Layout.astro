@@ -247,7 +247,10 @@ const webPageEntity = {
 const structuredData = isArticle
   ? {
       "@context": "https://schema.org",
-      "@type": articleType,
+      "@type":
+        articleType === "TechArticle"
+          ? ["TechArticle", "Article"]
+          : ["BlogPosting", "Article"],
       headline: contentTitle,
       name: contentTitle,
       description: `${description}`,
@@ -325,7 +328,7 @@ const structuredData = isArticle
     <meta name="title" content={title} />
     <meta name="description" content={description} />
     <meta name="author" content={author} />
-    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="sitemap" href="/sitemap.xml" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content={isArticle ? "article" : "website"} />
