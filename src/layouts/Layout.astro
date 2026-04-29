@@ -45,32 +45,85 @@ const {
 const socialImageURL = new URL(ogImage, Astro.url);
 
 const isArticle = !!pubDatetime;
+const siteTitleSuffix = ` | ${SITE.title}`;
+const pageTitle = `${title}`;
+const contentTitle = pageTitle.endsWith(siteTitleSuffix)
+  ? pageTitle.slice(0, -siteTitleSuffix.length)
+  : pageTitle;
 
-const publisherEntity = {
-  "@type": "Organization",
-  name: "BAEM1N.DEV",
-  url: SITE.website,
-  logo: {
-    "@type": "ImageObject",
-    url: `${SITE.website}favicon.svg`,
-  },
-};
+const contactEmail = "gm.bae@ddok.ai";
+const sameAsLinks = [
+  "https://github.com/baem1n",
+  "https://www.linkedin.com/in/baem1n/",
+  "https://huggingface.co/baem1n",
+];
+const expertiseTopics = [
+  "RAG",
+  "GraphRAG",
+  "LLMOps",
+  "AI Agents",
+  "LangChain",
+  "Local LLM Inference",
+  "Benchmark Engineering",
+  "Data Science Education",
+];
+const dependencyTopics =
+  dependencies
+    ?.split(",")
+    .map((item) => item.trim())
+    .filter(Boolean) ?? [];
+const articleTopics = Array.from(new Set([...tags, ...dependencyTopics]));
 
 const authorEntity = {
   "@type": "Person",
   name: "배기민 (BAEM1N)",
   alternateName: "baem1n",
   url: `${SITE.website}about/`,
+  email: contactEmail,
   jobTitle: "AI/Data Educator & Engineer",
+  description:
+    "DDOK.AI Founder, AI/Data Educator & Engineer, and technical writer focused on RAG, LLMOps, AI agents, and local LLM benchmarking.",
   worksFor: {
     "@type": "Organization",
     name: "DDOK.AI",
   },
-  sameAs: [
-    "https://github.com/baem1n",
-    "https://www.linkedin.com/in/baem1n/",
-    "https://huggingface.co/baem1n",
+  affiliation: {
+    "@type": "Organization",
+    name: "DDOK.AI",
+  },
+  knowsAbout: expertiseTopics,
+  hasCredential: [
+    {
+      "@type": "EducationalOccupationalCredential",
+      credentialCategory: "Professional Certificate",
+      name: "TensorFlow Certificate",
+    },
+    {
+      "@type": "EducationalOccupationalCredential",
+      credentialCategory: "Professional Certification",
+      name: "Big Data Analytics Engineer",
+    },
   ],
+  sameAs: sameAsLinks,
+};
+
+const publisherEntity = {
+  "@type": "Organization",
+  name: "BAEM1N.DEV",
+  alternateName: "baem1n",
+  url: SITE.website,
+  logo: {
+    "@type": "ImageObject",
+    url: `${SITE.website}favicon.svg`,
+  },
+  founder: authorEntity,
+  sameAs: sameAsLinks,
+  contactPoint: {
+    "@type": "ContactPoint",
+    email: contactEmail,
+    contactType: "editorial and AI/data education inquiries",
+    availableLanguage: ["ko", "en"],
+  },
 };
 
 const organizationSchema = {
@@ -82,76 +135,181 @@ const organizationSchema = {
   logo: `${SITE.website}favicon.svg`,
   description: SITE.desc,
   founder: authorEntity,
-  sameAs: [
-    "https://github.com/baem1n",
-    "https://www.linkedin.com/in/baem1n/",
-    "https://huggingface.co/baem1n",
+  sameAs: sameAsLinks,
+  knowsAbout: expertiseTopics,
+  publishingPrinciples: `${SITE.website}about/`,
+  contactPoint: publisherEntity.contactPoint,
+};
+
+const articleBreadcrumbSchema = isArticle
+  ? {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Home",
+          item: lang === "en" ? `${SITE.website}en/` : SITE.website,
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "Posts",
+          item:
+            lang === "en"
+              ? `${SITE.website}en/posts/`
+              : `${SITE.website}posts/`,
+        },
+        {
+          "@type": "ListItem",
+          position: 3,
+          name: contentTitle,
+          item: `${canonicalURL}`,
+        },
+      ],
+    }
+  : null;
+
+const canonicalPathname = new URL(`${canonicalURL}`, Astro.url).pathname;
+const pathSegments = canonicalPathname.split("/").filter(Boolean);
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: "Home",
+      item: lang === "en" ? `${SITE.website}en/` : SITE.website,
+    },
+    ...pathSegments.map((segment, index) => ({
+      "@type": "ListItem",
+      position: index + 2,
+      name:
+        index === pathSegments.length - 1
+          ? contentTitle
+          : decodeURIComponent(segment),
+      item: `${SITE.website}${pathSegments.slice(0, index + 1).join("/")}/`,
+    })),
   ],
+};
+
+const topicEntities = articleTopics.map((topic) => ({
+  "@type": "Thing",
+  name: topic,
+}));
+
+const dependencyEntities = dependencyTopics.map((topic) => ({
+  "@type": "Thing",
+  name: topic,
+}));
+
+const expertiseEntities = expertiseTopics.map((topic) => ({
+  "@type": "Thing",
+  name: topic,
+}));
+
+const websiteEntity = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: SITE.title,
+  description: SITE.desc,
+  url: SITE.website,
+  inLanguage: lang,
+  author: [authorEntity],
+  creator: authorEntity,
+  publisher: publisherEntity,
+  about: expertiseEntities,
+  potentialAction: {
+    "@type": "SearchAction",
+    target: {
+      "@type": "EntryPoint",
+      urlTemplate: `${SITE.website}search?q={search_term_string}`,
+    },
+    "query-input": "required name=search_term_string",
+  },
+};
+
+const webPageEntity = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: contentTitle,
+  description: `${description}`,
+  url: `${canonicalURL}`,
+  inLanguage: lang,
+  isPartOf: websiteEntity,
+  author: [authorEntity],
+  publisher: publisherEntity,
+  about: expertiseEntities,
 };
 
 const structuredData = isArticle
   ? {
       "@context": "https://schema.org",
       "@type": articleType,
-      headline: `${title}`,
+      headline: contentTitle,
+      name: contentTitle,
       description: `${description}`,
       image: `${socialImageURL}`,
       datePublished: `${pubDatetime?.toISOString()}`,
-      dateModified: modDatetime ? modDatetime.toISOString() : pubDatetime?.toISOString(),
+      dateModified: modDatetime
+        ? modDatetime.toISOString()
+        : pubDatetime?.toISOString(),
       url: `${canonicalURL}`,
       author: [authorEntity],
+      accountablePerson: authorEntity,
       publisher: publisherEntity,
+      copyrightHolder: publisherEntity,
       mainEntityOfPage: {
         "@type": "WebPage",
         "@id": `${canonicalURL}`,
       },
       inLanguage: lang,
+      isAccessibleForFree: true,
+      ...(topicEntities.length > 0 && { about: topicEntities }),
+      ...(dependencyEntities.length > 0 && { mentions: dependencyEntities }),
       ...(tags.length > 0 && { keywords: tags.join(", ") }),
-      ...(articleType === "TechArticle" && proficiencyLevel && { proficiencyLevel }),
+      ...(articleType === "TechArticle" &&
+        proficiencyLevel && { proficiencyLevel }),
+      ...(articleType === "TechArticle" &&
+        proficiencyLevel && {
+          educationalLevel: proficiencyLevel,
+        }),
       ...(articleType === "TechArticle" && dependencies && { dependencies }),
       speakable: {
         "@type": "SpeakableSpecification",
         cssSelector: ["article h1", "article > p:first-of-type", "article h2"],
       },
     }
-  : {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      name: SITE.title,
-      description: SITE.desc,
-      url: SITE.website,
-      inLanguage: lang,
-      author: [authorEntity],
-      potentialAction: {
-        "@type": "SearchAction",
-        target: {
-          "@type": "EntryPoint",
-          urlTemplate: `${SITE.website}search?q={search_term_string}`,
-        },
-        "query-input": "required name=search_term_string",
-      },
-    };
+  : websiteEntity;
 ---
 
 <!doctype html>
-<html
-  dir={SITE.dir}
-  lang={lang}
-  class={scrollSmooth ? "scroll-smooth" : ""}
->
+<html dir={SITE.dir} lang={lang} class={scrollSmooth ? "scroll-smooth" : ""}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href={canonicalURL} />
-    {alternateUrl && alternateLang && (
-      <>
-        <link rel="alternate" hreflang={lang} href={canonicalURL.toString()} />
-        <link rel="alternate" hreflang={alternateLang} href={alternateUrl} />
-        <link rel="alternate" hreflang="x-default" href={lang === "ko" ? canonicalURL.toString() : alternateUrl} />
-      </>
-    )}
+    {
+      alternateUrl && alternateLang && (
+        <>
+          <link
+            rel="alternate"
+            hreflang={lang}
+            href={canonicalURL.toString()}
+          />
+          <link rel="alternate" hreflang={alternateLang} href={alternateUrl} />
+          <link
+            rel="alternate"
+            hreflang="x-default"
+            href={lang === "ko" ? canonicalURL.toString() : alternateUrl}
+          />
+        </>
+      )
+    }
     <meta name="generator" content={Astro.generator} />
 
     <!-- Load Fonts via Google Fonts (external CSS, not inline) -->
@@ -208,13 +366,42 @@ const structuredData = isArticle
       is:inline
       set:html={JSON.stringify(structuredData)}
     />
-    {!isArticle && (
-      <script
-        type="application/ld+json"
-        is:inline
-        set:html={JSON.stringify(organizationSchema)}
-      />
-    )}
+    {
+      !isArticle && (
+        <script
+          type="application/ld+json"
+          is:inline
+          set:html={JSON.stringify(organizationSchema)}
+        />
+      )
+    }
+    {
+      !isArticle && (
+        <script
+          type="application/ld+json"
+          is:inline
+          set:html={JSON.stringify(webPageEntity)}
+        />
+      )
+    }
+    {
+      !isArticle && (
+        <script
+          type="application/ld+json"
+          is:inline
+          set:html={JSON.stringify(breadcrumbSchema)}
+        />
+      )
+    }
+    {
+      articleBreadcrumbSchema && (
+        <script
+          type="application/ld+json"
+          is:inline
+          set:html={JSON.stringify(articleBreadcrumbSchema)}
+        />
+      )
+    }
 
     <!-- Enable RSS feed auto-discovery  -->
     <!-- https://docs.astro.build/en/recipes/rss/#enabling-rss-feed-auto-discovery -->
@@ -264,7 +451,7 @@ const structuredData = isArticle
         window.theme = {
           themeValue: themeValue,
           getTheme: () => window.theme.themeValue,
-          setTheme: val => {
+          setTheme: (val) => {
             window.theme.themeValue = val;
           },
         };

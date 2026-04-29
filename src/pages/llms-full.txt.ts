@@ -16,12 +16,13 @@ Author: ${SITE.author}
 Language: ${SITE.lang ?? "en"}
 
 ## Pages
-- /about : About the author
-- /posts : All blog posts
-- /tags : Tags
-- /archives : Archives
-- /search : Search
-- /rss.xml : RSS Feed
+- [About](/about/): About the author and credentials
+- [Posts](/posts/): All Korean blog posts
+- [English Posts](/en/posts/): All English blog posts
+- [Tags](/tags/): Topic index
+- [Archives](/archives/): Archive page
+- [Search](/search/): Site search
+- [RSS Feed](/rss.xml): RSS Feed
 
 ---
 
@@ -29,7 +30,7 @@ Language: ${SITE.lang ?? "en"}
 
 `;
 
-  const postSections = sortedPosts.map(post => {
+  const postSections = sortedPosts.map((post) => {
     const { title, description, pubDatetime, modDatetime, tags } = post.data;
     const date = modDatetime ?? pubDatetime;
     const tagList = tags.join(", ");
@@ -37,6 +38,7 @@ Language: ${SITE.lang ?? "en"}
     return `### ${title}
 
 - Date: ${date.toISOString().split("T")[0]}
+- URL: [${title}](/posts/${post.id}/)
 - Tags: ${tagList}
 - Description: ${description}
 

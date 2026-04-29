@@ -16,13 +16,19 @@ const personJsonLd = {
   name: "배기민 (BAEM1N)",
   alternateName: "baem1n",
   url: SITE.website,
+  mainEntityOfPage: `${SITE.website}about/`,
   jobTitle: "AI/Data Educator & Engineer",
   worksFor: {
     "@type": "Organization",
     name: "DDOK.AI",
   },
+  affiliation: {
+    "@type": "Organization",
+    name: "DDOK.AI",
+  },
   email: "gm.bae@ddok.ai",
-  description: "AI/Data Educator & Engineer. TensorFlow Certificate, 빅데이터분석기사. Samsung, SK, GS 등 기업 AI 교육. LangChain-OpenTutorial 인프라 PM.",
+  description:
+    "AI/Data Educator & Engineer. TensorFlow Certificate, 빅데이터분석기사. Samsung, SK, GS 등 기업 AI 교육. LangChain-OpenTutorial 인프라 PM.",
   knowsAbout: [
     "Data Science",
     "Machine Learning",
@@ -34,6 +40,24 @@ const personJsonLd = {
     "Local LLM Inference",
     "Benchmark Engineering",
   ],
+  hasCredential: [
+    {
+      "@type": "EducationalOccupationalCredential",
+      credentialCategory: "Professional Certificate",
+      name: "TensorFlow Certificate",
+    },
+    {
+      "@type": "EducationalOccupationalCredential",
+      credentialCategory: "Professional Certification",
+      name: "Big Data Analytics Engineer",
+    },
+  ],
+  contactPoint: {
+    "@type": "ContactPoint",
+    email: "gm.bae@ddok.ai",
+    contactType: "AI/data education and technical project inquiries",
+    availableLanguage: ["ko", "en"],
+  },
   sameAs: [
     "https://github.com/baem1n",
     "https://www.linkedin.com/in/baem1n/",
@@ -46,7 +70,9 @@ const personJsonLd = {
 <Layout
   title={`${frontmatter.title} | ${SITE.title}`}
   lang={Astro.url.pathname.startsWith("/en/") ? "en" : "ko"}
-  alternateUrl={Astro.url.pathname.startsWith("/en/") ? `${SITE.website}about/` : `${SITE.website}en/about/`}
+  alternateUrl={Astro.url.pathname.startsWith("/en/")
+    ? `${SITE.website}about/`
+    : `${SITE.website}en/about/`}
   alternateLang={Astro.url.pathname.startsWith("/en/") ? "ko" : "en"}
 >
   <Header />

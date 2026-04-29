@@ -1,51 +1,62 @@
 # BAEM1N.DEV
 
-> AI, 데이터, 자동화, 개발 기록을 공유하는 개인 개발 블로그
-> A personal dev blog sharing hands-on experiments in AI, data engineering, and automation.
+> AI, 데이터, 자동화, 개발 기록을 공유하는 개인 개발 블로그.
+> A personal dev blog sharing hands-on experiments in AI, data engineering, local LLM inference, RAG, AI agents, and automation.
 
-Author: baem1n (배기민) — AI/Data Educator & Engineer, DDOK.AI Founder
-Full content: /llms-full.txt
-Last updated: 2026-04-14
+Author: 배기민 / baem1n — AI/Data Educator & Engineer, DDOK.AI Founder.
+Contact: [Email](mailto:gm.bae@ddok.ai), [GitHub](https://github.com/baem1n), [LinkedIn](https://www.linkedin.com/in/baem1n/), [Hugging Face](https://huggingface.co/baem1n).
+Trust note: benchmark posts link to source code, raw CSV/results, methodology notes, and disclosure statements when the author maintains a related project.
+Full content: [llms-full.txt](/llms-full.txt).
+Last updated: 2026-04-29.
+
+## Key Facts
+
+- [BAEM1N.DEV](/): Personal technical blog by baem1n / 배기민.
+- [About](/about/): Author credentials, projects, training history, open-source work, contact, and disclosure notes.
+- [English About](/en/about/): English author profile and disclosure notes.
+- [Qwen3.5 Benchmark Results](/posts/llm-bench-03-results-tables/): Controlled local LLM inference benchmark across 4 hardware platforms and 5 engines.
+- [RunPod Referral](/posts/runpod-referral-gpu-cloud/): RunPod referral credit details.
+- [Vultr Referral](/posts/vultr-referral-cloud-server/): Vultr referral credit details.
 
 ## Expertise
 
-Topics: GraphRAG, LLM Benchmarking, Apache AGE, PostgreSQL, Apple Silicon Inference, AI Agents, LangChain, RAG, LLMOps
+- [RAG and GraphRAG](/tags/rag/): Retrieval-augmented generation, Apache AGE, pgvector, LangChain, and PostgreSQL-based GraphRAG.
+- [Local LLM Benchmarking](/tags/local-llm/): Qwen3.5 inference measurement, llama.cpp, MLX, Ollama, vLLM, Lemonade, NVIDIA/AMD/Apple Silicon.
+- [AI Agents](/tags/ai-agent/): Deep Agents SDK, LangGraph, HITL approval, Tauri, SSE streaming, memory, and tool orchestration.
+- [LLM-as-Judge Evaluation](/tags/llm-judge/): Cross-judge RAG answer scoring with local and API LLM judges.
 
 ## Core Pages
 
-- /about : Author bio and credentials
-- /en/about : About (English)
-- /posts : All posts (Korean)
-- /en/posts : All posts (English)
-- /tags : Posts by tag
-- /search : Search
-- /rss.xml : RSS feed
+- [Homepage](/): Featured posts and latest writing.
+- [About](/about/): Author bio and credentials.
+- [About in English](/en/about/): English author bio and credentials.
+- [All Korean Posts](/posts/): Korean blog archive.
+- [All English Posts](/en/posts/): English blog archive.
+- [Tags](/tags/): Posts grouped by topic.
+- [Search](/search/): Site search.
+- [RSS Feed](/rss.xml): RSS feed.
 
-## Blog Posts
+## Priority Blog Posts
 
-### langchain-age Series (GraphRAG with PostgreSQL)
-- /posts/graphrag-with-postgresql/ : GraphRAG를 PostgreSQL만으로 구축하기 — Apache AGE + pgvector로 Neo4j 없이 단일 DB GraphRAG. Cost: $0 vs Neo4j $15K+/yr
-- /posts/neo4j-vs-age-benchmark/ : Neo4j vs Apache AGE 실측 벤치마크 — 8개 Cypher 테스트, AGE가 6개에서 승리. 포인트 룩업 2.2x, CREATE 3.7x 빠름
-- /posts/langchain-age-hybrid-search/ : langchain-age 벡터 검색 — Similarity, MMR, Hybrid Search 비교 + 14개 메타데이터 필터 연산자
-- /posts/langchain-age-graphrag-pipeline/ : GraphRAG 파이프라인 실전 구축 — 벡터 검색 → 그래프 확장 → LLM 답변 end-to-end
-- /posts/langchain-age-langgraph-agent/ : PostgreSQL 하나로 AI Agent 전체 스택 — LangGraph + langchain-age, DB 1개 완결판
+### LLM Benchmarks
 
-### LLM Benchmarks (Cross-Platform Qwen3.5 Series)
-- /posts/llm-bench-01-methodology/ : Qwen3.5 크로스 플랫폼 벤치마크 실험 설계 — prompt cache 차단, nonce prefix, cold prefill, 실행 순서 랜덤화. 함정 6종 차단 방법론
-- /posts/llm-bench-02-results-analysis/ : Qwen3.5 4대 하드웨어 × 5개 엔진 성능 분석 — 3090×2 35B MoE 139 tok/s 1위, vLLM GPTQ-Marlin 156 tok/s 최고, MoE가 전 플랫폼 Dense보다 빠름
-- /posts/llm-bench-03-results-tables/ : Qwen3.5 벤치마크 결과표 — 4대 하드웨어 × 5엔진 × 9트랙 전체 수치. 122B MoE 3대 실행 가능(Mac 42.9 / DGX 21.7 / Ryzen 22.9 tok/s)
-- /posts/qwen3-5-mac-benchmark/ : Qwen3.5 M5 Max 단일 벤치마크 — 692회 측정. llama.cpp FA 204x faster prefill (아카이브)
+- [Qwen3.5 Local Inference Benchmark Results](/posts/llm-bench-03-results-tables/): 4 hardware platforms × 5 inference engines × Qwen3.5 9B/27B/35B-A3B/122B-A10B results.
+- [Qwen3.5 Benchmark Methodology](/posts/llm-bench-01-methodology/): Cache isolation, cold prefill, nonce prefixes, random run order, and measurement protocol.
+- [Qwen3.5 Cross-Platform Analysis](/posts/llm-bench-02-results-analysis/): Main findings from the hardware and engine comparison.
 
-### DeepCoWork Series (AI Agent Desktop App)
-- /posts/deepcowork-01-introduction/ : DeepCoWork 소개 — DeepAgents SDK + Tauri 2 오픈소스 AI 에이전트 데스크톱 앱
-- /posts/deepcowork-02-tauri-sidecar/ : Tauri 2 + Python 사이드카 — 헬스체크, graceful shutdown, PyInstaller 번들링
-- /posts/deepcowork-03-deep-agents-sdk/ : DeepAgents SDK 핵심 — create_deep_agent, LocalShellBackend, ReAct 루프
-- /posts/deepcowork-04-system-prompts/ : 모드별 시스템 프롬프트 설계 — Clarify, Code, Cowork, ACP
-- /posts/deepcowork-05-sse-streaming/ : SSE 스트리밍 파이프라인 — astream → SSE → React
-- /posts/deepcowork-06-hitl-approval/ : HITL 승인 플로우 — interrupt_on, 승인 큐, 타임아웃
-- /posts/deepcowork-07-acp-multi-agent/ : 멀티에이전트 ACP 모드 — task() 도구, 서브에이전트, 스트림 병합
-- /posts/deepcowork-08-agent-memory/ : 에이전트 메모리 4계층 — SOUL.md, USER.md, AGENTS.md, MEMORY.md
-- /posts/deepcowork-09-skills-system/ : 스킬 시스템 — SKILL.md 기반 플러그인
-- /posts/deepcowork-10-llm-providers/ : LLM 프로바이더 통합 — Anthropic, OpenRouter, Ollama, LM Studio, vLLM
-- /posts/deepcowork-11-security/ : 보안 체크리스트 — 경로 탈출, 입력 검증, CSP, CORS
-- /posts/deepcowork-12-ci-cd/ : GitHub Actions 크로스 플랫폼 빌드 — PyInstaller 사이드카, CI/CD
+### GraphRAG / PostgreSQL
+
+- [GraphRAG with PostgreSQL](/posts/graphrag-with-postgresql/): Apache AGE + pgvector GraphRAG without Neo4j.
+- [Neo4j vs Apache AGE Benchmark](/posts/neo4j-vs-age-benchmark/): Cypher benchmark comparing Neo4j and Apache AGE.
+- [langchain-age Hybrid Search](/posts/langchain-age-hybrid-search/): Similarity, MMR, hybrid search, and metadata filters.
+
+### AI Agent / DeepCoWork
+
+- [DeepCoWork Introduction](/posts/deepcowork-01-introduction/): Deep Agents SDK + Tauri 2 open-source AI agent desktop app.
+- [DeepCoWork Security](/posts/deepcowork-11-security/): Path traversal, input validation, CSP, CORS, and safe tool execution.
+
+## Contact
+
+- [Email](mailto:gm.bae@ddok.ai): Contact for AI/data education, RAG, LLMOps, and local LLM benchmark inquiries.
+- [GitHub](https://github.com/baem1n): Source code and open-source projects.
+- [LinkedIn](https://www.linkedin.com/in/baem1n/): Professional profile.
