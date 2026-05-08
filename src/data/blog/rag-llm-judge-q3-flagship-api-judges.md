@@ -13,41 +13,57 @@ draft: false
 
 ## 요약
 
-- **실험**: 12개 로컬 LLM 답변(`gemma-embed-300m` top-5 retrieval)을 9개 API judge가 채점.
+- **실험**: 12개 로컬 LLM 답변을 9개 API judge가 채점.
 - **방법론**: allganize 4-metric × threshold=4 × majority(≥3).
 - **규모**: 9 judges × 12 candidates × 4 metric × 300 Q = **129,600 judge calls** (100% 완료).
 - **결과**: 모든 judge가 `gpt-oss:120b`, `qwen3.5_122b-a10b-q4_K_M_think`, `gpt-oss:20b` 를 상위 3개로 평가 — strong cross-judge consensus.
 
+## 통제 변수 (Q1~Q4 공통)
+
+**retrieval 파이프라인은 모든 quadrant 에서 동일**. 변수는 오직 **생성모델(cand) 과 판단모델(judge) 만**.
+
+| 단계          | 고정값                      | 결정 근거                                          |
+| ------------- | --------------------------- | -------------------------------------------------- |
+| Parser        | `pymupdf4llm`               | Phase 1 winner (MRR 0.4715)                        |
+| Chunking      | 500 chars / 100 overlap     | Phase 2 winner (MRR 0.5315, +23.5%)                |
+| VectorStore   | FAISS                       | Phase 3 winner (latency p95 0.74ms, accuracy tied) |
+| **Embedding** | **gemma-embed-300m (768d)** | Phase 4 rank 2, batch judging 부담 적음            |
+| Retrieval     | top-5 cosine similarity     | allganize 원본 k=6 근사                            |
+
+→ 같은 query 가 모든 cand LLM 에 **동일한 retrieved chunks** 로 들어가므로, 답변 차이 = **순수 LLM 답변 능력 차이** (retrieval 잡음 제거됨).
+
+Q3 의 변수: **cand = 12 로컬 LLM**, **judge = 9 API LLM** (아래).
+
 ## Judge 9종
 
-| Judge | 가족 | 호출 방식 |
-|---|---|---|
-| `claude-opus-4-7` | Anthropic | Batch + retry, 52건은 `claude-opus-4-6` fallback (안전 거부 우회) |
-| `claude-sonnet-4-6` | Anthropic | Batch + 147건 retry (max_tokens 1024) |
-| `gemini-3.1-pro-preview` | Google | OpenRouter, reasoning effort=low |
-| `gemini-3-flash-preview` | Google | OpenRouter, no reasoning |
-| `gemini-3.1-flash-lite-preview` | Google | OpenRouter, no reasoning |
-| `gpt-5.5` | OpenAI | Responses API, reasoning effort=none |
-| `gpt-5.4` | OpenAI | Batch API |
-| `gpt-5.4-mini` | OpenAI | Batch API |
-| `gpt-5.4-nano` | OpenAI | Batch API |
+| Judge                           | 가족      | 호출 방식                                                         |
+| ------------------------------- | --------- | ----------------------------------------------------------------- |
+| `claude-opus-4-7`               | Anthropic | Batch + retry, 52건은 `claude-opus-4-6` fallback (안전 거부 우회) |
+| `claude-sonnet-4-6`             | Anthropic | Batch + 147건 retry (max_tokens 1024)                             |
+| `gemini-3.1-pro-preview`        | Google    | OpenRouter, reasoning effort=low                                  |
+| `gemini-3-flash-preview`        | Google    | OpenRouter, no reasoning                                          |
+| `gemini-3.1-flash-lite-preview` | Google    | OpenRouter, no reasoning                                          |
+| `gpt-5.5`                       | OpenAI    | Responses API, reasoning effort=none                              |
+| `gpt-5.4`                       | OpenAI    | Batch API                                                         |
+| `gpt-5.4-mini`                  | OpenAI    | Batch API                                                         |
+| `gpt-5.4-nano`                  | OpenAI    | Batch API                                                         |
 
 ## 결과 매트릭스 (accuracy = O / 300)
 
-| Cand | G-Pro | G-Flash | G-FL | Sonnet | Opus | 5.4 | 5.4-m | 5.4-n | 5.5 | **Avg** |
-|---|---|---|---|---|---|---|---|---|---|---|
-| `gpt-oss_120b` | 0.663 | 0.737 | 0.700 | 0.697 | 0.680 | 0.723 | 0.707 | 0.707 | 0.723 | **0.704** |
-| `qwen3.5_122b-a10b_think` | 0.667 | 0.727 | 0.680 | 0.690 | 0.693 | 0.723 | 0.697 | 0.657 | 0.683 | **0.691** |
-| `gpt-oss_20b` | 0.680 | 0.750 | 0.663 | 0.680 | 0.650 | 0.730 | 0.697 | 0.663 | 0.697 | **0.690** |
-| `qwen3.5_27b-q8_0` | 0.647 | 0.713 | 0.667 | 0.680 | 0.673 | 0.697 | 0.667 | 0.657 | 0.683 | **0.676** |
-| `qwen3.5_122b-a10b_nothink` | 0.633 | 0.710 | 0.657 | 0.663 | 0.657 | 0.687 | 0.657 | 0.650 | 0.657 | **0.663** |
-| `mistral-small_24b` | 0.597 | 0.673 | 0.637 | 0.620 | 0.613 | 0.660 | 0.607 | 0.600 | 0.600 | **0.623** |
-| `phi4_14b` | 0.583 | 0.673 | 0.630 | 0.620 | 0.620 | 0.660 | 0.610 | 0.567 | 0.620 | **0.620** |
-| `exaone3.5_32b` | 0.573 | 0.680 | 0.610 | 0.607 | 0.603 | 0.670 | 0.613 | 0.600 | 0.627 | **0.620** |
-| `deepseek-r1_70b` | 0.577 | 0.673 | 0.603 | 0.593 | 0.593 | 0.650 | 0.593 | 0.613 | 0.583 | **0.609** |
-| `qwen3.5_9b-q4` | 0.553 | 0.630 | 0.587 | 0.580 | 0.580 | 0.617 | 0.573 | 0.560 | 0.593 | **0.586** |
-| `qwen3.5_9b-q8` | 0.540 | 0.620 | 0.540 | 0.577 | 0.563 | 0.600 | 0.570 | 0.550 | 0.590 | **0.572** |
-| `lfm2_24b` | 0.370 | 0.487 | 0.410 | 0.387 | 0.373 | 0.450 | 0.417 | 0.410 | 0.387 | **0.410** |
+| Cand                        | G-Pro | G-Flash | G-FL  | Sonnet | Opus  | 5.4   | 5.4-m | 5.4-n | 5.5   | **Avg**   |
+| --------------------------- | ----- | ------- | ----- | ------ | ----- | ----- | ----- | ----- | ----- | --------- |
+| `gpt-oss_120b`              | 0.663 | 0.737   | 0.700 | 0.697  | 0.680 | 0.723 | 0.707 | 0.707 | 0.723 | **0.704** |
+| `qwen3.5_122b-a10b_think`   | 0.667 | 0.727   | 0.680 | 0.690  | 0.693 | 0.723 | 0.697 | 0.657 | 0.683 | **0.691** |
+| `gpt-oss_20b`               | 0.680 | 0.750   | 0.663 | 0.680  | 0.650 | 0.730 | 0.697 | 0.663 | 0.697 | **0.690** |
+| `qwen3.5_27b-q8_0`          | 0.647 | 0.713   | 0.667 | 0.680  | 0.673 | 0.697 | 0.667 | 0.657 | 0.683 | **0.676** |
+| `qwen3.5_122b-a10b_nothink` | 0.633 | 0.710   | 0.657 | 0.663  | 0.657 | 0.687 | 0.657 | 0.650 | 0.657 | **0.663** |
+| `mistral-small_24b`         | 0.597 | 0.673   | 0.637 | 0.620  | 0.613 | 0.660 | 0.607 | 0.600 | 0.600 | **0.623** |
+| `phi4_14b`                  | 0.583 | 0.673   | 0.630 | 0.620  | 0.620 | 0.660 | 0.610 | 0.567 | 0.620 | **0.620** |
+| `exaone3.5_32b`             | 0.573 | 0.680   | 0.610 | 0.607  | 0.603 | 0.670 | 0.613 | 0.600 | 0.627 | **0.620** |
+| `deepseek-r1_70b`           | 0.577 | 0.673   | 0.603 | 0.593  | 0.593 | 0.650 | 0.593 | 0.613 | 0.583 | **0.609** |
+| `qwen3.5_9b-q4`             | 0.553 | 0.630   | 0.587 | 0.580  | 0.580 | 0.617 | 0.573 | 0.560 | 0.593 | **0.586** |
+| `qwen3.5_9b-q8`             | 0.540 | 0.620   | 0.540 | 0.577  | 0.563 | 0.600 | 0.570 | 0.550 | 0.590 | **0.572** |
+| `lfm2_24b`                  | 0.370 | 0.487   | 0.410 | 0.387  | 0.373 | 0.450 | 0.417 | 0.410 | 0.387 | **0.410** |
 
 ## 인사이트
 
@@ -57,14 +73,14 @@ draft: false
 
 ### 2. Judge 별 평균 점수 차이
 
-| Judge | 12 cand 평균 | 경향 |
-|---|---|---|
-| `gemini-3-flash` | 0.681 | 가장 관대 |
-| `gpt-5.4` | 0.672 | 두 번째 |
-| `gpt-5.5` | 0.654 | |
-| `claude-sonnet-4-6` | 0.633 | |
-| `claude-opus-4-7` | 0.625 | |
-| `gemini-3.1-pro` | 0.594 | 가장 엄격 |
+| Judge               | 12 cand 평균 | 경향      |
+| ------------------- | ------------ | --------- |
+| `gemini-3-flash`    | 0.681        | 가장 관대 |
+| `gpt-5.4`           | 0.672        | 두 번째   |
+| `gpt-5.5`           | 0.654        |           |
+| `claude-sonnet-4-6` | 0.633        |           |
+| `claude-opus-4-7`   | 0.625        |           |
+| `gemini-3.1-pro`    | 0.594        | 가장 엄격 |
 
 → Gemini Pro 가 동일 답변에 대해 가장 까다롭게 평가. Flash 라인이 +9%p 더 후함. 그러나 **상대 ranking은 9 judge 모두 일치**.
 

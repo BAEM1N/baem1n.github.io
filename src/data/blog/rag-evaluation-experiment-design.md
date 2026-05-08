@@ -1,8 +1,8 @@
 ---
 author: baem1n
-pubDatetime: 2026-04-16T00:00:00.000Z
-title: "한국어 RAG 벤치마크 — 300 Q&A × 21 임베딩 × 30 LLM 실험 설계"
-description: "allganize RAG-Evaluation-Dataset-KO 기반으로 파서·청킹·벡터스토어·임베딩·LLM 5단계를 분리 비교하는 RAG 벤치마크 실험 계획을 공유합니다."
+pubDatetime: 2026-04-19T00:00:00.000Z
+title: "한국어 RAG 벤치마크 — 300 Q&A × 27 임베딩 × 12 LLM 실험 설계"
+description: "allganize RAG-Evaluation-Dataset-KO 기반으로 파서·청킹·벡터스토어·임베딩·LLM 5단계를 분리 비교하는 RAG 벤치마크 실험 계획."
 tags:
   - rag
   - llm
@@ -10,11 +10,11 @@ tags:
   - benchmark
   - korean-nlp
 featured: false
-draft: true
+draft: false
 aiAssisted: true
 ---
 
-> **TL;DR**: 한국어 RAG 파이프라인을 5단계(파서→청킹→벡터스토어→임베딩→LLM)로 분해해 각각 단일 변수 실험으로 돌렸다. 21개 임베딩, 7개 벡터스토어, 약 30개 LLM(로컬+OpenRouter+Friendli.ai)을 교차 평가하는 구조다. 임베딩 1위는 **google/gemma-embed-300m (MRR 0.6682)**, 하위 95% 비용 절감을 위해 Qwen3.5 양자화 모델은 `chat_template_kwargs: {enable_thinking: false}`를 반드시 넘겨야 한다.
+> **TL;DR**: 한국어 RAG 파이프라인을 5단계(파서→청킹→벡터스토어→임베딩→LLM)로 분해해 각각 단일 변수 실험으로 돌렸다. **27개 임베딩**, 7개 벡터스토어, **12개 LLM**(로컬+DGX Spark ollama)을 교차 평가하는 구조다. 임베딩 1위는 **nlpai-lab/KoE5 (MRR 0.6871)** — 한국어 파인튜닝된 600M 모델이 7B~27B 대형 모델을 전부 이겼다. Qwen3.5 계열은 `chat_template_kwargs: {enable_thinking: false}`로 thinking을 꺼야 토큰 27배 절감.
 
 ## Table of contents
 
@@ -27,7 +27,7 @@ aiAssisted: true
 | allganize RAG-Evaluation-Dataset-KO | 300 Q&A | PyPDF 고정 | 1000/200 고정 | OpenAI ada-002 1종 | Chroma | gpt-4-turbo |
 | AutoRAG-example | 비공개 | 미명시 | 미명시 | **16종** (API 혼합) | 미비교 | 미사용 |
 | ssisOneTeam | 106 Q&A | 미명시 | 미명시 | **24종** (API 혼합) | 미비교 | 미사용 |
-| **본 실험** | 300 Q&A | **3종** | **4종** | **21종 로컬 + 5종 API** | **7종** | **~30종 (로컬 + OpenRouter + Friendli.ai)** |
+| **본 실험** | 300 Q&A | **3종** | **4종** | **27종 로컬 GGUF** | **7종** | **12종 (AI-395 llama.cpp + DGX Spark ollama)** |
 
 기존 실험들은 단일 컴포넌트만 바꾸거나 데이터가 작거나 상용 API 위주였다. 이 프로젝트는 **각 컴포넌트를 독립 변수로 잡고 나머지를 고정**하는 Phase 구조로, 어떤 구성 요소가 얼마나 기여하는지 측정한다.
 
@@ -94,27 +94,25 @@ aiAssisted: true
 
 **검색 정확도는 7종 전부 동일 (MRR 0.527~0.530)**. 같은 벡터를 넣으면 같은 결과가 나온다. 차이는 오직 속도다. FAISS가 insert 0.8초 · 지연 0.7ms로 압도적.
 
-### Phase 4: Embedding 비교 (21종)
+### Phase 4: Embedding 비교 (27종)
 
 **고정:** Parser=pymupdf4llm, Chunking=500/100, VectorStore=FAISS  
-**변수:** 21개 임베딩 모델 (전부 로컬 GGUF)
+**변수:** 27개 임베딩 모델 (전부 로컬 GGUF)
 
-MRR 1위: **google/gemma-embed-300m (0.6682)** — 모델 크기 314MB로 대형 7~8B 모델을 압도. 자세한 결과는 [임베딩 벤치마크 결과 포스트](/posts/rag-embedding-benchmark-results) 참조.
+MRR 1위: **nlpai-lab/KoE5 (0.6871, 600M 파라미터)** — 고려대 NLP&AI Lab이 multilingual-e5-large를 한국어 triplet 70만+ 쌍으로 파인튜닝. 2위 google/gemma-embed-300m (0.6650), 3위 PIXIE/Rune-v1.0 (0.6627). 대형 7~8B 모델들은 모두 중하위권. 자세한 결과는 [임베딩 벤치마크 결과 포스트](/posts/rag-embedding-benchmark-results) 참조.
 
-### Phase 5: LLM 생성 비교 (약 30종)
+### Phase 5: LLM 생성 비교 (12종)
 
 **고정:** Parser=pymupdf4llm, Chunking=500/100, Embedding=gemma-embed-300m, VectorStore=FAISS  
 **변수:** LLM
 
 | 카테고리 | 모델 수 | 실행 위치 |
 |----------|--------|----------|
-| 로컬 (AI-395) | 4 (qwen3.5-27b/35b-a3b × think/nothink) | llama.cpp |
-| 로컬 (DGX Spark) | 15+ (qwen 계열, exaone, gpt-oss, gemma4 등) | Ollama |
-| OpenRouter | 23 (GPT-5.4, Claude 4.6, Gemini 3.1, Grok 4.20 등) | API |
-| Friendli.ai | 5 (K-EXAONE 236B, Qwen3-235B 등) | API |
+| 로컬 (AI-395) | 4 (qwen3.5-27b/35b-a3b, qwen3.6-35b-a3b × think/nothink) | llama.cpp |
+| 로컬 (DGX Spark) | 12 (qwen3.5 9b/27b/122b, exaone3.5, gpt-oss 20b/120b, phi4, mistral-small, lfm2, deepseek-r1) | Ollama |
 
-**실험 A**: 21 임베딩 × 4 로컬 LLM → 임베딩 영향 측정  
-**실험 B**: gemma-embed-300m 고정 × 약 30 LLM → LLM 영향 측정
+**실험 A**: 27 임베딩 × 고정 LLM → 임베딩이 답변 품질에 미치는 영향 측정  
+**실험 B**: gemma-embed-300m 고정 × 12 LLM × 300 Q&A = 3,600 답변 → LLM 성능 비교 (진행 중)
 
 ![실험 A vs 실험 B 구조](../../assets/images/blog/rag-design/exp-ab-ko.png)
 
@@ -131,15 +129,15 @@ MRR 1위: **google/gemma-embed-300m (0.6682)** — 모델 크기 314MB로 대형
 
 ## 핵심 함정 3가지
 
-### 1. llama.cpp 임베딩 서버 512 토큰 제한
+### 1. llama.cpp 임베딩 서버 ctx-size 명시 필요
 
-청크가 512 토큰을 넘으면 **에러 없이 빈 응답**을 돌려준다. 성공률 75%로 떨어지는 주범. 500자(약 350 토큰)로 트렁케이트하면 해결된다.
+기본값을 쓰면 대형 임베딩 모델(4096dim 이상)에서 context 범위가 자동 조정되어 긴 청크 일부가 silent 절단된다. 초기 실험에서 500자 트렁케이트로 이를 피했으나 **대형 모델에 불공정한 조건**이어서 다음 설정을 표준으로 정했다.
 
-```python
-def get_embeddings_batch(texts, max_chars=500):
-    truncated = [t[:max_chars] for t in texts]
-    ...
+```bash
+llama-server ... -b 8192 -ub 8192 -c 8192
 ```
+
+`-c 8192`를 명시하면 기본 모델 파라미터와 무관하게 컨텍스트를 8K로 통일 → 트렁케이트 제거 가능. 500자 청크라면 한국어 ~250 토큰이라 이 범위 내 안전하게 처리된다.
 
 ### 2. Qwen3.5 thinking 모드 비활성화
 
@@ -188,21 +186,22 @@ results = llm.batch(prompts, config={"max_concurrency": 20})
 
 전체 조합(3×4×7×21×30=5,292)을 다 돌리면 소요 시간·비용이 현실적이지 않다. 각 Phase에서 1위만 다음 단계로 넘겨 실험 수를 선형(3+4+7+21+30=65)으로 줄인다.
 
-### Phase 4 임베딩 1위가 왜 7B가 아니라 300M인가?
+### Phase 4 임베딩 1위가 왜 7B가 아니라 600M (KoE5)인가?
 
-한국어 RAG에서는 **모델 크기보다 훈련 목적과 데이터가 중요**하다. gemma-embed-300m(768dim, Apache 2.0)은 Google이 검색 특화로 훈련했고, qwen3-embed-8b(4096dim)는 범용 임베딩이다. 또한 512 토큰 제한으로 대형 모델의 긴 컨텍스트 강점이 사라진 영향도 있다.
+한국어 RAG에서는 **모델 크기보다 훈련 목적과 도메인 데이터가 중요**하다. KoE5(600M, 1024dim)는 multilingual-e5-large를 한국어 query-document-hard_negative 70만+ 쌍으로 파인튜닝했다. qwen3-embed-8b(4096dim)는 범용 MTEB 최적화이며 Korean 비중이 낮다. 같은 베이스(multilingual-e5-large)의 Korean 파인튜닝이 **MRR +0.099**를 준다 (0.5882 → 0.6871). 스케일보다 정렬된 데이터가 답.
 
 ### 왜 FAISS가 속도 1위인가?
 
 FAISS는 인-프로세스 라이브러리라 **네트워크 오버헤드가 없다**. Chroma/Qdrant/Milvus/Weaviate는 HTTP/gRPC 왕복이 추가된다. 검색 정확도가 같다면 RAG 파이프라인에서 FAISS가 최적.
 
-### LLM은 왜 로컬 + API 하이브리드인가?
+### 왜 LLM을 로컬로만 돌렸나?
 
-- 로컬(AI-395 + Spark): 비용 0, 양자화(Q4_K_M) 영향 측정
-- OpenRouter: GPT-5.4, Claude Opus 4.6 등 상용 최상위 모델
-- Friendli.ai: 한국 K-EXAONE 236B MoE, OpenRouter에 없는 대형 한국 모델
+현재 Phase 5 범위는 **로컬 환경(AI-395 + DGX Spark) 내 12개 LLM**으로 한정했다. 이유:
+- **재현성**: 누구나 같은 GGUF/ollama 모델로 검증 가능
+- **양자화 영향 측정**: Q4/Q8 quantized 모델이 full precision과 얼마나 차이 나는지 보려면 통제된 환경 필요
+- **비용 0**: 300 × 12 = 3,600 답변 생성하면 API 비용 폭발
 
-양쪽을 비교해야 "로컬 양자화 → 상용 full precision"의 gap을 볼 수 있다.
+OpenRouter/Friendli.ai 등 상용 API 비교는 LLM-as-judge 평가 단계 이후 확장 예정.
 
 ## 다음 단계
 
