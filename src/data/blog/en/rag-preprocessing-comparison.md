@@ -1,6 +1,6 @@
 ---
 author: baem1n
-pubDatetime: 2026-04-16T02:00:00.000Z
+pubDatetime: 2026-04-19T02:30:00.000Z
 title: "RAG Preprocessing Matters More Than Embeddings — Parser × Chunking × VectorStore Benchmark"
 description: "Single-variable experiments on 300 Q&A for 3 PDF parsers, 4 chunking strategies, and 7 vector stores. Chunking moves MRR +23.5%, parser +5.4%, vector stores tie on accuracy but differ 200x in latency."
 tags:
@@ -180,7 +180,7 @@ index = faiss.IndexFlatIP(dim)
 index.add(normalized_embeddings)
 ```
 
-This stack hits MRR 0.5304 at Phase 3. Swap in gemma-embed-300m in [Phase 4](/en/posts/rag-embedding-benchmark-results) and you reach **MRR 0.6682 (+26%)**.
+This stack hits MRR 0.5304 at Phase 3. Swap the embedding from qwen3-embed-8b to **[KoE5](/en/posts/rag-embedding-benchmark-results)** (Phase 4 #1) and you reach **MRR 0.6871 (+30%)** — same preprocessing, just a better embedding.
 
 ## FAQ
 
@@ -211,7 +211,7 @@ They all run cosine (or inner product) over the same vectors. Differences come f
 
 ## Next steps
 
-- **Embedding swap effect**: replace with gemma-embed-300m → +26% MRR. See [embedding benchmark](/en/posts/rag-embedding-benchmark-results).
+- **Embedding swap effect**: replace with KoE5 → +30% MRR (0.5304 → 0.6871). See [embedding benchmark](/en/posts/rag-embedding-benchmark-results).
 - **Rerankers**: exploit Phase 3's accuracy tie by adding a second-stage reranker.
 - **Per-domain chunking**: finance / law / medical may have distinct optimal sizes.
 

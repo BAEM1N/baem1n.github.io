@@ -1,8 +1,8 @@
 ---
 author: baem1n
-pubDatetime: 2026-04-16T01:00:00.000Z
-title: "21 Korean RAG Embeddings Benchmarked — Why a 300M Model Beat 8B"
-description: "MRR, Hit@k, NDCG, and failure mode analysis across 21 open GGUF embeddings on the allganize Korean 300 Q&A dataset. google/gemma-embed-300m wins at MRR 0.6682."
+pubDatetime: 2026-04-19T02:00:00.000Z
+title: "27 Korean RAG Embeddings Benchmarked — Why KoE5 Beat the 8B Models"
+description: "MRR, Hit@k, and failure-mode analysis across 27 open GGUF embeddings on allganize Korean 300 Q&A. Korean fine-tuned nlpai-lab/KoE5 (600M) wins at MRR 0.6871, beating every 8B model."
 tags:
   - rag
   - embedding
@@ -10,11 +10,11 @@ tags:
   - korean-nlp
   - llm
 featured: false
-draft: true
+draft: false
 aiAssisted: true
 ---
 
-> **TL;DR**: 21 open GGUF embeddings on the allganize Korean 300 Q&A. The winner is **google/gemma-embed-300m (MRR 0.6682, 314MB)** — 7B–27B dense models landed in the bottom half. Law is the most embedding-sensitive domain; image-based questions fail across every embedding. 50 "hard" questions (16.7%) can't be rescued by any embedding — that's a retrieval ceiling no model can break.
+> **TL;DR**: 27 open GGUF embeddings on allganize Korean 300 Q&A. Winner: **nlpai-lab/KoE5 (MRR 0.6871, 600M, 1024-dim)**. Runner-up: **google/gemma-embed-300m (MRR 0.6650, 314MB)**. The 7B–27B dense models all landed in the middle or lower half — bigger ≠ better. We removed the 500-char truncation bug from the prior run and switched Microsoft Harrier to its official `last-token pooling`.
 
 ## Table of contents
 
@@ -25,208 +25,241 @@ aiAssisted: true
 - **Chunking**: 500 chars / overlap 100 (3,166 chunks total)
 - **Vector store**: FAISS (in-memory, cosine)
 - **Top-k**: 5
-- **Input truncation**: 500 chars (to fit llama.cpp's 512-token cap)
-- **Metrics**: MRR, NDCG@5, Hit@1/5 (page-level), File Hit@5 (file-level)
+- **Input truncation**: **removed** (old 500-char cap unfairly penalized large models)
+- **ctx-size**: 8192 for all models
+- **Harrier pooling**: `last`-token (Microsoft spec)
+- **Metrics**: MRR, Hit@1/5 (page-level), File Hit@5 (file-level)
 
 Full experiment design in [RAG Benchmark Experiment Design](/en/posts/rag-evaluation-experiment-design).
 
 ## Full ranking (sorted by MRR)
 
-| Rank | Model | dim | Size | MRR | Hit@1 | Hit@5 | File@5 | Fail% |
-|----|------|-----|------|-----|-------|-------|--------|-------|
-| **1** | **google/gemma-embed-300m** | 768 | 314MB | **0.6682** | **58.3%** | **79.3%** | **92.0%** | 20.7% |
-| 2 | jinaai/jina-v4-retrieval | 4096 | 3.1GB | 0.6489 | 55.3% | 79.0% | 91.7% | 21.0% |
-| 3 | Snowflake/arctic-embed-l-v2 | 1024 | 606MB | 0.6489 | 58.7% | 73.3% | 89.7% | 26.6% |
-| 4 | nomic-ai/nomic-embed-v2-moe | 768 | 489MB | 0.6484 | 57.0% | 75.3% | 90.0% | 24.7% |
-| 5 | nlpai-lab/KURE-v1 | 1024 | 606MB | 0.6412 | 56.0% | 75.0% | 91.0% | 25.0% |
-| 6 | ibm-granite/granite-278m | 768 | 290MB | 0.5973 | 50.3% | 72.3% | 87.3% | 27.7% |
-| 7 | Qwen/Qwen3-Embedding-4B | 4096 | 4.0GB | 0.5862 | 49.0% | 72.7% | 90.3% | 27.4% |
-| 8 | intfloat/multilingual-e5-large-instruct | 1024 | 576MB | 0.5853 | 50.0% | 71.0% | 91.0% | 29.0% |
-| 9 | jinaai/jina-v4-code | 4096 | 3.1GB | 0.5442 | 43.7% | 69.0% | 88.3% | 31.0% |
-| 10 | BAAI/bge-m3 | 1024 | 606MB | 0.5745 | 48.7% | 68.3% | 89.7% | 31.6% |
-| 11 | Qwen/Qwen3-Embedding-0.6B | 1024 | 610MB | 0.5621 | 47.0% | 66.7% | 87.3% | 33.4% |
-| 12 | Microsoft/harrier-oss-270m | 1024 | 279MB | 0.5594 | 47.0% | 67.3% | 88.3% | 32.7% |
-| 13 | Microsoft/harrier-oss-0.6b | 1024 | 610MB | 0.5266 | 41.7% | 66.7% | 87.0% | 33.3% |
-| 14 | **Qwen/Qwen3-Embedding-8B** | 4096 | **7.5GB** | 0.5325 | 45.0% | 65.0% | 86.7% | 35.0% |
-| 15 | ibm-granite/granite-107m | 768 | 116MB | 0.4806 | 38.3% | 61.0% | 82.7% | 39.0% |
-| 16 | NVIDIA/nemotron-embed-8b | 4096 | 7.5GB | 0.4640 | 36.0% | 60.3% | 88.0% | 39.7% |
-| 17 | jinaai/v5-small-retrieval | 1024 | 610MB | 0.3868 | 31.0% | 48.0% | 74.7% | 52.0% |
-| 18 | jinaai/jina-code-1.5b | 1024 | 1.6GB | 0.3288 | 22.7% | 47.0% | 82.3% | 53.0% |
-| 19 | jinaai/v5-nano-matching | 512 | 223MB | 0.1821 | 12.7% | 25.0% | 61.3% | 75.0% |
-| 20 | google/LaBSE | 768 | 492MB | 0.0468 | 2.7% | 8.0% | 27.0% | 92.0% |
-| 21 | Microsoft/harrier-oss-27b | 4096 | **27GB** | 0.0044 | 0.0% | 1.0% | 11.3% | 99.0% |
+| Rank | Model | dim | Size | MRR | p@1 | p@5 | f@5 |
+|----|------|-----|------|-----|-------|-------|--------|
+| 🥇 | **nlpai-lab/KoE5** | 1024 | 600MB | **0.6871** | **60.7%** | **80.7%** | 91.3% |
+| 🥈 | google/gemma-embed-300m | 768 | 314MB | 0.6650 | 57.3% | 79.7% | **91.7%** |
+| 🥉 | PIXIE/Rune-v1.0 | 1024 | 1.0GB | 0.6627 | 58.7% | 76.0% | **92.0%** |
+| 4 | Snowflake/arctic-embed-ko | 1024 | 606MB | 0.6612 | 58.3% | 75.0% | 91.7% |
+| 5 | Snowflake/arctic-l-v2 | 1024 | 606MB | 0.6495 | 58.3% | 73.0% | 89.0% |
+| 6 | jinaai/jina-v4-retrieval | 4096 | 3.1GB | 0.6449 | 54.7% | 78.7% | 91.7% |
+| 7 | nomic-ai/nomic-embed-v2-moe | 768 | 489MB | 0.6435 | 56.7% | 75.3% | 90.0% |
+| 8 | nlpai-lab/KURE-v1 | 1024 | 606MB | 0.6267 | 54.7% | 74.3% | 91.0% |
+| 9 | Microsoft/harrier-oss-v1-0.6b | 1024 | 610MB | 0.6131 | 53.3% | 70.3% | 88.7% |
+| 10 | ibm-granite/granite-278m | 768 | 290MB | 0.5969 | 50.3% | 72.0% | 87.3% |
+| 11 | intfloat/multilingual-e5-large | 1024 | 576MB | 0.5882 | 50.7% | 70.7% | 90.7% |
+| 12 | Qwen/Qwen3-Embedding-4B | 4096 | 4.0GB | 0.5850 | 48.0% | 73.0% | 89.7% |
+| 13 | BAAI/bge-m3 | 1024 | 606MB | 0.5630 | 48.7% | 66.7% | 89.7% |
+| 14 | Qwen/Qwen3-Embedding-0.6B | 1024 | 610MB | 0.5564 | 46.3% | 67.0% | 87.7% |
+| 15 | jinaai/jina-v4-code | 4096 | 3.1GB | 0.5334 | 42.3% | 67.7% | 88.0% |
+| 16 | Microsoft/harrier-oss-v1-270m | 640 | 279MB | 0.5291 | 43.7% | 65.3% | 88.3% |
+| 17 | **Qwen/Qwen3-Embedding-8B** | 4096 | **7.5GB** | 0.5271 | 44.3% | 64.7% | 86.3% |
+| 18 | ibm-granite/granite-107m | 768 | 116MB | 0.4786 | 38.0% | 60.3% | 83.0% |
+| 19 | NVIDIA/nemotron-embed-8b | 4096 | 7.5GB | 0.4617 | 36.3% | 59.0% | 88.0% |
+| 20 | NVIDIA/llama-embed-nemotron-8b | 4096 | 7.5GB | 0.4617 | 36.3% | 59.0% | 88.0% |
+| 21 | jinaai/v5-small-retrieval | 1024 | 610MB | 0.3898 | 31.7% | 48.3% | 74.3% |
+| 22 | jinaai/jina-code-1.5b | 1024 | 1.6GB | 0.3248 | 23.0% | 46.3% | 82.0% |
+| 23 | intfloat/e5-mistral-7b-instruct | 4096 | 7.1GB | 0.2843 | 22.7% | 36.0% | 69.3% |
+| 24 | jinaai/v5-nano-matching | 512 | 223MB | 0.1791 | 12.7% | 26.3% | 62.0% |
+| 25 | mixedbread-ai/mxbai-embed-large | 1024 | 606MB | 0.1157 | 8.7% | 15.7% | 38.7% |
+| 26 | google/LaBSE | 768 | 492MB | 0.0472 | 2.7% | 8.0% | 27.3% |
+| 27 | **Microsoft/harrier-oss-v1-27b** | 5376 | **27GB** | 0.0170 | 1.0% | 2.3% | 15.7% |
 
 ![Top 10 embeddings — MRR ranking](../../../assets/images/blog/rag-embedding/top10-mrr-en.png)
 
-### Three key observations
+### Four key observations
 
-1. **Top 5 are all small (300MB–606MB)**. qwen3-embed-8b (7.5GB) is #14.
-2. **Korean-specific (kure-v1) vs multilingual (gemma-300m)**: gemma wins slightly. Retrieval-tuned general model beats a Korean-specific one here.
-3. **Bigger ≠ better**: harrier-oss-27b (27GB) is effectively broken with MRR 0.004 — likely a GGUF quantization issue.
+1. **Top 8 are small-to-mid (290MB–1.0GB)**. The biggest 27B and 8B models all sit in the bottom half.
+2. **Three Korean-fine-tuned models make the top 8**: KoE5 (#1), snowflake-arctic-ko (#4), kure-v1 (#8).
+3. **Two Nemotron models have bit-identical MRR (0.4617)**: nemotron-embed-8b and llama-embed-nemotron-8b appear to be the same model.
+4. **harrier-27b is effectively broken**: 97% of its 5376 dims have variance < 0.0001 → embedding space collapse, every chunk looks similar.
 
-## Why 300M beat 8B
+## Why KoE5 wins
 
-Two likely causes.
+KoE5 is a fine-tune of **intfloat/multilingual-e5-large** on 700K+ Korean query-document-hard_negative triplets (Korea University NLP & AI Lab).
 
-### 1. The 512-token truncation
+| Model | MRR | Base | Delta |
+|-------|-----|------|-------|
+| **KoE5** | **0.6871** | multilingual-e5-large | **+0.099** (Korean triplet fine-tuning) |
+| multilingual-e5-large-instruct | 0.5882 | — | baseline |
 
-llama.cpp server caps inputs at 512 tokens. At 500-char truncation, Korean text is ~350 tokens. **With short inputs, model capacity stops mattering** — large models' advantage (long context, fine semantics) doesn't kick in.
+A direct apples-to-apples comparison shows Korean domain fine-tuning buys you **+0.099 MRR**. Multilingual models still have plenty of room to improve on Korean.
 
-### 2. Training objective matters more than size
+> 💡 **Prompt prefix caveat**: KoE5 requires `query: ` and `passage: ` prefixes. We ran without prefixes, so **actual performance could be higher** than what we report here.
 
-| Model | Training focus | Result |
-|-------|----------------|--------|
-| gemma-embed-300m | Retrieval-specific (Google) | MRR 0.6682 (1st) |
-| qwen3-embed-8b | General MTEB | MRR 0.5325 (14th) |
-| kure-v1 | Korean-specific (AI-Lab) | MRR 0.6412 (5th) |
+## Why 8B models lost to 300M
 
-**Models trained specifically for retrieval win at RAG.** MTEB averages across many tasks and doesn't translate directly.
+After removing the truncation bug, qwen3-embed-8b is still 0.5271 vs gemma-embed-300m at 0.6650.
 
-## Failure mode analysis
+### 1. Training objective mismatch
 
-We classify failures into three bins:
+| Model | Training focus | MRR |
+|-------|----------------|-----|
+| KoE5 | **Korean retrieval fine-tuning** | 0.6871 |
+| gemma-embed-300m | Google general retrieval | 0.6650 |
+| qwen3-embed-8b | General MTEB | 0.5271 |
 
-- **file_miss**: target file not even in top-10 (worst)
-- **page_miss**: right file, wrong page (fixable with more recall)
-- **rank_low**: target at rank 6–10 (fixable by larger top-k)
+**Retrieval-focused + Korean data beats scale.** MTEB averages across many tasks; they don't translate directly to RAG retrieval.
 
-| Embedding | File Miss | Page Miss | Total Fail |
-|-----------|-----------|-----------|-----------|
-| gemma-embed-300m | 8.0% | 12.7% | 20.7% |
-| jina-v4-retrieval | 8.3% | 12.7% | 21.0% |
-| kure-v1 | 9.0% | 16.0% | 25.0% |
-| qwen3-embed-8b | 13.3% | 21.7% | 35.0% |
-| labse | **73.0%** | 19.0% | 92.0% |
-| harrier-27b | **88.7%** | 10.3% | 99.0% |
+### 2. Korean tokenization efficiency
 
-labse fails structurally at the file level (shallow Korean representation across 109 languages). harrier-27b is essentially random output.
+Qwen tokenizers are multilingual but Korean-light. At the same 512–8K token budget, Korean conveys less semantic information.
 
-## Domain heatmap (top 5 embeddings)
+### 3. Quantization noise accumulates with scale
 
-| Model | commerce | finance | law | medical | public | Avg |
-|-------|----------|---------|-----|---------|--------|-----|
-| gemma-embed-300m | 0.789 | 0.564 | 0.657 | 0.699 | 0.632 | 0.668 |
-| jina-v4-retrieval | 0.781 | 0.477 | 0.595 | 0.685 | 0.666 | 0.641 |
-| snowflake-arctic-l-v2 | 0.764 | 0.577 | 0.663 | 0.603 | 0.641 | 0.650 |
-| nomic-embed-v2-moe | 0.773 | 0.545 | 0.647 | 0.628 | 0.650 | 0.649 |
-| kure-v1 | 0.716 | 0.555 | 0.605 | 0.690 | 0.640 | 0.641 |
+Q8 noise hurts larger models more relative to the precision they were trained at. 300M models pack more info per parameter, so they lose less.
 
-![Embedding x Domain MRR heatmap](../../../assets/images/blog/rag-embedding/domain-heatmap-en.png)
+## Microsoft Harrier series — fresh measurement
 
-- **Finance is hardest**: everyone drops below average. Lots of numbers, tables, charts.
-- **Commerce is easiest**: mostly natural-language explanations.
+Harrier is a decoder-only embedding model; the official spec says **last-token pooling**. Our prior run used llama-server's default `mean` pooling.
+
+Result after fixing:
+
+| Model | mean pooling (old) | last pooling (spec) | Delta |
+|-------|--------------------|---------------------|-------|
+| harrier-270m (640 dim) | 0.5479 | 0.5291 | 📉 -0.019 |
+| **harrier-0.6b (1024 dim)** | 0.5193 | **0.6131** | 📈 **+0.094** |
+| harrier-27b (5376 dim) | 0.0033 | 0.0170 | 5× better (still bottom) |
+
+- **0.6b**: spec-compliant pooling adds +18% MRR.
+- **270m**: mean was marginally better — pooling preference is size-dependent.
+- **27b**: broken regardless — a quantization and/or Korean-compatibility problem.
+
+## Domain breakdown
+
+Top 5 embeddings' MRR by domain:
+
+| Model | commerce | finance | law | medical | public |
+|-------|----------|---------|-----|---------|--------|
+| koe5 | 0.802 | 0.621 | 0.672 | 0.714 | 0.676 |
+| gemma-embed-300m | 0.789 | 0.564 | 0.657 | 0.699 | 0.632 |
+| pixie-rune-v1 | 0.793 | 0.601 | 0.649 | 0.671 | 0.657 |
+| snowflake-arctic-ko | 0.778 | 0.612 | 0.654 | 0.688 | 0.649 |
+| snowflake-arctic-l-v2 | 0.764 | 0.577 | 0.663 | 0.603 | 0.641 |
+
+![Embedding × Domain MRR heatmap](../../../assets/images/blog/rag-embedding/domain-heatmap-en.png)
+
+- **Finance is hardest** — heavy numeric/tabular content.
+- **Commerce is easiest** — natural-language descriptions.
+- **KoE5 wins every domain**.
 
 ## Context type
 
-| Model | paragraph | table | text | image |
-|-------|-----------|-------|------|-------|
-| gemma-embed-300m | 0.737 | 0.667 | 0.720 | **0.486** |
-| jina-v4-retrieval | 0.700 | 0.656 | 0.686 | **0.474** |
-| kure-v1 | 0.717 | 0.617 | 0.687 | **0.464** |
+```
+Top 5 embeddings average:
+paragraph → MRR ~0.74
+text      → MRR ~0.71
+table     → MRR ~0.65
+image     → MRR ~0.48  (universal failure)
+```
 
-![Performance by context type](../../../assets/images/blog/rag-embedding/context-type-en.png)
+**Image-type questions fail across every embedding.** Text embeddings can't see inside images — you need vision embedding + OCR captioning upstream.
 
-**Image-type questions fail universally (MRR ≤ 0.5)**. Text embeddings can't query image content — needs vision embedding + OCR captioning upstream.
+## Failure modes
 
-## Question difficulty clustering
+| Embedding | File Miss | Page Miss | Total Fail |
+|-----------|-----------|-----------|-----------|
+| koe5 | 8.7% | 12.6% | 21.3% |
+| gemma-embed-300m | 8.3% | 12.0% | 20.3% |
+| qwen3-embed-8b | 13.7% | 21.6% | 35.3% |
+| labse | 72.7% | 19.3% | 92.0% |
+| **harrier-27b** | **84.3%** | 13.4% | **97.7%** |
 
-300 questions grouped by how many embeddings (out of 21) retrieved the right chunk.
+- **labse** struggles structurally — its 109-language training leaves Korean semantics shallow.
+- **harrier-27b** collapses even at the file level — every chunk looks the same in its embedding space.
 
-| Cluster | Questions | Share | Interpretation |
-|---------|-----------|-------|----------------|
-| **Universal** (18+/21 hit) | 86 | 28.7% | Retrieval works everywhere → clean sample for LLM comparison |
-| **Divergent** (3–17/21) | 164 | 54.7% | Embedding choice matters → highest experimental value |
-| **Hard** (0–2/21) | **50** | **16.7%** | No embedding rescues them → retrieval ceiling |
-
-### Hard 50 distribution
-
-- **Domain**: finance 20, public 12, law 8, commerce 7, medical 3
-- **Context type**: **image 26 (52%)**, paragraph 17, table 4, text 3
-
-![Question difficulty clusters](../../../assets/images/blog/rag-embedding/difficulty-donut-en.png)
-
-**52% of hard questions are image-context**. Image-grounded questions can't be solved by current text RAG — a hard upper bound, not a model problem.
-
-## Consensus-based pseudo-GT
-
-If we aggregate every embedding's top-1 into a majority vote, how often does the consensus match the ground truth?
-
-| Consensus strength | Questions | GT match |
-|--------------------|-----------|----------|
-| Strong (15+/21 agree) | 102 | **82.4%** |
-| Medium (8–14/21) | 120 | 63.3% |
-| Weak (<8/21) | 78 | 23.1% |
-
-![Consensus-based pseudo-GT](../../../assets/images/blog/rag-embedding/consensus-en.png)
-
-**When many embeddings agree on the same chunk, it's the right answer 82.4% of the time.** Useful later to cut LLM-as-judge cost.
-
-## Model efficiency (MRR / VRAM)
+## Efficiency (MRR / VRAM)
 
 | Model | MRR | VRAM | MRR/VRAM |
 |-------|-----|------|----------|
-| **gemma-embed-300m** | 0.6682 | **0.5GB** | **1.336** |
-| granite-107m | 0.4806 | 0.2GB | 2.403 |
-| harrier-270m | 0.5594 | 0.3GB | 1.865 |
-| granite-278m | 0.5973 | 0.5GB | 1.195 |
-| kure-v1 | 0.6412 | 1.0GB | 0.641 |
-| qwen3-embed-8b | 0.5325 | 9.0GB | 0.059 |
-| harrier-27b | 0.0044 | 20.0GB | 0.000 |
+| **granite-107m** | 0.4786 | 0.2GB | **2.39** |
+| **harrier-270m** | 0.5291 | 0.3GB | 1.76 |
+| gemma-embed-300m | 0.6650 | 0.5GB | 1.33 |
+| **koe5** | 0.6871 | 0.6GB | 1.15 |
+| qwen3-embed-8b | 0.5271 | 7.5GB | 0.070 |
+| harrier-27b | 0.0170 | 27GB | 0.001 |
 
 ![Embedding efficiency (MRR vs VRAM)](../../../assets/images/blog/rag-embedding/efficiency-scatter-en.png)
 
-Sub-500MB models dominate on efficiency. qwen3-embed-8b delivers ~1/22 the efficiency of gemma-embed-300m.
+**Small models dominate on cost/performance.** qwen3-embed-8b's MRR-per-GB is ~1/16 of KoE5.
 
 ## Recommendations
 
 | Scenario | Pick | Why |
 |----------|------|-----|
-| **Best accuracy** | gemma-embed-300m | MRR #1, 20.7% failure rate |
-| **Korean-specific** | kure-v1 | MRR #5, stable on Korean |
-| **Low memory (<500MB)** | granite-278m | MRR 0.597, 290MB |
-| **Ultra low memory (<100MB)** | granite-107m | MRR 0.481, 116MB |
-| **Korean+EN+JP multilingual** | bge-m3 | MRR 0.575, hybrid dense+sparse |
+| **Best accuracy** | **koe5** | MRR #1, Korean-fine-tuned |
+| **Mixed EN + KO** | gemma-embed-300m | MRR #2, general-purpose retrieval |
+| **Ultra low memory (<300MB)** | granite-278m | MRR 0.597, 290MB |
+| **Experimental baseline** | bge-m3 | MRR 0.563, hybrid (dense + sparse possible) |
 
 ## FAQ
 
-### Why did gemma-embed-300m beat the Korean-specialized kure-v1?
+### Why is qwen3-embed-8b at #17?
 
-gemma-embed-300m is a 768-dim general retrieval embedding. Retrieval optimization generalized well to Korean, and its training data includes substantial Korean. The gap is MRR 0.027 (~4%) — not huge but consistent.
+It's near-SOTA on MTEB but this Korean benchmark punishes it because:
+1. **Korean is underrepresented in its training data**
+2. **No retrieval-specific fine-tuning** (tuned for general MTEB)
+3. **Q8 quantization loss scales with model size**
+4. Same forces push e5-mistral-7b and llama-embed-nemotron-8b into the bottom tier.
 
-### Is qwen3-embed-8b at #14 really correct?
+### You removed truncation — why didn't 8B models jump up?
 
-On general MTEB it's strong. In this benchmark it's hurt by:
-1. 512-token input cap — nullifies long-context advantage
-2. General MTEB tuning — not specifically retrieval-optimized
-3. Possible Q8_0 quantization impact
+The old 0.5325 → current 0.5271 barely moved. **Truncation wasn't the root cause**. 500-char chunks are ~250 tokens in Korean, so a large model's long-context advantage never kicks in.
 
-### Why does harrier-27b fail 99%?
+### Why did harrier-27b collapse so badly?
 
-A 27GB GGUF that loads but returns near-random outputs. Either llama.cpp doesn't fully support the architecture or Q8_0 quantization destroyed the embedding quality. **Always validate large-model GGUF quantizations before deployment.**
+Analyzing its .npy: **97% of 5376 dims have near-zero variance**. Every chunk-to-chunk similarity lives in 0.76–0.9 → no discrimination at all. Even with the official `last` pooling and explicit `-c 8192`, MRR only crept from 0.0033 to 0.0170. The 27B Q8 GGUF appears to lose critical signal.
 
-### Why is File@5 high but MRR low?
+### Why are KoE5 and KURE-v1 so different despite being the same lab?
 
-File@5 (92%) minus Page@5 (79%) = 13% gap means "right file, wrong page". Common with legal/financial docs where similar text repeats across pages. Fix: larger top-k (5→10), add a reranker.
+| Model | Base | MRR |
+|-------|------|-----|
+| KoE5 | multilingual-e5-large | 0.6871 |
+| KURE-v1 | BAAI/bge-m3 | 0.6267 |
 
-### Why does every model fail on image context?
+Different starting models. KoE5 inherits E5's retrieval optimization; KURE inherits BGE's general multilingual training. Both were fine-tuned on Korean triplets — the **base's retrieval aptitude** decides the winner.
 
-All tested models are **text embeddings**. When a question references chart/graph content inside an image, we need vision embedding + OCR captioning at parse time. pymupdf4llm doesn't generate image captions today.
+### Why do nemotron-embed-8b and llama-embed-nemotron-8b have identical MRR?
+
+Every metric matches to the decimal (MRR 0.4617, p@1 36.3%, p@5 59.0%, f@5 88.0%).
+→ **The two releases appear to be the same architecture and weights.** They're published separately but behave identically.
 
 ## Next steps
 
-1. Parser/Chunking/VectorStore impact → [Why preprocessing matters more than embeddings](/en/posts/rag-preprocessing-comparison)
-2. Experiment B: fixed embedding (gemma-embed-300m) × ~30 LLMs
-3. Reranker experiments (Qwen3-Reranker, BCE, BGE)
-4. Rescue the Hard-50: vision embedding + OCR preprocessing
-5. RAGAS-based LLM-as-judge for answer quality
+1. Preprocessing impact → [Parser / Chunking / VectorStore comparison](/en/posts/rag-preprocessing-comparison)
+2. **Experiment B (LLM comparison)**: 11 LLMs × 300 Q&A with gemma-embed-300m fixed — in progress
+3. **Experiment A (embedding → answer quality)**: does better retrieval yield better answers?
+4. **LLM-as-judge**: gpt-oss-120b + qwen3.5-122b auto-scoring — pending
+5. Reranker experiments: Qwen3-Reranker, BCE, BGE reranker
 
 ---
 
 ## Code & raw data
 
 - **GitHub**: [github.com/BAEM1N/RAG-Evaluation](https://github.com/BAEM1N/RAG-Evaluation)
-- **Phase 4 JSON**: [results/phase4_embedding/](https://github.com/BAEM1N/RAG-Evaluation/tree/main/results/phase4_embedding) — full MRR / Hit / domain breakdowns for all 21 embeddings
-- **Deep analysis CSV**: [results/retrieval_analysis/](https://github.com/BAEM1N/RAG-Evaluation/tree/main/results/retrieval_analysis) — heatmaps, failure modes, consensus, 21×21 pairwise overlap
-- **Analysis script**: [scripts/analyze_retrieval_deep.py](https://github.com/BAEM1N/RAG-Evaluation/blob/main/scripts/analyze_retrieval_deep.py) — reproducible by anyone
+- **Phase 4 JSON**: [results/phase4_embedding/](https://github.com/BAEM1N/RAG-Evaluation/tree/main/results/phase4_embedding) — all 27 embeddings' MRR / Hit / domain breakdowns
+- **Retrieval cache**: [data/retrieval_cache/](https://github.com/BAEM1N/RAG-Evaluation/tree/main/data/retrieval_cache) — per-embedding top-5 chunks × 300 questions
+- **Leaderboard**: [LEADERBOARD.md](https://github.com/BAEM1N/RAG-Evaluation/blob/main/results/phase4_embedding/LEADERBOARD.md)
+- **Runner**: [scripts/bench_phase4_parallel.py](https://github.com/BAEM1N/RAG-Evaluation/blob/main/scripts/bench_phase4_parallel.py)
 
-You can inspect every raw result directly when you need hard evidence for a RAG design choice.
+Inspect the raw JSONs directly when you need hard evidence for a RAG design choice.
+
+---
+
+## RAG Series Index
+
+**Phase 1-4: Retrieval optimization**
+
+- [Experiment design](/posts/en/rag-evaluation-experiment-design/)
+- [Parser comparison](/posts/en/rag-parser-comparison/) — pymupdf4llm wins (+5.4%p)
+- [Chunking comparison](/posts/en/rag-chunking-comparison/) — small chunks +23.5%p (biggest MRR lever)
+- [Vector store comparison](/posts/en/rag-vectorstore-comparison/) — FAISS 0.74ms (accuracy tied)
+- [Embedding benchmark (27)](/posts/en/rag-embedding-benchmark-results/) — koe5 #1 (Korean-tuned)
+
+**Phase 5: LLM-as-Judge cross-validation**
+
+- [Q1 — Local cand × Local judge](/posts/en/rag-llm-judge-q1-local-cross-validation/)
+- [Q2 — API cand × Local judge](/posts/en/rag-llm-judge-q2-api-llm-vs-local-judges/)
+- [Q3 — Local cand × API judge](/posts/en/rag-llm-judge-q3-flagship-api-judges/)
+- [Q4 — API cand × API judge](/posts/en/rag-llm-judge-q4-api-self-evaluation/)
+- [4-Quadrant unified RRF leaderboard](/posts/en/rag-llm-judge-summary-4quadrant-matrix/) — 46 cand × 17 judge
+- [Judge × Judge correlation analysis](/posts/en/rag-llm-judge-correlation-analysis/) — severity vs consensus, optimal ensemble

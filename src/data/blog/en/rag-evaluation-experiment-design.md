@@ -1,7 +1,7 @@
 ---
 author: baem1n
-pubDatetime: 2026-04-16T00:00:00.000Z
-title: "Korean RAG Benchmark — Experiment Design for 300 Q&A × 21 Embeddings × 30 LLMs"
+pubDatetime: 2026-04-19T00:00:00.000Z
+title: "Korean RAG Benchmark — Experiment Design for 300 Q&A × 27 Embeddings × 12 LLMs"
 description: "Experiment plan for a component-wise Korean RAG benchmark (parser, chunking, vector store, embedding, LLM) on the allganize RAG-Evaluation-Dataset-KO."
 tags:
   - rag
@@ -10,11 +10,11 @@ tags:
   - benchmark
   - korean-nlp
 featured: false
-draft: true
+draft: false
 aiAssisted: true
 ---
 
-> **TL;DR**: We decompose a Korean RAG pipeline into five layers (parser → chunking → vector store → embedding → LLM) and run one-variable experiments for each. 21 embeddings, 7 vector stores, and ~30 LLMs (local + OpenRouter + Friendli.ai) are cross-evaluated. The top embedding is **google/gemma-embed-300m (MRR 0.6682)**; to cut Qwen3.5 generation cost by 95% you must pass `chat_template_kwargs: {enable_thinking: false}` — system prompts alone don't work.
+> **TL;DR**: We decompose a Korean RAG pipeline into five layers (parser → chunking → vector store → embedding → LLM) and run one-variable experiments for each. **27 embeddings**, 7 vector stores, and **12 LLMs** (local across AI-395 llama.cpp + DGX Spark ollama) are cross-evaluated. The top embedding is **nlpai-lab/KoE5 (MRR 0.6871)** — a 600M Korean fine-tune that beat every 7B–27B dense model. To cut Qwen3.5 generation cost by 95% you must pass `chat_template_kwargs: {enable_thinking: false}` — system prompts alone don't work.
 
 ## Table of contents
 
@@ -27,7 +27,7 @@ Existing Korean RAG benchmarks are narrow in scope.
 | allganize RAG-Evaluation-Dataset-KO | 300 Q&A | PyPDF (fixed) | 1000/200 (fixed) | OpenAI ada-002 only | Chroma | gpt-4-turbo |
 | AutoRAG-example | n/a | n/a | n/a | **16** (mixed APIs) | none | none |
 | ssisOneTeam | 106 Q&A | n/a | n/a | **24** (mixed APIs) | none | none |
-| **This project** | 300 Q&A | **3** | **4** | **21 local + 5 API** | **7** | **~30 (local + OpenRouter + Friendli.ai)** |
+| **This project** | 300 Q&A | **3** | **4** | **27 local GGUF** | **7** | **12 (AI-395 llama.cpp + DGX Spark ollama)** |
 
 Most prior runs vary a single component, use small data, or rely on commercial APIs. This project isolates each component as the independent variable and holds everything else fixed — that's the only way to quantify per-component contribution.
 
@@ -92,24 +92,22 @@ Smaller chunks dominate. They also fit the llama.cpp embedding server's 512-toke
 
 **Accuracy is effectively identical across all seven stores (MRR 0.527–0.530)**. Same vectors → same results. The differentiator is pure speed; FAISS wins at 0.8s insert / 0.7ms query.
 
-### Phase 4 — Embedding (21 options)
+### Phase 4 — Embedding (27 options)
 
-Top: **google/gemma-embed-300m (MRR 0.6682)** — a 314MB model beating 7–8B dense models. Full results in the [embedding benchmark results post](/en/posts/rag-embedding-benchmark-results).
+Top: **nlpai-lab/KoE5 (MRR 0.6871, 600M)** — a Korean-fine-tuned e5-large beat every 7B–27B model. Runner-up: google/gemma-embed-300m (0.6650, 314MB). Full results in the [embedding benchmark results post](/en/posts/rag-embedding-benchmark-results).
 
-### Phase 5 — LLM generation (~30 options)
+### Phase 5 — LLM generation (12 options)
 
 **Variable:** LLM  
 **Fixed:** parser=pymupdf4llm, chunking=500/100, embedding=gemma-embed-300m, vector store=FAISS
 
 | Category | Models | Hosting |
 |----------|--------|---------|
-| Local (AI-395) | 4 (qwen3.5-27b/35b-a3b × think/nothink) | llama.cpp |
-| Local (DGX Spark) | 15+ (qwen family, EXAONE, gpt-oss, gemma4…) | Ollama |
-| OpenRouter | 23 (GPT-5.4, Claude 4.6, Gemini 3.1, Grok 4.20…) | API |
-| Friendli.ai | 5 (K-EXAONE 236B, Qwen3-235B…) | API |
+| Local (AI-395) | 4 (qwen3.5-27b/35b-a3b, qwen3.6-35b-a3b × think/nothink) | llama.cpp |
+| Local (DGX Spark) | 12 (qwen3.5 9b/27b/122b, exaone3.5, gpt-oss 20b/120b, phi4, mistral-small, lfm2, deepseek-r1) | Ollama |
 
-- **Experiment A**: 21 embeddings × 4 local LLMs → measure embedding impact
-- **Experiment B**: gemma-embed-300m fixed × ~30 LLMs → measure LLM impact
+- **Experiment A**: 27 embeddings × fixed LLM → does better retrieval yield better answers?
+- **Experiment B**: gemma-embed-300m fixed × 12 LLMs × 300 Q&A = 3,600 answers → LLM comparison (in progress)
 
 ![Experiment A vs B structure](../../../assets/images/blog/rag-design/exp-ab-en.png)
 
@@ -126,15 +124,15 @@ Top: **google/gemma-embed-300m (MRR 0.6682)** — a 314MB model beating 7–8B d
 
 ## Three critical pitfalls
 
-### 1. llama.cpp embedding server's 512-token limit
+### 1. Set `-c 8192` explicitly on llama.cpp embedding servers
 
-Anything longer silently returns an empty response — success rate collapses to 75%. Truncate inputs to ~500 chars (about 350 tokens).
+Without an explicit context size, larger embedding models (4096-dim+) adjust their ctx automatically and may silently truncate long chunks. Our first run used a 500-char cap to avoid this — but that unfairly penalized large models. The canonical setup:
 
-```python
-def get_embeddings_batch(texts, max_chars=500):
-    truncated = [t[:max_chars] for t in texts]
-    ...
+```bash
+llama-server ... -b 8192 -ub 8192 -c 8192
 ```
+
+With `-c 8192` every model runs under the same 8K window regardless of defaults. 500-char chunks are ~250 Korean tokens, well within range — no more truncation workaround needed.
 
 ### 2. Turning off Qwen3.5 thinking mode the right way
 
@@ -182,21 +180,22 @@ Each 300-question combo takes 20–50 min on average. The full matrix (52 LLMs �
 
 A full cross (3×4×7×21×30 ≈ 5,292 combos) is infeasible in time and cost. Freezing the winner of each phase drops the total to a linear ~65 experiments while still answering "how much does this component matter?".
 
-### Why did 300M beat 7B in Phase 4?
+### Why did 600M (KoE5) beat 7B in Phase 4?
 
-For Korean RAG, training objective and data matter more than raw size. gemma-embed-300m (Apache 2.0, Google) is trained specifically for retrieval. qwen3-embed-8b is a general-purpose embedder. The 512-token limit also neutralizes the advantage of long-context models.
+For Korean RAG, **training objective and aligned domain data matter more than raw size**. KoE5 (600M, 1024-dim) fine-tunes multilingual-e5-large on 700K+ Korean query-document-hard_negative triplets. qwen3-embed-8b is a general MTEB embedder with light Korean coverage. Direct base-vs-fine-tune comparison (both on the same multilingual-e5-large): **+0.099 MRR** purely from Korean alignment (0.5882 → 0.6871). Scale loses to well-targeted data.
 
 ### Why is FAISS the fastest vector store?
 
 FAISS is an in-process library — zero network round-trip. Chroma, Qdrant, Milvus, Weaviate all add HTTP/gRPC latency. Given identical retrieval accuracy, FAISS is the clear winner for an end-to-end RAG pipeline.
 
-### Why hybrid local + API LLMs?
+### Why local LLMs only?
 
-- Local (AI-395 + DGX Spark): zero-cost, lets us quantify Q4_K_M quantization loss
-- OpenRouter: commercial flagships (GPT-5.4, Claude Opus 4.6, etc.)
-- Friendli.ai: Korean K-EXAONE 236B MoE — exclusive, not on OpenRouter
+Phase 5 is scoped to **12 local LLMs (AI-395 + DGX Spark)** for now. Reasons:
+- **Reproducibility**: anyone can re-run with the same GGUF / ollama models
+- **Quantization measurement**: how much does Q4/Q8 hurt vs full precision? Requires controlled environment
+- **Zero cost**: 300 × 12 = 3,600 answers; API calls would be expensive
 
-This combination is the only way to compare "local-quantized" vs "commercial full-precision" fairly.
+Commercial API comparison (OpenRouter, Friendli.ai) is deferred until after LLM-as-judge evaluation stabilizes the scoring pipeline.
 
 ## Next steps
 
@@ -217,3 +216,24 @@ This combination is the only way to compare "local-quantized" vs "commercial ful
 - **Analysis CSV**: `results/retrieval_analysis/` — heatmaps, failure modes, consensus
 
 Every benchmark is fully reproducible — single-command Phase reruns.
+
+---
+
+## RAG Series Index
+
+**Phase 1-4: Retrieval optimization**
+
+- [Experiment design](/posts/en/rag-evaluation-experiment-design/)
+- [Parser comparison](/posts/en/rag-parser-comparison/) — pymupdf4llm wins (+5.4%p)
+- [Chunking comparison](/posts/en/rag-chunking-comparison/) — small chunks +23.5%p (biggest MRR lever)
+- [Vector store comparison](/posts/en/rag-vectorstore-comparison/) — FAISS 0.74ms (accuracy tied)
+- [Embedding benchmark (27)](/posts/en/rag-embedding-benchmark-results/) — koe5 #1 (Korean-tuned)
+
+**Phase 5: LLM-as-Judge cross-validation**
+
+- [Q1 — Local cand × Local judge](/posts/en/rag-llm-judge-q1-local-cross-validation/)
+- [Q2 — API cand × Local judge](/posts/en/rag-llm-judge-q2-api-llm-vs-local-judges/)
+- [Q3 — Local cand × API judge](/posts/en/rag-llm-judge-q3-flagship-api-judges/)
+- [Q4 — API cand × API judge](/posts/en/rag-llm-judge-q4-api-self-evaluation/)
+- [4-Quadrant unified RRF leaderboard](/posts/en/rag-llm-judge-summary-4quadrant-matrix/) — 46 cand × 17 judge
+- [Judge × Judge correlation analysis](/posts/en/rag-llm-judge-correlation-analysis/) — severity vs consensus, optimal ensemble
