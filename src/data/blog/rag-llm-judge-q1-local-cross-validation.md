@@ -108,3 +108,24 @@ ollama Modelfile의 `TEMPLATE` 가 `{{ .Prompt }}` 한 줄로만 정의되어 me
 - Q4: API LLM 답변 × API judge.
 
 각 quadrant 결과를 통합해 4-quadrant cross-validation 매트릭스를 구축 중.
+
+---
+
+## 시리즈 목차
+
+**Phase 1-4: RAG retrieval 최적화**
+
+- [실험 설계](/posts/rag-evaluation-experiment-design/) — 5단계 통제 실험
+- [파서 비교](/posts/rag-parser-comparison/) — pymupdf4llm 1위 (+5.4%p)
+- [청킹 비교](/posts/rag-chunking-comparison/) — small 청크 1위 (+23.5%p, MRR 영향 최대)
+- [벡터스토어 비교](/posts/rag-vectorstore-comparison/) — FAISS 0.74ms (정확도 동률)
+- [임베딩 27종](/posts/rag-embedding-benchmark-results/) — koe5 1위 (한국어 특화 강세)
+
+**Phase 5: LLM-as-Judge cross-validation**
+
+- [Q1 — Local cand × Local judge](/posts/rag-llm-judge-q1-local-cross-validation/)
+- [Q2 — API cand × Local judge](/posts/rag-llm-judge-q2-api-llm-vs-local-judges/)
+- [Q3 — Local cand × API judge](/posts/rag-llm-judge-q3-flagship-api-judges/)
+- [Q4 — API cand × API judge](/posts/rag-llm-judge-q4-api-self-evaluation/)
+- [4-Quadrant 종합 RRF leaderboard](/posts/rag-llm-judge-summary-4quadrant-matrix/) — 46 cand × 17 judge 통합
+- [Judge × Judge correlation 분석](/posts/rag-llm-judge-correlation-analysis/) — severity vs consensus, optimal ensemble

@@ -30,6 +30,92 @@ draft: false
 - Judge: 8 OSS (Q1+Q2) + 9 API (Q3+Q4) + 1 OSS distill (qwen3.5-27b-claude-distill) = **18 judge**
 - 각 judge 가 채점한 cand 의 accuracy 를 변수로 사용
 
+## Judge 위치도 — Severity vs Consensus
+
+각 judge 를 2D 평면에 배치. **X축**: 평균 accuracy (severity, 후함/깐깐), **Y축**: 다른 judge 와 평균 correlation (합의 강도).
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 520" style="background:#fafafa;font-family:system-ui,-apple-system,sans-serif;width:100%;height:auto;max-width:720px">
+<rect x="80" y="30" width="610" height="430" fill="white" stroke="#ddd"/>
+<text x="232.5" y="48" text-anchor="middle" fill="#1976d2" font-size="11" font-weight="600">⬆ 깐깐 + 합의↑ (ideal)</text>
+<text x="537.5" y="48" text-anchor="middle" fill="#388e3c" font-size="11" font-weight="600">⬆ 후함 + 합의↑ (good)</text>
+<text x="232.5" y="452" text-anchor="middle" fill="#d32f2f" font-size="11" font-weight="600">⬇ 깐깐 + 합의↓ (단독 위험)</text>
+<text x="537.5" y="452" text-anchor="middle" fill="#d32f2f" font-size="11" font-weight="600">⬇ 후함 + 합의↓ (outlier)</text>
+<line x1="385" y1="30" x2="385" y2="460" stroke="#bbb" stroke-dasharray="4,3"/>
+<line x1="80" y1="180.5" x2="690" y2="180.5" stroke="#bbb" stroke-dasharray="4,3"/>
+<line x1="76" y1="438.5" x2="80" y2="438.5" stroke="#888"/>
+<text x="72" y="442.5" text-anchor="end" font-size="10" fill="#666">-0.2</text>
+<line x1="76" y1="352.5" x2="80" y2="352.5" stroke="#888"/>
+<text x="72" y="356.5" text-anchor="end" font-size="10" fill="#666">+0.0</text>
+<line x1="76" y1="266.5" x2="80" y2="266.5" stroke="#888"/>
+<text x="72" y="270.5" text-anchor="end" font-size="10" fill="#666">+0.2</text>
+<line x1="76" y1="180.5" x2="80" y2="180.5" stroke="#888"/>
+<text x="72" y="184.5" text-anchor="end" font-size="10" fill="#666">+0.4</text>
+<line x1="76" y1="94.5" x2="80" y2="94.5" stroke="#888"/>
+<text x="72" y="98.5" text-anchor="end" font-size="10" fill="#666">+0.6</text>
+<line x1="202" y1="460" x2="202" y2="464" stroke="#888"/>
+<text x="202" y="478" text-anchor="middle" font-size="10" fill="#666">0.5</text>
+<line x1="324" y1="460" x2="324" y2="464" stroke="#888"/>
+<text x="324" y="478" text-anchor="middle" font-size="10" fill="#666">0.6</text>
+<line x1="446" y1="460" x2="446" y2="464" stroke="#888"/>
+<text x="446" y="478" text-anchor="middle" font-size="10" fill="#666">0.7</text>
+<line x1="568" y1="460" x2="568" y2="464" stroke="#888"/>
+<text x="568" y="478" text-anchor="middle" font-size="10" fill="#666">0.8</text>
+<line x1="690" y1="460" x2="690" y2="464" stroke="#888"/>
+<text x="690" y="478" text-anchor="middle" font-size="10" fill="#666">0.9</text>
+<text x="360" y="505" text-anchor="middle" font-size="13" fill="#333" font-weight="600">Severity (mean accuracy across cands) → 너그러움</text>
+<text x="20" y="260" text-anchor="middle" font-size="13" fill="#333" font-weight="600" transform="rotate(-90,20,260)">avg correlation with other judges → 합의 강함</text>
+<circle cx="653" cy="417" r="6" fill="#f57c00" opacity="0.85" stroke="white" stroke-width="1.5"/>
+<text x="595" y="421" font-size="11" fill="#f57c00">solar-100b</text>
+<circle cx="553" cy="176" r="6" fill="#f57c00" opacity="0.85" stroke="white" stroke-width="1.5"/>
+<text x="561" y="180" font-size="11" fill="#f57c00">qwen3.6-35b</text>
+<circle cx="484" cy="258" r="6" fill="#f57c00" opacity="0.85" stroke="white" stroke-width="1.5"/>
+<text x="492" y="262" font-size="11" fill="#f57c00">nemotron-120b</text>
+<circle cx="447" cy="271" r="6" fill="#f57c00" opacity="0.85" stroke="white" stroke-width="1.5"/>
+<text x="455" y="275" font-size="11" fill="#f57c00">supergemma4</text>
+<circle cx="446" cy="73" r="6" fill="#1976d2" opacity="0.85" stroke="white" stroke-width="1.5"/>
+<text x="454" y="65" font-size="11" fill="#1976d2">gemini-3-flash</text>
+<circle cx="426" cy="86" r="6" fill="#f57c00" opacity="0.85" stroke="white" stroke-width="1.5"/>
+<text x="434" y="100" font-size="11" fill="#f57c00">qwen3.5_35b</text>
+<circle cx="421" cy="90" r="6" fill="#f57c00" opacity="0.85" stroke="white" stroke-width="1.5"/>
+<text x="332" y="94" font-size="11" fill="#f57c00">qwen3.5_122b</text>
+<circle cx="419" cy="77" r="6" fill="#1976d2" opacity="0.85" stroke="white" stroke-width="1.5"/>
+<text x="427" y="81" font-size="11" fill="#1976d2">claude-opus-4-7</text>
+<circle cx="418" cy="78" r="6" fill="#1976d2" opacity="0.85" stroke="white" stroke-width="1.5"/>
+<text x="365" y="69" font-size="11" fill="#1976d2">gpt-5.5</text>
+<circle cx="416" cy="78" r="6" fill="#1976d2" opacity="0.85" stroke="white" stroke-width="1.5"/>
+<text x="362" y="93" font-size="11" fill="#1976d2">gpt-5.4</text>
+<circle cx="380" cy="82" r="6" fill="#1976d2" opacity="0.85" stroke="white" stroke-width="1.5"/>
+<text x="298" y="86" font-size="11" fill="#1976d2">claude-sonnet-4-6</text>
+<circle cx="347" cy="245" r="6" fill="#f57c00" opacity="0.85" stroke="white" stroke-width="1.5"/>
+<text x="225" y="249" font-size="11" fill="#f57c00">qwen3.5-27b-distill</text>
+<circle cx="347" cy="86" r="6" fill="#1976d2" opacity="0.85" stroke="white" stroke-width="1.5"/>
+<text x="220" y="78" font-size="11" fill="#1976d2">gemini-3.1-flash-lite</text>
+<circle cx="345" cy="86" r="6" fill="#1976d2" opacity="0.85" stroke="white" stroke-width="1.5"/>
+<text x="353" y="100" font-size="11" fill="#1976d2">gpt-5.4-mini</text>
+<circle cx="342" cy="90" r="6" fill="#1976d2" opacity="0.85" stroke="white" stroke-width="1.5"/>
+<text x="350" y="112" font-size="11" fill="#1976d2">gpt-5.4-nano</text>
+<circle cx="331" cy="361" r="6" fill="#f57c00" opacity="0.85" stroke="white" stroke-width="1.5"/>
+<text x="339" y="365" font-size="11" fill="#f57c00">gemma4_31b</text>
+<circle cx="256" cy="94" r="6" fill="#1976d2" opacity="0.85" stroke="white" stroke-width="1.5"/>
+<text x="264" y="98" font-size="11" fill="#1976d2">gemini-3.1-pro</text>
+<circle cx="180" cy="305" r="6" fill="#f57c00" opacity="0.85" stroke="white" stroke-width="1.5"/>
+<text x="188" y="309" font-size="11" fill="#f57c00">qwen3-next-80b</text>
+<g transform="translate(540,40)">
+<rect x="0" y="0" width="140" height="50" fill="white" stroke="#ddd"/>
+<circle cx="14" cy="18" r="5" fill="#1976d2"/><text x="26" y="22" font-size="11" fill="#333">API judge</text>
+<circle cx="14" cy="36" r="5" fill="#f57c00"/><text x="26" y="40" font-size="11" fill="#333">OSS judge</text>
+</g>
+</svg>
+
+**사분면 해석**:
+
+- **우상단 (good)**: gemini-3-flash, claude-opus-4-7, gpt-5.4, gpt-5.5, qwen3.5_35b/122b, qwen3.6-35b — frontier judge cluster
+- **좌상단 (ideal critic)**: gemini-3.1-pro-preview, gpt-5.4-mini/nano, gemini-3.1-flash-lite — 깐깐하면서 합의 강함
+- **우하단 (outlier)**: solar-100b — 너무 후함, 다른 judge 와 정반대 ranking
+- **좌하단 (단독 위험)**: gemma4_31b, qwen3-next-80b, qwen3.5-27b-distill — 단독 사용 시 ranking 왜곡
+
+**즉시 탈락 후보** (좌하단 + 우하단): solar-100b, gemma4_31b, qwen3-next-80b. 단독 judge 로 쓰면 안 됨.
+
 ## 1. Top 5 가장 비슷한 judge pair (중복)
 
 | Pair | r | n | 해석 |
@@ -148,7 +234,28 @@ python3 scripts/build_html_unified.py
 
 이전 글:
 
-- [4-Quadrant 종합 — RRF 통합 cross-judge ranking](/blog/rag-llm-judge-summary-4quadrant-matrix)
-- [Q4 — API LLM 답변 34종을 API judge 8종이 채점한 self-evaluation 매트릭스](/blog/rag-llm-judge-q4-api-self-evaluation)
-- [Q3 — 로컬 LLM 답변을 API flagship judge 9종이 채점한 결과](/blog/rag-llm-judge-q3-flagship-api-judges)
-- [Q1 — 로컬 LLM 8종이 로컬 LLM 12종을 채점하는 cross-validation](/blog/rag-llm-judge-q1-local-cross-validation)
+- [4-Quadrant 종합 — RRF 통합 cross-judge ranking](/posts/rag-llm-judge-summary-4quadrant-matrix/)
+- [Q4 — API LLM 답변 34종을 API judge 8종이 채점한 self-evaluation 매트릭스](/posts/rag-llm-judge-q4-api-self-evaluation/)
+- [Q3 — 로컬 LLM 답변을 API flagship judge 9종이 채점한 결과](/posts/rag-llm-judge-q3-flagship-api-judges/)
+- [Q1 — 로컬 LLM 8종이 로컬 LLM 12종을 채점하는 cross-validation](/posts/rag-llm-judge-q1-local-cross-validation/)
+
+---
+
+## 시리즈 목차
+
+**Phase 1-4: RAG retrieval 최적화**
+
+- [실험 설계](/posts/rag-evaluation-experiment-design/) — 5단계 통제 실험
+- [파서 비교](/posts/rag-parser-comparison/) — pymupdf4llm 1위 (+5.4%p)
+- [청킹 비교](/posts/rag-chunking-comparison/) — small 청크 1위 (+23.5%p, MRR 영향 최대)
+- [벡터스토어 비교](/posts/rag-vectorstore-comparison/) — FAISS 0.74ms (정확도 동률)
+- [임베딩 27종](/posts/rag-embedding-benchmark-results/) — koe5 1위 (한국어 특화 강세)
+
+**Phase 5: LLM-as-Judge cross-validation**
+
+- [Q1 — Local cand × Local judge](/posts/rag-llm-judge-q1-local-cross-validation/)
+- [Q2 — API cand × Local judge](/posts/rag-llm-judge-q2-api-llm-vs-local-judges/)
+- [Q3 — Local cand × API judge](/posts/rag-llm-judge-q3-flagship-api-judges/)
+- [Q4 — API cand × API judge](/posts/rag-llm-judge-q4-api-self-evaluation/)
+- [4-Quadrant 종합 RRF leaderboard](/posts/rag-llm-judge-summary-4quadrant-matrix/) — 46 cand × 17 judge 통합
+- [Judge × Judge correlation 분석](/posts/rag-llm-judge-correlation-analysis/) — severity vs consensus, optimal ensemble
