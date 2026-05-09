@@ -1,4 +1,5 @@
 ---
+draft: true
 author: baem1n
 pubDatetime: 2026-04-04T10:00:00.000Z
 title: "DeepCoWork #11: Security Checklist -- Path Traversal, Input Validation, CSP, CORS"

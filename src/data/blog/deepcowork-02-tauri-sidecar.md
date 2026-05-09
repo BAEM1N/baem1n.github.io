@@ -1,4 +1,5 @@
 ---
+draft: true
 author: baem1n
 pubDatetime: 2026-04-04T01:00:00.000Z
 title: "DeepCoWork #2: Tauri 2 + Python 사이드카 — 데스크톱 AI 앱의 뼈대"

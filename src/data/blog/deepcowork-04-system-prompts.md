@@ -1,4 +1,5 @@
 ---
+draft: true
 author: baem1n
 pubDatetime: 2026-04-04T03:00:00.000Z
 title: "DeepCoWork #4: 모드별 시스템 프롬프트 설계 -- Clarify, Code, Cowork, ACP"

@@ -1,4 +1,5 @@
 ---
+draft: true
 author: baem1n
 pubDatetime: 2026-04-04T05:00:00.000Z
 title: "DeepCoWork #6: HITL 승인 플로우 -- interrupt_on, 승인 큐, 타임아웃, 거부 복구"

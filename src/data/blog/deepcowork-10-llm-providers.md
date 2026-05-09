@@ -1,4 +1,5 @@
 ---
+draft: true
 author: baem1n
 pubDatetime: 2026-04-04T09:00:00.000Z
 title: "DeepCoWork #10: LLM 프로바이더 통합 -- 5개 백엔드, 모델 자동 감지, 빌드 변형"

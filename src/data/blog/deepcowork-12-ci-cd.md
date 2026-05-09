@@ -1,4 +1,5 @@
 ---
+draft: true
 author: baem1n
 pubDatetime: 2026-04-04T11:00:00.000Z
 title: "DeepCoWork #12: GitHub Actions 크로스 플랫폼 빌드 -- PyInstaller 사이드카, CI/CD"

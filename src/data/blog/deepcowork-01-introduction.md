@@ -1,4 +1,5 @@
 ---
+draft: true
 author: baem1n
 pubDatetime: 2026-04-04T00:00:00.000Z
 title: "DeepCoWork: DeepAgents SDK 기반 AI 에이전트 데스크톱 앱을 만들었다"

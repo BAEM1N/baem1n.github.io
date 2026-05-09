@@ -1,4 +1,5 @@
 ---
+draft: true
 author: baem1n
 pubDatetime: 2026-04-04T00:00:00.000Z
 title: "DeepCoWork: Building an AI Agent Desktop App with Deep Agents SDK"

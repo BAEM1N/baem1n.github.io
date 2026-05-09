@@ -1,4 +1,5 @@
 ---
+draft: true
 author: baem1n
 pubDatetime: 2026-04-04T02:00:00.000Z
 title: "DeepCoWork #3: DeepAgents SDK Internals -- create_deep_agent, LocalShellBackend, ReAct Loop"

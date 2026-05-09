@@ -1,4 +1,5 @@
 ---
+draft: true
 author: baem1n
 pubDatetime: 2026-04-04T07:00:00.000Z
 title: "DeepCoWork #8: Agent Memory 4 Layers -- SOUL.md, USER.md, AGENTS.md, MEMORY.md"

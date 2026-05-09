@@ -1,4 +1,5 @@
 ---
+draft: true
 author: baem1n
 pubDatetime: 2026-04-04T08:00:00.000Z
 title: "DeepCoWork #9: 스킬 시스템 -- SKILL.md, 프로그레시브 디스클로저, 런타임 주입"

@@ -1,4 +1,5 @@
 ---
+draft: true
 author: baem1n
 pubDatetime: 2026-04-04T10:00:00.000Z
 title: "DeepCoWork #11: 보안 체크리스트 -- 경로 탈출, 입력 검증, CSP, CORS"
