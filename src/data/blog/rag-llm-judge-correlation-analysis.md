@@ -9,7 +9,7 @@ tags:
   - korean-nlp
   - statistics
 featured: false
-draft: false
+draft: true
 ---
 
 ## 요약

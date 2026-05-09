@@ -10,7 +10,7 @@ tags:
   - korean-nlp
   - llm
 featured: false
-draft: false
+draft: true
 aiAssisted: true
 ---
 

@@ -10,7 +10,7 @@ tags:
   - pgvector
   - korean-nlp
 featured: false
-draft: false
+draft: true
 aiAssisted: true
 ---
 

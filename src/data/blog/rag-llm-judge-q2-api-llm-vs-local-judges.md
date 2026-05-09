@@ -8,7 +8,7 @@ tags:
   - evaluation
   - korean-nlp
 featured: false
-draft: false
+draft: true
 ---
 
 ## 요약

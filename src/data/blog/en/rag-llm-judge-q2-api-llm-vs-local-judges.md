@@ -9,7 +9,7 @@ tags:
   - evaluation
   - korean-nlp
 featured: false
-draft: false
+draft: true
 aiAssisted: true
 ---
 

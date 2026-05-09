@@ -8,7 +8,7 @@ tags:
   - evaluation
   - korean-nlp
 featured: false
-draft: false
+draft: true
 ---
 
 ## 통제 변수 (Q1~Q4 공통)
