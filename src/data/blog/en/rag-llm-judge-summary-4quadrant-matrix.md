@@ -42,7 +42,7 @@ API-gen    │ Q2                      │ Q4                      │
             └─────────────────────────┴─────────────────────────┘
 ```
 
-**Q1 / Q3 / Q4 100% complete** + **Q2 96.7% complete** = ~**1M LLM judge calls** total.
+**Q1 / Q3 / Q4 100% complete** + **Q2 98.2% complete** = ~**1M LLM judge calls** total.
 
 ## RRF (Reciprocal Rank Fusion)
 
