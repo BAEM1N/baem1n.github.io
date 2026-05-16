@@ -429,6 +429,31 @@ const structuredData = isArticle
       )
     }
 
+    <!-- Google Analytics (GA4) -->
+    <script
+      is:inline
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-SN656751V6"
+    ></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      window.gtag = gtag;
+      gtag("js", new Date());
+      // send_page_view:false → astro:page-load 에서 수동 전송 (View Transitions 호환)
+      gtag("config", "G-SN656751V6", { send_page_view: false });
+
+      document.addEventListener("astro:page-load", () => {
+        gtag("event", "page_view", {
+          page_path: location.pathname + location.search,
+          page_location: location.href,
+          page_title: document.title,
+        });
+      });
+    </script>
+
     <ClientRouter />
 
     <!-- Minimal inline script to prevent FOUC - sets theme immediately -->
