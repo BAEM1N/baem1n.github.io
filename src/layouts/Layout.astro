@@ -269,6 +269,26 @@ const structuredData = isArticle
         "@id": `${canonicalURL}`,
       },
       inLanguage: lang,
+      // KO↔EN entity unification: declare the translation counterpart so AI/search
+      // treat both language versions as one work, not competing pages.
+      ...(alternateUrl &&
+        lang === "en" && {
+          translationOfWork: {
+            "@type": "Article",
+            "@id": alternateUrl,
+            url: alternateUrl,
+            inLanguage: alternateLang,
+          },
+        }),
+      ...(alternateUrl &&
+        lang === "ko" && {
+          workTranslation: {
+            "@type": "Article",
+            "@id": alternateUrl,
+            url: alternateUrl,
+            inLanguage: alternateLang,
+          },
+        }),
       isAccessibleForFree: true,
       ...(topicEntities.length > 0 && { about: topicEntities }),
       ...(dependencyEntities.length > 0 && { mentions: dependencyEntities }),

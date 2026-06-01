@@ -200,7 +200,7 @@ A. Yes — compare combinations/judges on the dashboard (rag.baeum.ai.kr), and r
     "contentUrl": "https://huggingface.co/datasets/BAEM1N/Korean-RAG-LLM-Judge-Benchmark"
   }],
   "variableMeasured": ["MRR", "Hit@1", "judge_mean (1-5)", "LLM-judge accuracy (majority-O)"],
-  "measurementTechnique": "6-stage single-variable comparison + 384-combination Cartesian sweep; 4-metric LLM-as-Judge (majority-O); 11 open + 9 API judges",
+  "measurementTechnique": "6-stage single-variable comparison + 384-combination Cartesian sweep; 4-metric LLM-as-Judge (majority-O); 18 judges (9 open + 9 closed), expanded to 20 (11 open + 9 API)",
   "license": "https://opensource.org/licenses/MIT",
   "isAccessibleForFree": true,
   "keywords": ["Korean RAG", "RAG benchmark", "pipeline optimization", "reranker", "LLM-as-judge", "winner pipeline"]

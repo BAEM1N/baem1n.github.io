@@ -88,7 +88,7 @@ Hand-grading generated answers doesn't scale, so I used an LLM-as-Judge — allg
 
 > **4-metric majority-O** — the judge LLM scores each answer 1–5 on similarity, correctness, completeness, and faithfulness. If **at least 2 of the 4 score ≥4**, the answer counts as correct (O). accuracy is the O-rate; judge_mean is the mean of the four metric scores (1–5).
 
-Trusting a single judge is risky, so I expanded grading to **11 open-weight + 9 API judges** and cross-scored. (Absolute scores swing by judge, but relative ranking across combinations is largely preserved — that robustness story is its own post.)
+Trusting a single judge is risky. The 46-generator leaderboard uses an **18-judge majority-O (9 open + 9 closed)**, and the dashboard/384-Cartesian expands the judge set to **20 (11 open + 9 API)** for cross-judge robustness. (Absolute scores swing by judge, but relative ranking across combinations is largely preserved — that robustness story is its own post.)
 
 ## What this series covers
 
@@ -122,7 +122,7 @@ A. Because components interact. Stacking each axis's univariate winner did not m
 A. allganize's RAG-Evaluation-Dataset-KO — 300 Q&A across 5 Korean domains, 58 PDFs, with answer text and source page as ground truth.
 
 **Q. Is the LLM-as-Judge trustworthy?**
-A. A single judge is risky, so I cross-scored with 11 open + 9 API judges. Absolute scores vary by judge, but relative ranking across combinations is largely preserved.
+A. A single judge is risky, so I cross-scored with an 18-judge majority-O (9 open + 9 closed), expanded to 20 (11 open + 9 API) on the dashboard. Absolute scores vary by judge, but relative ranking across combinations is largely preserved.
 
 **Q. Where should I start?**
 A. After this hub, read the ingestion post first; to get only the conclusions, jump to the final synthesis.
@@ -155,7 +155,7 @@ A. After this hub, read the ingestion post first; to get only the conclusions, j
     "contentUrl": "https://huggingface.co/datasets/BAEM1N/Korean-RAG-LLM-Judge-Benchmark"
   }],
   "variableMeasured": ["MRR", "Hit@1", "Hit@5", "File@5", "LLM-judge accuracy (majority-O)", "judge_mean (1-5)"],
-  "measurementTechnique": "6-stage single-variable comparison + 384-combination Cartesian sweep; 4-metric LLM-as-Judge (majority-O) with 11 open + 9 API judges",
+  "measurementTechnique": "6-stage single-variable comparison + 384-combination Cartesian sweep; 4-metric LLM-as-Judge (majority-O) with an 18-judge majority-O (9 open + 9 closed), expanded to 20 (11 open + 9 API) on the dashboard",
   "license": "https://opensource.org/licenses/MIT",
   "isAccessibleForFree": true,
   "keywords": ["Korean RAG", "RAG benchmark", "reranker", "LLM-as-judge", "retrieval", "embedding", "Cartesian sweep"]

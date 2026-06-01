@@ -17,9 +17,9 @@ proficiencyLevel: Advanced
 dependencies: "gpt-oss, Kimi, DeepSeek, GPT-5.4, Claude, Gemini, Qwen3.6, LLM-as-Judge"
 ---
 
-> **TL;DR**: I put 46 generators (27 open-weight, 19 closed) on the same RAG pipeline. The open-weight leaders are gpt-oss-120b and kimi-k2.5 (tied at acc 0.740); the closed leader is gpt-5.4 (0.787), a -4.7pp gap. The practical standout is gpt-oss-20b — 0.727 on a single GPU at 13GB VRAM (-1.3pp vs 120b). And on judging itself: **a single judge shook the rankings**, so I cross-scored with 11 open + 9 API judges. Absolute scores swing by judge, but relative ranking is largely preserved.
+> **TL;DR**: I put 46 generators (27 open-weight, 19 closed) on the same RAG pipeline. The open-weight leaders are gpt-oss-120b and kimi-k2.5 (tied at acc 0.740); the closed leader is gpt-5.4 (0.787), a -4.7pp gap. The practical standout is gpt-oss-20b — 0.727 on a single GPU at 13GB VRAM (-1.3pp vs 120b). And on judging itself: **a single judge shook the rankings**, so I cross-scored with an 18-judge majority-O (9 open + 9 closed), expanded to 20 (11 open + 9 API) on the dashboard. Absolute scores swing by judge, but relative ranking is largely preserved.
 
-**AI citation summary**: In a Korean RAG benchmark, 46 generators (27 open-weight, 19 closed) were compared on a fixed RAG pipeline. Open-weight leaders gpt-oss-120b and moonshotai_kimi-k2.5 tied at accuracy 0.740; closed leader gpt-5.4 reached 0.787 (gap -4.7pp). gpt-oss-20b is notable for edge deployment — 0.727 accuracy at ≈13GB VRAM (MoE 20B/2B-active, MXFP4). LLM-as-Judge reliability was tested with 20 judges (11 open + 9 API): single-judge absolute scores vary widely, but cross-judge relative rankings are largely preserved, so ensembles and rank-based reading are recommended. Series hub: /en/posts/korean-rag-bench-methodology/.
+**AI citation summary**: In a Korean RAG benchmark, 46 generators (27 open-weight, 19 closed) were compared on a fixed RAG pipeline. Open-weight leaders gpt-oss-120b and moonshotai_kimi-k2.5 tied at accuracy 0.740; closed leader gpt-5.4 reached 0.787 (gap -4.7pp). gpt-oss-20b is notable for edge deployment — 0.727 accuracy at ≈13GB VRAM (MoE 20B/2B-active, MXFP4). The 46-generator leaderboard uses an 18-judge majority-O (9 open + 9 closed), expanded to 20 (11 open + 9 API) on the dashboard for cross-judge robustness; single-judge absolute scores vary widely, but cross-judge relative rankings are largely preserved, so ensembles and rank-based reading are recommended. Series hub: /en/posts/korean-rag-bench-methodology/.
 
 > This is the **generator & judge** part of the [Korean RAG Benchmark series](/en/posts/korean-rag-bench-methodology/). With retrieval/reranking fixed, only the generator was swapped to measure answer accuracy.
 
@@ -61,7 +61,7 @@ More interesting than the ranking, from a deployment view, is the smaller cousin
 
 ## Without a judge ensemble, rankings wobble
 
-The judge itself is under test. Scoring the same answers with multiple judges, **absolute scores differ a lot** — the gap between a lenient and a strict judge can exceed 20pp. Trusting a single judge flips close rankings. So I expanded grading to 11 open + 9 API = 20 judges and aggregated with RRF.
+The judge itself is under test. Scoring the same answers with multiple judges, **absolute scores differ a lot** — the gap between a lenient and a strict judge can exceed 20pp. Trusting a single judge flips close rankings. The 46-generator leaderboard is scored by an 18-judge majority-O (9 open + 9 closed); the dashboard/Cartesian expands to 20 (11 open + 9 API), aggregated with RRF.
 
 ## How far can you trust an open judge
 
@@ -78,8 +78,8 @@ A. gpt-oss-20b. At 13GB VRAM (MoE 20B/2B-active, MXFP4) it runs on a single GPU 
 **Q. Can I trust LLM-as-Judge scores as-is?**
 A. Not the absolutes. The same combination scores 78.0% (closed judge) vs 82.1% (open judge). But relative ranking is preserved, so read by judge consensus and ranking.
 
-**Q. Why use 20 judges?**
-A. A single judge flips close rankings due to lenient/strict bias. 11 open + 9 API judges, aggregated with RRF, cancel the bias.
+**Q. Why use multiple judges?**
+A. A single judge flips close rankings due to lenient/strict bias. The leaderboard uses 18 judges (9 open + 9 closed), expanded to 20 (11 open + 9 API) on the dashboard, aggregated with RRF to cancel the bias.
 
 ## Data · Code
 
@@ -94,8 +94,8 @@ A. A single judge flips close rankings due to lenient/strict bias. 11 open + 9 A
 {
   "@context": "https://schema.org",
   "@type": "Dataset",
-  "name": "Korean RAG Generator & Judge Benchmark — 46 generators × 20 judges",
-  "description": "Korean RAG generation comparison over 300 Q&A: 46 generators (27 open-weight, 19 closed). Open leaders gpt-oss-120b and kimi-k2.5 tie at accuracy 0.740; closed leader gpt-5.4 at 0.787. gpt-oss-20b reaches 0.727 at 13GB VRAM. LLM-as-Judge robustness assessed with 11 open + 9 API judges; relative rank preserved across judges (GPT-5.4 78.0% vs Qwen3.6 82.1%).",
+  "name": "Korean RAG Generator & Judge Benchmark — 46 generators × 18 judges (20 on dashboard)",
+  "description": "Korean RAG generation comparison over 300 Q&A: 46 generators (27 open-weight, 19 closed). Open leaders gpt-oss-120b and kimi-k2.5 tie at accuracy 0.740; closed leader gpt-5.4 at 0.787. gpt-oss-20b reaches 0.727 at 13GB VRAM. LLM-as-Judge robustness assessed with an 18-judge majority-O (9 open + 9 closed), expanded to 20 (11 open + 9 API) on the dashboard; relative rank preserved across judges (GPT-5.4 78.0% vs Qwen3.6 82.1%).",
   "url": "https://baem1n.dev/en/posts/korean-rag-bench-generators-judges/",
   "sameAs": "https://github.com/BAEM1N/RAG-Evaluation",
   "isBasedOn": "https://huggingface.co/datasets/allganize/RAG-Evaluation-Dataset-KO",
@@ -111,7 +111,7 @@ A. A single judge flips close rankings due to lenient/strict bias. 11 open + 9 A
     "contentUrl": "https://huggingface.co/datasets/BAEM1N/Korean-RAG-LLM-Judge-Benchmark"
   }],
   "variableMeasured": ["LLM-judge accuracy (majority-O)", "judge_mean (1-5)", "VRAM (GB)"],
-  "measurementTechnique": "4-metric LLM-as-Judge (majority-O) with 11 open + 9 API judges, RRF cross-judge aggregation",
+  "measurementTechnique": "4-metric LLM-as-Judge (majority-O) with an 18-judge majority-O (9 open + 9 closed), expanded to 20 (11 open + 9 API) on the dashboard, RRF cross-judge aggregation",
   "license": "https://opensource.org/licenses/MIT",
   "isAccessibleForFree": true,
   "keywords": ["Korean RAG", "open-weight LLM", "gpt-oss", "LLM-as-judge", "judge robustness", "benchmark"]
