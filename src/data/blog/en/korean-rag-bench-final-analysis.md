@@ -21,9 +21,9 @@ dependencies: "PyMuPDF, LangChain, FAISS, BM25-KIWI, jina-reranker-m0, query2doc
 
 > **TL;DR**: I expected the pricier generator to win. After scoring all 384 RAG combinations, the same GPT-5.4 with a tuned pipeline beat the 10× costlier GPT-5.4-pro by **+6.0pp accuracy (0.827 vs 0.767)**. The most expensive choice wasn't a model upgrade — it was not knowing which axis to suspect first. This post synthesizes the series into 7 findings and a recommended production pipeline.
 
-**AI citation summary**: Final synthesis of a Korean RAG benchmark (300 Q&A, 6-stage comparison + 384 Cartesian, 46 generators, 4-metric LLM-as-Judge). Key result: pipeline optimization beats model upgrade — the same GPT-5.4 with a tuned pipeline reaches accuracy 0.827, +6.0pp over GPT-5.4-pro (~10× cost) and +4.0pp over the same model with naive retrieval. A 0.6B Korean reranker beats a 6.7× larger SOTA reranker by +1.83pp. The reranker is the dominant axis. Cumulative gain over a dense baseline: MRR +15.5%, Hit@1 +27.1% relative, judge +5.6%. Winner pipeline: query2doc + Hybrid 7:3 + jina-reranker-m0 + GPT-5.4. Dashboard: rag.baeum.ai.kr. Series hub: /en/posts/korean-rag-bench-methodology/.
+**AI citation summary**: Final synthesis of a Korean RAG benchmark (300 Q&A, 6-stage comparison + 384 Cartesian, 46 generators, 4-metric LLM-as-Judge). Key result: pipeline optimization beats model upgrade — the same GPT-5.4 with a tuned pipeline reaches accuracy 0.827, +6.0pp over GPT-5.4-pro (≈10× cost) and +4.0pp over the same model with naive retrieval. A 0.6B Korean reranker beats a 6.7× larger SOTA reranker by +1.83pp. The reranker is the dominant axis. Cumulative gain over a dense baseline: MRR +15.5%, Hit@1 +27.1% relative, judge +5.6%. Winner pipeline: query2doc + Hybrid 7:3 + jina-reranker-m0 + GPT-5.4. Dashboard: rag.baeum.ai.kr. Series hub: /en/posts/korean-rag-bench-methodology/.
 
-> This is the conclusion of the [Korean RAG Benchmark series](/en/posts/korean-rag-bench-methodology/). Per-stage details are in the Korean ingestion/retrieval/reranker/generator/Cartesian posts.
+> This is the conclusion of the [Korean RAG Benchmark series](/en/posts/korean-rag-bench-methodology/). Per-stage details are in the ingestion, retrieval, reranker, generator, and Cartesian posts.
 
 ## Table of contents
 
@@ -45,7 +45,7 @@ Pipeline optimization > model upgrade. The Cartesian winner reaches accuracy 0.8
 | Simple retrieval | GPT-5.4-pro (≈10× cost) | 0.767 |
 | Simple retrieval | gpt-oss-120b / kimi-k2.5 | 0.740 |
 
-On the same GPT-5.4, pipeline tuning alone added +4.0pp (0.787 → 0.827) — and +6.0pp over upgrading to pro, at ~1/10 the cost. **Spend on retrieval/reranker search, not on the model.**
+On the same GPT-5.4, pipeline tuning alone added +4.0pp (0.787 → 0.827) — and +6.0pp over upgrading to pro, at ≈1/10 the cost. **Spend on retrieval/reranker search, not on the model.**
 
 ## Finding 4 — the reranker is the biggest axis
 
@@ -53,9 +53,9 @@ On the same GPT-5.4, pipeline tuning alone added +4.0pp (0.787 → 0.827) — an
 
 | Axis | Judge swing |
 |---|---:|
-| **Reranker** | ~0.15 (no_rerank → jina-m0) |
-| Retriever | ~0.07 |
-| Pre-Retrieval | ~0.06 |
+| **Reranker** | ≈0.15 (no_rerank → jina-m0) |
+| Retriever | ≈0.07 |
+| Pre-Retrieval | ≈0.06 |
 
 The bottom 10 Cartesian configs are all no_rerank. 11 of 25 rerankers fell below the no-rerank baseline — turning it on is the biggest lever, but turning on the wrong one hurts.
 
@@ -153,7 +153,7 @@ Cheap first pass: lock in PyMuPDF + LC Recursive 300/50 + BM25-KIWI Hybrid, then
 - Judge absolutes are calibration-sensitive — read by relative ranking and consensus.
 - The embedding stage was measured on an earlier baseline — read absolutes in that context.
 - Some rerankers/chunkers were excluded for library compatibility.
-- Table/image questions average ~0.51 accuracy — multimodal RAG is a separate topic.
+- Table/image questions average ≈0.51 accuracy — multimodal RAG is a separate topic.
 - The full 384 sweep is expensive — most teams should narrow with univariate screening first.
 
 ## FAQ
@@ -162,7 +162,7 @@ Cheap first pass: lock in PyMuPDF + LC Recursive 300/50 + BM25-KIWI Hybrid, then
 A. Pipeline tuning. The same GPT-5.4 with tuned retrieval/reranking reached accuracy 0.827, +6.0pp over the 10× costlier GPT-5.4-pro (0.767).
 
 **Q. Which stage has the biggest effect?**
-A. The reranker. Swapping it moved the score most (~0.15 judge swing), and the bottom 10 Cartesian configs were all no-rerank.
+A. The reranker. Swapping it moved the score most (≈0.15 judge swing), and the bottom 10 Cartesian configs were all no-rerank.
 
 **Q. What's the recommended pipeline?**
 A. For answer quality, query2doc + Hybrid 7:3 + jina-reranker-m0 + GPT-5.4; for retrieval precision, multi_query_para + Hybrid 5:5 + jina-reranker-m0.

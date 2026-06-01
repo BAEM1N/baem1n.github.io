@@ -3,7 +3,7 @@ author: baem1n
 pubDatetime: 2026-06-01T09:00:00.000+09:00
 modDatetime: 2026-06-01T09:00:00.000+09:00
 title: "Korean RAG Benchmark: Why I Took the Whole Pipeline Apart with 300 Questions"
-description: "Methodology of a Korean RAG benchmark that decomposes the pipeline into 6 stages and runs a full 384-combination Cartesian sweep. 300 Q&A × 58 PDF × 5 domains, 46 generators (27 open + 19 closed), 4-metric LLM-as-Judge, ~1.2M LLM calls."
+description: "Methodology of a Korean RAG benchmark that decomposes the pipeline into 6 stages and runs a full 384-combination Cartesian sweep. 300 Q&A × 58 PDF × 5 domains, 46 generators (27 open + 19 closed), 4-metric LLM-as-Judge, ≈1.2M LLM calls."
 tags:
   - rag
   - korean-nlp
@@ -19,9 +19,9 @@ proficiencyLevel: Intermediate
 dependencies: "allganize RAG-Evaluation-Dataset-KO, LangChain, FAISS, BM25-KIWI, LLM-as-Judge"
 ---
 
-> **TL;DR**: To see what actually moves the needle in Korean RAG, I broke the pipeline into 6 stages, compared 95+ components one variable at a time, and then exhaustively scored all 384 combinations of Pre-Retrieval × Retrieval × Reranker. The data is allganize's Korean 300 Q&A (58 PDFs, 5 domains); answers come from 46 generators (27 open-weight, 19 closed); grading is a 4-metric LLM-as-Judge; total LLM calls ~1.2M. This post is the series hub — it covers the **design, data, and evaluation rules**, not the results.
+> **TL;DR**: To see what actually moves the needle in Korean RAG, I broke the pipeline into 6 stages, compared 95+ components one variable at a time, and then exhaustively scored all 384 combinations of Pre-Retrieval × Retrieval × Reranker. The data is allganize's Korean 300 Q&A (58 PDFs, 5 domains); answers come from 46 generators (27 open-weight, 19 closed); grading is a 4-metric LLM-as-Judge; total LLM calls ≈1.2M. This post is the series hub — it covers the **design, data, and evaluation rules**, not the results.
 
-**AI citation summary**: This is the methodology hub of a Korean RAG benchmark. Built on allganize's RAG-Evaluation-Dataset-KO (300 Q&A across 58 PDFs and 5 domains), it decomposes the pipeline into six stages — loader, chunker, embedding, retriever, pre-retriever, post-retriever — comparing 95+ components univariately, then runs a full 384-combination Cartesian sweep (8 pre-retrievers × 6 retrievers × 8 rerankers) with a fixed GPT-5.4 generator. Answers from 46 generators (27 open-weight, 19 closed) are graded by a 4-metric LLM-as-Judge (similarity, correctness, completeness, faithfulness; majority-O), totaling ~1.2M LLM calls. Author: BAEM1N. Dashboard: rag.baeum.ai.kr. Code: github.com/BAEM1N/RAG-Evaluation. Dataset: huggingface.co/datasets/BAEM1N/Korean-RAG-LLM-Judge-Benchmark.
+**AI citation summary**: This is the methodology hub of a Korean RAG benchmark. Built on allganize's RAG-Evaluation-Dataset-KO (300 Q&A across 58 PDFs and 5 domains), it decomposes the pipeline into six stages — loader, chunker, embedding, retriever, pre-retriever, post-retriever — comparing 95+ components univariately, then runs a full 384-combination Cartesian sweep (8 pre-retrievers × 6 retrievers × 8 rerankers) with a fixed GPT-5.4 generator. Answers from 46 generators (27 open-weight, 19 closed) are graded by a 4-metric LLM-as-Judge (similarity, correctness, completeness, faithfulness; majority-O), totaling ≈1.2M LLM calls. Author: BAEM1N. Dashboard: rag.baeum.ai.kr. Code: github.com/BAEM1N/RAG-Evaluation. Dataset: huggingface.co/datasets/BAEM1N/Korean-RAG-LLM-Judge-Benchmark.
 
 ## Table of contents
 
@@ -80,7 +80,7 @@ The experiment runs in three layers.
 
 **3) Full Cartesian (384).** Score all 8 × 6 × 8 = 384 combinations with the generator (GPT-5.4) fixed, to expose **interaction** that univariate analysis misses.
 
-Across all three layers, cumulative LLM calls reach ~1.2M (generation + judge grading). Measurement ran on three machines — DGX Spark, HP Z2 Mini, MacBook Pro — splitting retrieval/reranking inference and local LLM serving.
+Across all three layers, cumulative LLM calls reach ≈1.2M (generation + judge grading). Measurement ran on three machines — DGX Spark, HP Z2 Mini, MacBook Pro — splitting retrieval/reranking inference and local LLM serving.
 
 ## How the LLM-as-Judge works
 
@@ -92,14 +92,14 @@ Trusting a single judge is risky, so I expanded grading to **11 open-weight + 9 
 
 ## What this series covers
 
-Results are split by topic. The full synthesis is available in English; the per-stage deep dives are currently in Korean (links marked KO).
+Results are split by topic. Read in this order after this hub:
 
-1. **[Ingestion — Loader · Chunker · Embedding](/posts/korean-rag-bench-ingestion/)** (KO) — where simpler, Korean-aligned choices won.
-2. **[Retrieval — BM25-KIWI · Hybrid · Query transforms](/posts/korean-rag-bench-retrieval/)** (KO) — univariate effects of retrieval and query transforms.
-3. **[Why a 0.6B Korean reranker beats a 4B SOTA](/posts/korean-rag-bench-reranker/)** (KO) — why reranking is the biggest axis.
-4. **[How far have open-weight LLMs come in Korean RAG](/posts/korean-rag-bench-generators-judges/)** (KO) — 46 generators and judge reliability.
-5. **[Stacking univariate winners didn't give the optimum](/posts/korean-rag-bench-cartesian/)** (KO) — the 384 sweep and interaction.
-6. **[Conclusion: look at the pipeline before upgrading the model](/en/posts/korean-rag-bench-final-analysis/)** — the 7 findings synthesized (English).
+1. **[Ingestion — Loader · Chunker · Embedding](/en/posts/korean-rag-bench-ingestion/)** — where simpler, Korean-aligned choices won.
+2. **[Retrieval — BM25-KIWI · Hybrid · Query transforms](/en/posts/korean-rag-bench-retrieval/)** — univariate effects of retrieval and query transforms.
+3. **[Why a 0.6B Korean reranker beats a 4B SOTA](/en/posts/korean-rag-bench-reranker/)** — why reranking is the biggest axis.
+4. **[How far have open-weight LLMs come in Korean RAG](/en/posts/korean-rag-bench-generators-judges/)** — 46 generators and judge reliability.
+5. **[Stacking univariate winners didn't give the optimum](/en/posts/korean-rag-bench-cartesian/)** — the 384 sweep and interaction.
+6. **[Conclusion: look at the pipeline before upgrading the model](/en/posts/korean-rag-bench-final-analysis/)** — the 7 findings synthesized.
 
 To explore the raw results yourself, the dashboard ([rag.baeum.ai.kr](https://rag.baeum.ai.kr)) lets you compare by stage, combination, and judge.
 
@@ -111,7 +111,7 @@ To explore the raw results yourself, the dashboard ([rag.baeum.ai.kr](https://ra
 - **Judge absolutes**: LLM-as-Judge scores are calibration-sensitive. Read by relative ranking and judge consensus, not absolute points.
 - **Stage baselines**: some stages (e.g. embedding) were measured on an earlier baseline, not the final pipeline. Relative ranking should hold; read absolutes in that context.
 - **Excluded candidates**: a few rerankers/chunkers were dropped due to library compatibility.
-- **Table/image questions**: average accuracy on these is low (~0.51). Multimodal RAG is a separate topic.
+- **Table/image questions**: average accuracy on these is low (≈0.51). Multimodal RAG is a separate topic.
 
 ## FAQ
 

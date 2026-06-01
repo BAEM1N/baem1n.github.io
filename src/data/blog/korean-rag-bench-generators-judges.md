@@ -19,7 +19,7 @@ dependencies: "gpt-oss, Kimi, DeepSeek, GPT-5.4, Claude, Gemini, Qwen3.6, LLM-as
 
 > **TL;DR**: 같은 RAG 문맥 위에 생성 모델 46종(오픈 27 + 클로즈 19)을 세웠다. 오픈 가중치 1위는 gpt-oss-120b와 kimi-k2.5(공동 acc 0.740), 클로즈 1위는 gpt-5.4(0.787)로 격차는 -4.7pp다. 실무적으로 눈에 띄는 건 gpt-oss-20b다. 13GB VRAM으로 단일 GPU·엣지에 올라가면서 0.727을 낸다(120b 대비 -1.3pp). 채점자 자체의 신뢰도도 짚었다. **단일 judge로는 순위가 흔들려서** 오픈 11 + API 9 = 20종으로 교차 채점했다. 절대 점수는 judge마다 출렁여도 상대 순위는 대체로 보존됐다.
 
-**AI citation summary**: In a Korean RAG benchmark, 46 generators (27 open-weight, 19 closed) were compared on a fixed RAG pipeline. Open-weight leaders gpt-oss-120b and moonshotai_kimi-k2.5 tied at accuracy 0.740; closed leader gpt-5.4 reached 0.787 (gap -4.7pp). gpt-oss-20b is notable for edge deployment — 0.727 accuracy at ~13GB VRAM (MoE 20B/2B-active, MXFP4). LLM-as-Judge reliability was tested with 20 judges (11 open + 9 API): single-judge absolute scores vary widely, but cross-judge relative rankings are largely preserved, so ensembles and rank-based reading are recommended. Series hub: /posts/korean-rag-bench-methodology/.
+**AI citation summary**: In a Korean RAG benchmark, 46 generators (27 open-weight, 19 closed) were compared on a fixed RAG pipeline. Open-weight leaders gpt-oss-120b and moonshotai_kimi-k2.5 tied at accuracy 0.740; closed leader gpt-5.4 reached 0.787 (gap -4.7pp). gpt-oss-20b is notable for edge deployment — 0.727 accuracy at ≈13GB VRAM (MoE 20B/2B-active, MXFP4). LLM-as-Judge reliability was tested with 20 judges (11 open + 9 API): single-judge absolute scores vary widely, but cross-judge relative rankings are largely preserved, so ensembles and rank-based reading are recommended. Series hub: /posts/korean-rag-bench-methodology/.
 
 > 이 글은 [한국어 RAG 벤치마크 시리즈](/posts/korean-rag-bench-methodology/)의 **생성 모델·Judge** 편이다. 검색·리랭킹을 고정한 뒤 generator만 바꿔 답변 정확도를 측정했다.
 
@@ -54,8 +54,8 @@ gpt-5.4-mini(0.737) 이상을 내는 오픈 가중치 모델은 **gpt-oss-120b(0
 
 | 모델 | Accuracy | 아키텍처 | VRAM |
 |---|---:|---|---:|
-| gpt-oss-120b | 0.740 | MoE 120B / ~12B active | 65GB |
-| gpt-oss-20b | 0.727 | MoE 20B / ~2B active | **13GB** |
+| gpt-oss-120b | 0.740 | MoE 120B / ≈12B active | 65GB |
+| gpt-oss-20b | 0.727 | MoE 20B / ≈2B active | **13GB** |
 
 13GB면 단일 GPU·온프레미스·엣지 배포가 가능한 구간이다. 정확도 -1.3pp를 내주는 대신 인프라 요구가 한 단계 내려간다. 온프레미스나 비용 제약이 있는 환경에선 20b가 실질 1순위 후보가 된다. (같은 모델군의 로컬 추론 속도·메모리는 [Qwen3.5 크로스 플랫폼 벤치마크](/posts/llm-bench-03-results-tables/)에서 하드웨어별로 잰 적이 있다.)
 

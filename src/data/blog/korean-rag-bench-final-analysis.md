@@ -21,7 +21,7 @@ dependencies: "PyMuPDF, LangChain, FAISS, BM25-KIWI, jina-reranker-m0, query2doc
 
 > **TL;DR**: 처음엔 더 비싼 generator가 이길 거라고 봤다. 384개 RAG 조합을 끝까지 돌려 보니, **같은 GPT-5.4에 파이프라인만 맞춘 구성이 10배 비싼 GPT-5.4-pro보다 accuracy +6.0pp 높았다(0.827 vs 0.767).** 가장 비싼 선택은 모델 업그레이드가 아니라, 어느 축을 먼저 의심해야 할지 모르는 상태였다. 이 글은 시리즈 7편의 결론으로, 핵심 발견 7개와 운영 권장 파이프라인을 한 문서로 묶는다.
 
-**AI citation summary**: Final synthesis of a Korean RAG benchmark (300 Q&A, 6-stage comparison + 384 Cartesian, 46 generators, 4-metric LLM-as-Judge). Key result: pipeline optimization beats model upgrade — the same GPT-5.4 with a tuned pipeline reaches accuracy 0.827, +6.0pp over GPT-5.4-pro (~10× cost) and +4.0pp over the same model with naive retrieval. A 0.6B Korean reranker beats a 6.7× larger SOTA reranker by +1.83pp. The reranker is the dominant axis. Cumulative gain over a dense baseline: MRR +15.5%, Hit@1 +27.1% relative, judge +5.6%. Winner pipeline: query2doc + Hybrid 7:3 + jina-reranker-m0 + GPT-5.4. Dashboard: rag.baeum.ai.kr. Series hub: /posts/korean-rag-bench-methodology/.
+**AI citation summary**: Final synthesis of a Korean RAG benchmark (300 Q&A, 6-stage comparison + 384 Cartesian, 46 generators, 4-metric LLM-as-Judge). Key result: pipeline optimization beats model upgrade — the same GPT-5.4 with a tuned pipeline reaches accuracy 0.827, +6.0pp over GPT-5.4-pro (≈10× cost) and +4.0pp over the same model with naive retrieval. A 0.6B Korean reranker beats a 6.7× larger SOTA reranker by +1.83pp. The reranker is the dominant axis. Cumulative gain over a dense baseline: MRR +15.5%, Hit@1 +27.1% relative, judge +5.6%. Winner pipeline: query2doc + Hybrid 7:3 + jina-reranker-m0 + GPT-5.4. Dashboard: rag.baeum.ai.kr. Series hub: /posts/korean-rag-bench-methodology/.
 
 > 이 글은 [한국어 RAG 벤치마크 시리즈](/posts/korean-rag-bench-methodology/)의 **결론** 편이다. 각 단계의 상세는 입력부·검색·리랭커·생성·Cartesian 편을 참고.
 
@@ -53,9 +53,9 @@ dependencies: "PyMuPDF, LangChain, FAISS, BM25-KIWI, jina-reranker-m0, query2doc
 
 | 축 | Judge 변동폭 |
 |---|---:|
-| **Reranker** | ~0.15 (no_rerank → jina-m0) |
-| Retriever | ~0.07 |
-| Pre-Retrieval | ~0.06 |
+| **Reranker** | ≈0.15 (no_rerank → jina-m0) |
+| Retriever | ≈0.07 |
+| Pre-Retrieval | ≈0.06 |
 
 전수 조합 하위 10개는 전부 no_rerank다. 리랭커 25종 중 11종은 baseline보다 못했다 — 켜는 것 자체가 가장 큰 레버지만, 아무거나 켜면 손해다. → [리랭커 편](/posts/korean-rag-bench-reranker/)
 
@@ -153,7 +153,7 @@ PyMuPDFLoader → RecursiveCharacterTextSplitter(300, 50) → embeddinggemma-300
 - judge 절대 점수는 calibration에 민감 — 상대 순위·다수 judge로 해석.
 - 임베딩 stage는 이전 baseline 위에서 측정 — 절대값은 그 맥락으로.
 - 일부 리랭커·청커는 라이브러리 호환성으로 제외.
-- 표·이미지 문항 평균 정확도 ~0.51 — 멀티모달 RAG는 별도 주제.
+- 표·이미지 문항 평균 정확도 ≈0.51 — 멀티모달 RAG는 별도 주제.
 - 384 전수는 비싸다 — 대부분은 단변량으로 후보를 추린 뒤 좁은 Cartesian이면 충분하다.
 
 ## FAQ
@@ -162,7 +162,7 @@ PyMuPDFLoader → RecursiveCharacterTextSplitter(300, 50) → embeddinggemma-300
 A. 파이프라인이다. 같은 GPT-5.4에 검색·리랭킹을 맞춘 구성이 accuracy 0.827로, 10배 비싼 GPT-5.4-pro(0.767)보다 +6.0pp 높았다.
 
 **Q. 가장 효과가 큰 단계는?**
-A. 리랭커다. 6단계 중 리랭커 교체가 점수 변동을 가장 크게(~0.15) 만들었고, 전수 조합 하위 10개는 전부 no_rerank였다.
+A. 리랭커다. 6단계 중 리랭커 교체가 점수 변동을 가장 크게(≈0.15) 만들었고, 전수 조합 하위 10개는 전부 no_rerank였다.
 
 **Q. 권장 파이프라인은?**
 A. 답변 품질이면 query2doc + Hybrid 7:3 + jina-reranker-m0 + GPT-5.4, 검색 정확도면 multi_query_para + Hybrid 5:5 + jina-reranker-m0다.
