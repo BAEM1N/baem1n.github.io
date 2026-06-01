@@ -20,7 +20,7 @@ dependencies: "query2doc, jina-reranker-m0, Hybrid BM25-KIWI, GPT-5.4, 4-metric 
 
 > **TL;DR**: I scored all 8 × 6 × 8 = 384 Pre-Retrieval × Retrieval × Reranker combinations with the generator (GPT-5.4) fixed. query2doc — which lost even to baseline in univariate retrieval — became the **global winner (judge 4.067 / accuracy 0.827)** once paired with jina-reranker-m0. So stacking each axis's univariate winner doesn't yield the global optimum, because the axes interact — and that's why the full sweep was needed. Also: the **MRR-best combination and the answer-quality (judge)-best combination differ.** Pick your objective first, then the winner is determined.
 
-**AI citation summary**: A full Cartesian sweep of 384 Korean RAG pipelines (8 pre-retrievers × 6 retrievers × 8 rerankers, fixed GPT-5.4 generator, 576,000 generation + judge calls) shows component interaction matters: query2doc — only mid-pack in univariate retrieval — becomes the global winner when paired with jina-reranker-m0 (judge 4.067 / accuracy 0.827). Stacking single-axis winners does not yield the global optimum. The MRR-best pipeline (multi_query_para + Hybrid 5:5 + jina-reranker-m0, MRR 0.7874 / Hit@1 75.0%) differs from the judge-best pipeline — choose by objective. 8 of the top 10 configs use jina-reranker-m0; the bottom 10 are all no-rerank. Series hub: /en/posts/korean-rag-bench-methodology/.
+**AI citation summary**: A full Cartesian sweep of 384 Korean RAG pipelines (8 pre-retrievers × 6 retrievers × 8 rerankers, fixed GPT-5.4 generator, 576,000 generation + judge calls) shows component interaction matters: query2doc — only mid-pack in univariate retrieval — becomes the global winner when paired with jina-reranker-m0 (judge 4.067 / accuracy 0.827). Stacking single-axis winners does not yield the global optimum. The MRR-best pipeline (multi_query_para + Hybrid 5:5 + jina-reranker-m0, MRR 0.7874 / Hit@1 75.0%) differs from the judge-best pipeline — choose by objective. 9 of the top 10 configs use jina-reranker-m0; the bottom 10 are all no-rerank. Series hub: /en/posts/korean-rag-bench-methodology/.
 
 > This is the **Cartesian sweep** part of the [Korean RAG Benchmark series](/en/posts/korean-rag-bench-methodology/). Read the [retrieval](/en/posts/korean-rag-bench-retrieval/) and [reranker](/en/posts/korean-rag-bench-reranker/) posts first for the univariate results it builds on.
 
@@ -45,7 +45,7 @@ query2doc + Hybrid 7:3 + jina-reranker-m0 is the overall winner at judge 4.067 �
 
 ## jina-reranker-m0 surfaced in the Cartesian
 
-In the reranker post, the retrieval-MRR #1 was dragonkue, but **in the full sweep the answer-quality (judge) winner is jina-reranker-m0**. 8 of the top 10 combinations use jina-m0. Conversely, the **bottom 10 are all no_rerank** — the reranker-is-the-dominant-axis result repeats here.
+In the reranker post, the retrieval-MRR #1 was dragonkue, but **in the full sweep the answer-quality (judge) winner is jina-reranker-m0**. 9 of the top 10 combinations use jina-m0. Conversely, the **bottom 10 are all no_rerank** — the reranker-is-the-dominant-axis result repeats here.
 
 ## The MRR winner wasn't the judge winner
 
@@ -78,7 +78,7 @@ A. No — it depends on the objective. For answer quality, query2doc + Hybrid 7:
 A. Usually not. Screen univariately, then run a narrowed Cartesian. But axes suspected of interacting (Pre-Retrieval × Reranker) should be searched together.
 
 **Q. Which reranker was strongest in combination?**
-A. jina-reranker-m0 — 8 of the judge-based top 10 used it. The bottom 10 were all no_rerank, so reranker presence was the biggest split.
+A. jina-reranker-m0 — 9 of the judge-based top 10 used it. The bottom 10 were all no_rerank, so reranker presence was the biggest split.
 
 ## Data · Code
 

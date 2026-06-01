@@ -29,7 +29,7 @@ dependencies: "bge-reranker-v2-m3-ko, jina-reranker-m0, Qwen3-Reranker, mxbai-re
 
 In the full sweep (384), looking at how much each axis moves the score, **swapping the reranker produces the largest single-variable change**.
 
-*The reranker's effect rivals the retriever and query transform combined.*
+*The reranker's effect is about 2× the next axis (the retriever).*
 
 | Axis | Judge swing (low → high) |
 |---|---:|
@@ -37,7 +37,7 @@ In the full sweep (384), looking at how much each axis moves the score, **swappi
 | Retriever | ≈0.07 |
 | Pre-Retrieval | ≈0.06 |
 
-Turning the reranker on/off alone moves more than the other two axes combined. If you ask where to spend the RAG budget first, the answer is the reranker.
+Turning the reranker on/off alone moves about 2× the next axis (the retriever). If you ask where to spend the RAG budget first, the answer is the reranker.
 
 ## The dragonkue/bge-reranker-v2-m3-ko upset
 
@@ -76,7 +76,7 @@ For pure retrieval MRR, dragonkue; for final answer quality, jina-m0. The split 
 A. Yes. A 0.6B Korean fine-tune (dragonkue/bge-reranker-v2-m3-ko, MRR 0.7697) beat the 6.7× larger Qwen3-Reranker-4B (0.7514) by +1.83pp. In a single Korean domain, alignment beats scale.
 
 **Q. Is the reranker really that important in RAG?**
-A. It was the biggest single axis here. In the full sweep, swapping the reranker (≈0.15 judge swing) moved more than the retriever (≈0.07) and query transform (≈0.06) combined.
+A. It was the biggest single axis here. In the full sweep, swapping the reranker (≈0.15 judge swing) moved about 2× the retriever (≈0.07) and 2.5× the query transform (≈0.06).
 
 **Q. Does adding a reranker always help?**
 A. No. 11 of 25 fell below the no-rerank baseline (0.7171). General rerankers with weak Korean alignment make top-5 worse. Validate before adopting.

@@ -29,7 +29,7 @@ dependencies: "bge-reranker-v2-m3-ko, jina-reranker-m0, Qwen3-Reranker, mxbai-re
 
 전수 조합(384개)에서 각 축이 점수를 얼마나 좌우하는지 보면, **리랭커 교체가 단일 변수로 가장 큰 변동**을 만든다.
 
-*리랭커 선택의 영향이 검색기·쿼리 변형을 합친 것만큼 크다.*
+*리랭커 선택의 영향이 다음으로 큰 축(검색기)의 약 2배다.*
 
 | 축 | Judge 변동폭(최저→최고) |
 |---|---:|
@@ -37,7 +37,7 @@ dependencies: "bge-reranker-v2-m3-ko, jina-reranker-m0, Qwen3-Reranker, mxbai-re
 | Retriever | ≈0.07 |
 | Pre-Retrieval | ≈0.06 |
 
-리랭커를 켜고/끄는 것만으로 나머지 두 축을 합친 것보다 더 큰 폭이 움직인다. RAG 예산을 어디에 먼저 쓸지 묻는다면, 답은 리랭커다.
+리랭커를 켜고/끄는 것만으로 다음으로 큰 축(검색기)의 2배가 넘는 폭이 움직인다. RAG 예산을 어디에 먼저 쓸지 묻는다면, 답은 리랭커다.
 
 ## dragonkue/bge-reranker-v2-m3-ko의 역전
 
@@ -76,7 +76,7 @@ dependencies: "bge-reranker-v2-m3-ko, jina-reranker-m0, Qwen3-Reranker, mxbai-re
 A. 그렇다. 0.6B 한국어 fine-tune(dragonkue/bge-reranker-v2-m3-ko, MRR 0.7697)이 6.7배 큰 Qwen3-Reranker-4B(0.7514)를 +1.83pp 앞섰다. 한국어 단일 도메인에선 언어 정렬이 규모를 이긴다.
 
 **Q. RAG에서 리랭커가 그렇게 중요한가?**
-A. 이 실험에선 가장 큰 단일 축이었다. 전수 조합에서 리랭커 교체의 점수 변동폭(≈0.15)이 검색기(≈0.07)·쿼리 변형(≈0.06)을 합친 것보다 컸다.
+A. 이 실험에선 가장 큰 단일 축이었다. 전수 조합에서 리랭커 교체의 점수 변동폭(≈0.15)이 다음 축인 검색기(≈0.07)의 약 2배, 쿼리 변형(≈0.06)의 2.5배였다.
 
 **Q. 리랭커는 일단 붙이면 좋아지나?**
 A. 아니다. 25종 중 11종은 no_rerank baseline(0.7171)보다 낮았다. 한국어 정렬이 약한 범용 리랭커는 오히려 top-5를 나쁘게 만든다. 검증 후 채택해야 한다.
