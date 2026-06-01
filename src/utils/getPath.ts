@@ -27,10 +27,22 @@ export function getPath(
   const blogId = id.split("/");
   const slug = blogId.length > 0 ? blogId.slice(-1) : blogId;
 
-  // If not inside the sub-dir, simply return the file path
-  if (!pathSegments || pathSegments.length < 1) {
-    return [basePath, slug].join("/");
+  // Locale sub-directories (e.g. "en") route as `/<locale>/posts/<slug>` — the
+  // locale is a PREFIX before the base path, not a segment after it. Without this,
+  // an EN post (`src/data/blog/en/foo.md`) would wrongly resolve to `/posts/en/foo`
+  // (404) instead of the real route `/en/posts/foo`, breaking og:image and prev/next.
+  const LOCALES = ["en"];
+  let segments = pathSegments ?? [];
+  let localePrefix = "";
+  if (segments.length > 0 && LOCALES.includes(segments[0])) {
+    localePrefix = `/${segments[0]}`;
+    segments = segments.slice(1);
   }
 
-  return [basePath, ...pathSegments, slug].join("/");
+  // If not inside a (non-locale) sub-dir, simply return the file path
+  if (segments.length < 1) {
+    return [`${localePrefix}${basePath}`, slug].join("/");
+  }
+
+  return [`${localePrefix}${basePath}`, ...segments, slug].join("/");
 }
