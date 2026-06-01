@@ -54,7 +54,7 @@ On the same GPT-5.4, pipeline tuning alone added +4.0pp (0.787 → 0.827) — an
 | Axis | Judge swing |
 |---|---:|
 | **Reranker** | ≈0.15 (no_rerank → jina-m0) |
-| Retriever | ≈0.07 |
+| Retrieval | ≈0.07 |
 | Pre-Retrieval | ≈0.06 |
 
 The bottom 10 Cartesian configs are all no_rerank. 11 of 25 rerankers fell below the no-rerank baseline — turning it on is the biggest lever, but turning on the wrong one hurts.
@@ -77,7 +77,7 @@ A +1.83pp gap. The same "Korean alignment > size" pattern showed up in embedding
 | Axis | Univariate winner | Cartesian winner |
 |---|---|---|
 | Pre-Retrieval | query_expansion (judge) | **query2doc** (with jina-m0) |
-| Retriever | Hybrid 5:5 / 3:7 | **Hybrid 7:3** (with jina-m0) |
+| Retrieval | Hybrid 5:5 / 3:7 | **Hybrid 7:3** (with jina-m0) |
 | Reranker | dragonkue (retrieval MRR) | **jina-reranker-m0** (judge) |
 
 query2doc ranked 4th in univariate e2e-judge Pre-Retrieval (3.967), yet paired with jina-m0 it becomes the global winner (judge 4.067). Interaction is real, so the final combination search can't be replaced by univariate analysis.

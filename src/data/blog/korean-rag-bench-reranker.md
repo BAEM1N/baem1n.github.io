@@ -34,7 +34,7 @@ dependencies: "bge-reranker-v2-m3-ko, jina-reranker-m0, Qwen3-Reranker, mxbai-re
 | 축 | Judge 변동폭(최저→최고) |
 |---|---:|
 | **Reranker** | ≈0.15 (no_rerank 3.83 → jina-m0 3.98) |
-| Retriever | ≈0.07 |
+| Retrieval | ≈0.07 |
 | Pre-Retrieval | ≈0.06 |
 
 리랭커를 켜고/끄는 것만으로 다음으로 큰 축(검색기)의 2배가 넘는 폭이 움직인다. RAG 예산을 어디에 먼저 쓸지 묻는다면, 답은 리랭커다.

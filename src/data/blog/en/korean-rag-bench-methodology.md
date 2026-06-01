@@ -71,9 +71,9 @@ The experiment runs in three layers.
 | 1. Loader | 7 | pymupdf, pdfplumber, pymupdf4llm, pdfminer, docling, pypdf, opendataloader |
 | 2. Parser (Chunker) | 42 | 32 char-based + 10 semantic/LLM-based |
 | 3. Embedding | 27 | KoE5, embeddinggemma, BGE-M3, Qwen3-Embed, etc. |
-| 4. Retriever | 7 | Dense · BM25-KIWI · BM25-whitespace · Hybrid ratios |
-| 4-1. Pre-Retriever | 10 | HyDE, query2doc, multi-query, decompose, query_expansion, etc. |
-| 4-2. Post-Retriever (Reranker) | 25 | dragonkue, jina-m0, Qwen3-Reranker, bge-v2-m3, ko-reranker, etc. |
+| 4. Retrieval | 7 | Dense · BM25-KIWI · BM25-whitespace · Hybrid ratios |
+| 4-1. Pre-Retrieval | 10 | HyDE, query2doc, multi-query, decompose, query_expansion, etc. |
+| 4-2. Post-Retrieval (Reranker) | 25 | dragonkue, jina-m0, Qwen3-Reranker, bge-v2-m3, ko-reranker, etc. |
 | 5. Generator | 46 | 27 open-weight + 19 closed |
 
 **2) e2e axis-wise.** Fix the upstream winners, vary one axis at a time, and measure generation quality (judge) on top of retrieval metrics — to find where the retrieval winner and the answer-quality winner diverge.

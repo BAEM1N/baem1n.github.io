@@ -99,7 +99,7 @@ A. 3:7(dense 0.3 / sparse 0.7)이 미세하게 최적이지만 5:5와 차이가 
 {
   "@context": "https://schema.org",
   "@type": "Dataset",
-  "name": "Korean RAG Retrieval Benchmark — Dense · BM25-KIWI · Hybrid · Pre-Retriever",
+  "name": "Korean RAG Retrieval Benchmark — Dense · BM25-KIWI · Hybrid · Pre-Retrieval",
   "description": "Univariate retrieval comparison for Korean RAG over 300 Q&A. Hybrid 3:7 (dense + BM25-KIWI, RRF) MRR 0.7171 / Hit@1 65.3% beats dense 0.6816 and BM25-KIWI 0.6783; whitespace BM25 collapses to 0.5344 (+14.4pp for morphological tokenization). Pre-retriever query transforms show only noise-level univariate gains.",
   "url": "https://baem1n.dev/posts/korean-rag-bench-retrieval/",
   "sameAs": "https://github.com/BAEM1N/RAG-Evaluation",

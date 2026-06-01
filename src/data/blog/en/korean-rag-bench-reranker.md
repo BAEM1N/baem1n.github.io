@@ -34,7 +34,7 @@ In the full sweep (384), looking at how much each axis moves the score, **swappi
 | Axis | Judge swing (low → high) |
 |---|---:|
 | **Reranker** | ≈0.15 (no_rerank 3.83 → jina-m0 3.98) |
-| Retriever | ≈0.07 |
+| Retrieval | ≈0.07 |
 | Pre-Retrieval | ≈0.06 |
 
 Turning the reranker on/off alone moves about 2× the next axis (the retriever). If you ask where to spend the RAG budget first, the answer is the reranker.

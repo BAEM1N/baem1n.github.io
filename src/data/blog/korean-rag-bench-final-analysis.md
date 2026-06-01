@@ -54,7 +54,7 @@ dependencies: "PyMuPDF, LangChain, FAISS, BM25-KIWI, jina-reranker-m0, query2doc
 | 축 | Judge 변동폭 |
 |---|---:|
 | **Reranker** | ≈0.15 (no_rerank → jina-m0) |
-| Retriever | ≈0.07 |
+| Retrieval | ≈0.07 |
 | Pre-Retrieval | ≈0.06 |
 
 전수 조합 하위 10개는 전부 no_rerank다. 리랭커 25종 중 11종은 baseline보다 못했다 — 켜는 것 자체가 가장 큰 레버지만, 아무거나 켜면 손해다. → [리랭커 편](/posts/korean-rag-bench-reranker/)
@@ -77,7 +77,7 @@ dependencies: "PyMuPDF, LangChain, FAISS, BM25-KIWI, jina-reranker-m0, query2doc
 | 축 | 단변량 winner | Cartesian winner |
 |---|---|---|
 | Pre-Retrieval | query_expansion (judge) | **query2doc** (+ jina-m0) |
-| Retriever | Hybrid 5:5 / 3:7 | **Hybrid 7:3** (+ jina-m0) |
+| Retrieval | Hybrid 5:5 / 3:7 | **Hybrid 7:3** (+ jina-m0) |
 | Reranker | dragonkue (검색 MRR) | **jina-reranker-m0** (judge) |
 
 query2doc은 Pre-Retrieval 단변량 judge 4위(3.967)였는데, jina-m0와 조합되자 전역 1위(judge 4.067)가 된다. 축끼리 실제로 맞물려 움직이니, 마지막 조합 최적화는 단변량으로 대체가 안 된다. → [Cartesian 편](/posts/korean-rag-bench-cartesian/)

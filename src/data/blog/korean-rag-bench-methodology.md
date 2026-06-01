@@ -71,9 +71,9 @@ RAG를 한다고 하면 보통 "어떤 LLM이 제일 답을 잘 쓰나"부터 �
 | 1. Loader | 7 | pymupdf, pdfplumber, pymupdf4llm, pdfminer, docling, pypdf, opendataloader |
 | 2. Parser(Chunker) | 42 | char-based 32 + semantic·LLM 기반 10 |
 | 3. Embedding | 27 | KoE5, embeddinggemma, BGE-M3, Qwen3-Embed 등 |
-| 4. Retriever | 7 | Dense · BM25-KIWI · BM25-공백 · Hybrid 비율 변형 |
-| 4-1. Pre-Retriever | 10 | HyDE, query2doc, multi-query, decompose, query_expansion 등 |
-| 4-2. Post-Retriever(Reranker) | 25 | dragonkue, jina-m0, Qwen3-Reranker, bge-v2-m3, ko-reranker 등 |
+| 4. Retrieval | 7 | Dense · BM25-KIWI · BM25-공백 · Hybrid 비율 변형 |
+| 4-1. Pre-Retrieval | 10 | HyDE, query2doc, multi-query, decompose, query_expansion 등 |
+| 4-2. Post-Retrieval (Reranker) | 25 | dragonkue, jina-m0, Qwen3-Reranker, bge-v2-m3, ko-reranker 등 |
 | 5. Generator | 46 | 오픈 가중치 27 + 클로즈 가중치 19 |
 
 **2) e2e axis-wise.** 앞 단계 winner를 고정한 채 각 축만 바꿔, 검색 지표에 더해 생성 품질(judge)까지 측정한다. 검색 1등과 답변 1등이 갈리는 지점을 잡으려는 단계다.
