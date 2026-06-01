@@ -7,7 +7,7 @@ Author: 배기민 / baem1n — AI/Data Educator & Engineer, DDOK.AI Founder.
 Contact: [Email](mailto:gm.bae@ddok.ai), [GitHub](https://github.com/baem1n), [LinkedIn](https://www.linkedin.com/in/baem1n/), [Hugging Face](https://huggingface.co/baem1n).
 Trust note: benchmark posts link to source code, raw CSV/results, methodology notes, and disclosure statements when the author maintains a related project.
 Full content: [llms-full.txt](/llms-full.txt).
-Last updated: 2026-04-29.
+Last updated: 2026-06-01.
 
 ## Key Facts
 
@@ -43,6 +43,16 @@ Last updated: 2026-04-29.
 - [Qwen3.5 Local Inference Benchmark Results](/posts/llm-bench-03-results-tables/): 4 hardware platforms × 5 inference engines × Qwen3.5 9B/27B/35B-A3B/122B-A10B results.
 - [Qwen3.5 Benchmark Methodology](/posts/llm-bench-01-methodology/): Cache isolation, cold prefill, nonce prefixes, random run order, and measurement protocol.
 - [Qwen3.5 Cross-Platform Analysis](/posts/llm-bench-02-results-analysis/): Main findings from the hardware and engine comparison.
+
+### Korean RAG Benchmark
+
+- [Korean RAG Benchmark — Methodology (pillar)](/posts/korean-rag-bench-methodology/): 300 Q&A × 58 PDF × 5 domains, 6-stage component comparison + 384-combination Cartesian sweep, 46 generators, 4-metric LLM-as-Judge, ~1.2M LLM calls.
+- [Ingestion — Loader · Chunker · Embedding](/posts/korean-rag-bench-ingestion/): PyMuPDF MRR 0.6486; LC Recursive 300/50; KoE5 beats qwen3-embed-8b by +0.16 MRR.
+- [Retrieval — Dense · BM25-KIWI · Hybrid](/posts/korean-rag-bench-retrieval/): Hybrid 3:7 MRR 0.7171; KIWI morphological BM25 +14.4pp over whitespace.
+- [Reranker — 25 rerankers](/posts/korean-rag-bench-reranker/): a 0.6B Korean reranker (dragonkue, MRR 0.7697) beats Qwen3-Reranker-4B (0.7514) by +1.83pp.
+- [Generators & Judges — 46 generators](/posts/korean-rag-bench-generators-judges/): gpt-oss-120b/kimi-k2.5 0.740 open-weight; gpt-oss-20b 0.727 at 13GB VRAM; judge robustness across 20 judges.
+- [Cartesian Sweep — 384 combinations](/posts/korean-rag-bench-cartesian/): query2doc + jina-reranker-m0 wins (judge 4.067 / acc 0.827); MRR-best ≠ judge-best.
+- [Final Synthesis — winner pipeline & 7 findings](/posts/korean-rag-bench-final-analysis/): pipeline tuning beats model upgrade — GPT-5.4 + tuned pipeline 0.827, +6.0pp over GPT-5.4-pro.
 
 ### GraphRAG / PostgreSQL
 
