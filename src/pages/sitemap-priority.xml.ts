@@ -3,11 +3,25 @@ import { SITE } from "@/config";
 
 const priorityPaths = [
   "/",
-  "/posts/runpod-referral-gpu-cloud/",
-  "/posts/vultr-referral-cloud-server/",
+  "/about/",
+  "/posts/korean-rag-bench-final-analysis/",
+  "/posts/korean-rag-bench-methodology/",
+  "/posts/llm-bench-03-results-tables/",
+  "/posts/arize-phoenix-llmops-observability/",
+  "/posts/arize-phoenix-langchain-tracing/",
+  "/posts/phoenix-callbackhandler-openinference/",
+  "/posts/langchain-age-langgraph-agent/",
+  "/posts/graphrag-with-postgresql/",
   "/en/",
-  "/en/posts/runpod-referral-gpu-cloud/",
-  "/en/posts/vultr-referral-cloud-server/",
+  "/en/about/",
+  "/en/posts/korean-rag-bench-final-analysis/",
+  "/en/posts/korean-rag-bench-methodology/",
+  "/en/posts/llm-bench-03-results-tables/",
+  "/en/posts/arize-phoenix-llmops-observability/",
+  "/en/posts/arize-phoenix-langchain-tracing/",
+  "/en/posts/phoenix-callbackhandler-openinference/",
+  "/en/posts/langchain-age-langgraph-agent/",
+  "/en/posts/graphrag-with-postgresql/",
 ] as const;
 
 const xmlEscape = (value: string) =>
