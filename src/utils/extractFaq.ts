@@ -1,6 +1,10 @@
 /**
  * Extract FAQ question-answer pairs from markdown content.
- * Looks for a "## FAQ" section with "### question?" subsections.
+ * Looks for a FAQ section with "### question?" subsections.
+ * Supported section headings:
+ * - ## FAQ
+ * - ## Frequently Asked Questions
+ * - ## 자주 묻는 질문
  */
 export type FaqItem = {
   question: string;
@@ -10,8 +14,11 @@ export type FaqItem = {
 export function extractFaq(markdown: string | undefined | null): FaqItem[] {
   if (!markdown) return [];
 
-  // Find the FAQ section
-  const faqMatch = markdown.match(/^## FAQ\s*$/m);
+  // Find the FAQ section. Korean posts use "자주 묻는 질문" while English
+  // posts may use either the terse "FAQ" or the expanded heading.
+  const faqMatch = markdown.match(
+    /^## (?:FAQ|Frequently Asked Questions|자주 묻는 질문)\s*$/m,
+  );
   if (!faqMatch || faqMatch.index === undefined) return [];
 
   // Get content after ## FAQ until next ## heading or end
