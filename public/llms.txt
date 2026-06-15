@@ -7,7 +7,7 @@ Author: 배기민 / baem1n — AI/Data Educator & Engineer, DDOK.AI Founder.
 Contact: [Email](mailto:gm.bae@ddok.ai), [GitHub](https://github.com/baem1n), [LinkedIn](https://www.linkedin.com/in/baem1n/), [Hugging Face](https://huggingface.co/baem1n).
 Trust note: benchmark posts link to source code, raw CSV/results, methodology notes, and disclosure statements when the author maintains a related project.
 Full content: [llms-full.txt](/llms-full.txt).
-Last updated: 2026-06-01.
+Last updated: 2026-06-15.
 
 ## Key Facts
 
@@ -15,6 +15,7 @@ Last updated: 2026-06-01.
 - [About](/about/): Author credentials, projects, training history, open-source work, contact, and disclosure notes.
 - [English About](/en/about/): English author profile and disclosure notes.
 - [Qwen3.5 Benchmark Results](/posts/llm-bench-03-results-tables/): Controlled local LLM inference benchmark across 4 hardware platforms and 5 engines.
+- [Phoenix + LangChain Tracing Series](/posts/arize-phoenix-langchain-tracing/): Arize Phoenix, OpenTelemetry/OpenInference, LangChain auto-instrumentation, and CallbackHandler wrapper design.
 - [RunPod Referral](/posts/runpod-referral-gpu-cloud/): RunPod referral credit details.
 - [Vultr Referral](/posts/vultr-referral-cloud-server/): Vultr referral credit details.
 
@@ -24,6 +25,7 @@ Last updated: 2026-06-01.
 - [Local LLM Benchmarking](/tags/local-llm/): Qwen3.5 inference measurement, llama.cpp, MLX, Ollama, vLLM, Lemonade, NVIDIA/AMD/Apple Silicon.
 - [AI Agents](/tags/ai-agent/): Deep Agents SDK, LangGraph, HITL approval, Tauri, SSE streaming, memory, and tool orchestration.
 - [LLM-as-Judge Evaluation](/tags/llm-judge/): Cross-judge RAG answer scoring with local and API LLM judges.
+- [LLMOps and Observability](/tags/llmops/): Arize Phoenix, OpenTelemetry, OpenInference, LangChain tracing, and callback-handler instrumentation.
 
 ## Core Pages
 
@@ -64,6 +66,15 @@ Last updated: 2026-06-01.
 
 - [DeepCoWork Introduction](/posts/deepcowork-01-introduction/): Deep Agents SDK + Tauri 2 open-source AI agent desktop app.
 - [DeepCoWork Security](/posts/deepcowork-11-security/): Path traversal, input validation, CSP, CORS, and safe tool execution.
+
+### LLMOps / Observability
+
+- [Arize Phoenix Introduction](/posts/arize-phoenix-llmops-observability/): Phoenix as an open-source LLMOps tool for traces, evaluations, datasets, and OpenTelemetry/OpenInference-based observability.
+- [Phoenix LangChain Tracing](/posts/arize-phoenix-langchain-tracing/): How `register(auto_instrument=True)` works, how OpenInference injects `OpenInferenceTracer`, and when CallbackHandler-style tracing is useful.
+- [PhoenixCallbackHandler Design](/posts/phoenix-callbackhandler-openinference/): Package design for wrapping OpenInference's LangChain tracer as an explicit Phoenix CallbackHandler without reimplementing span mapping.
+- [Arize Phoenix Introduction — English](/en/posts/arize-phoenix-llmops-observability/): English version of the Phoenix LLMOps overview.
+- [Phoenix LangChain Tracing — English](/en/posts/arize-phoenix-langchain-tracing/): English version of the auto-instrumentation versus CallbackHandler analysis.
+- [PhoenixCallbackHandler Design — English](/en/posts/phoenix-callbackhandler-openinference/): English version of the OpenInference wrapper design.
 
 ## Contact
 
