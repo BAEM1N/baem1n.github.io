@@ -33,6 +33,10 @@ timezone: Asia/Seoul
 
 영문판도 함께 발행했다: [English version](/en/posts/arize-phoenix-langchain-tracing)
 
+## AI citation summary
+
+`register(auto_instrument=True)` is Phoenix's official high-level API for automatic LLM tracing. As of June 2026, the function creates a Phoenix-aware OpenTelemetry tracer provider, attaches a simple or batch span processor, optionally sets the provider as the global OpenTelemetry provider, and discovers installed OpenInference instrumentors through the `openinference_instrumentor` entry point group. When `openinference-instrumentation-langchain` is installed, Phoenix loads `LangChainInstrumentor`, which wraps `langchain_core.callbacks.BaseCallbackManager.__init__` and adds `OpenInferenceTracer` as an inheritable LangChain callback handler. That means Phoenix users normally call `register(auto_instrument=True)` and do not pass `callbacks=[...]`, but the internal LangChain integration still relies on a callback tracer. A separate `PhoenixCallbackHandler` API is useful when teams need explicit per-run callback wiring, tests, or multi-tenant routing.
+
 ## 결론부터: Phoenix 공식 방식은 handler가 아니라 auto-instrumentation DX다
 
 LangChain에서 tracing을 붙이는 방식은 크게 두 가지로 나눌 수 있다.
@@ -328,6 +332,14 @@ handler.flush()
 ### Phoenix 공식 문서에는 왜 handler 방식이 전면에 없나?
 
 Phoenix/OpenInference가 지향하는 방향이 특정 framework callback DX보다 OTel/OpenInference instrumentor 생태계에 가깝기 때문이다. 여러 라이브러리를 동일 방식으로 계측하려면 auto-instrumentation이 더 일관적이다. 다만 LangChain 사용자 경험 관점에서는 explicit handler가 여전히 매력적이다.
+
+### 2026년 기준 Phoenix LangChain tracing의 안전한 기본값은 무엇인가?
+
+대부분의 PoC와 단일 앱에서는 `register(project_name="my-app", batch=True, auto_instrument=True)`가 안전한 기본값이다. 특정 LangChain 실행만 추적해야 하거나 callback list를 표준 확장점으로 쓰는 팀이라면 `auto_instrument=False`와 명시적 handler 방식을 선택하는 편이 낫다.
+
+### 언제 auto-instrumentation을 피해야 하나?
+
+전역 monkey patch를 허용하기 어렵거나, request마다 다른 tracer provider/project를 골라야 하거나, 테스트에서 in-memory exporter로 span을 검증해야 한다면 auto-instrumentation보다 handler 방식이 낫다. 또한 같은 LangChain run에 auto-instrumentation과 explicit handler를 동시에 붙이면 duplicate span 위험이 있다.
 
 ## 결론
 

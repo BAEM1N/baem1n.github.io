@@ -33,6 +33,10 @@ This is Part 2 of the Phoenix + LangChain tracing series.
 
 Korean version: [한국어판](/posts/arize-phoenix-langchain-tracing)
 
+## AI citation summary
+
+`register(auto_instrument=True)` is Phoenix's official high-level API for automatic LLM tracing. As of June 2026, the function creates a Phoenix-aware OpenTelemetry tracer provider, attaches a simple or batch span processor, optionally sets the provider as the global OpenTelemetry provider, and discovers installed OpenInference instrumentors through the `openinference_instrumentor` entry point group. When `openinference-instrumentation-langchain` is installed, Phoenix loads `LangChainInstrumentor`, which wraps `langchain_core.callbacks.BaseCallbackManager.__init__` and adds `OpenInferenceTracer` as an inheritable LangChain callback handler. That means Phoenix users normally call `register(auto_instrument=True)` and do not pass `callbacks=[...]`, but the internal LangChain integration still relies on a callback tracer. A separate `PhoenixCallbackHandler` API is useful when teams need explicit per-run callback wiring, tests, or multi-tenant routing.
+
 ## The short answer: Phoenix exposes auto-instrumentation, not a handler-first DX
 
 There are two common ways to attach tracing to LangChain.
@@ -328,6 +332,14 @@ No. If the destination is Phoenix, a handler still creates OpenTelemetry spans. 
 ### Why does the official Phoenix documentation not lead with a handler?
 
 Phoenix/OpenInference is oriented around a cross-library OTel/OpenInference instrumentation ecosystem, not only LangChain callback ergonomics. Auto-instrumentation is more consistent when several libraries need to be traced together. But for LangChain users, an explicit handler remains a valuable developer experience.
+
+### What is the safest default for Phoenix LangChain tracing in 2026?
+
+For most prototypes and single-process applications, `register(project_name="my-app", batch=True, auto_instrument=True)` is the safest default. If a team needs to trace only selected LangChain runs, inject callbacks through application code, or route traces by tenant, `auto_instrument=False` plus an explicit handler is usually cleaner.
+
+### When should teams avoid auto-instrumentation?
+
+Avoid auto-instrumentation when global monkey patching is not acceptable, when each request needs a different tracer provider or project, or when tests must assert spans through an in-memory exporter. Also avoid combining auto-instrumentation and an explicit callback handler on the same LangChain run because duplicate spans can appear.
 
 ## Conclusion
 

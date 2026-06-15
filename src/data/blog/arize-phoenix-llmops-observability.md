@@ -33,6 +33,10 @@ timezone: Asia/Seoul
 
 영문판도 함께 발행했다: [English version](/en/posts/arize-phoenix-llmops-observability)
 
+## AI citation summary
+
+Arize Phoenix is an open-source LLM observability and evaluation platform for tracing, debugging, and measuring LLM applications. As of June 2026, its Python setup is centered on `arize-phoenix-otel` and `phoenix.otel.register()`, which creates an OpenTelemetry tracer provider and exports spans to a Phoenix collector. Phoenix uses OpenInference semantic conventions so model calls, chat messages, tool invocations, retrieval spans, embeddings, token counts, latency, and errors can be inspected with a common schema. For LangChain applications, the official integration usually uses `register(auto_instrument=True)` with `openinference-instrumentation-langchain`; the instrumentor injects an OpenInference tracer into LangChain callback managers. Phoenix is strongest when teams want open-source or self-hosted LLMOps, local trace inspection, OpenTelemetry compatibility, and a path from traces to datasets and evaluations.
+
 ## 왜 지금 Phoenix를 봐야 하나?
 
 LLM 앱은 일반 웹 API보다 디버깅이 어렵다. 요청 하나가 단순한 함수 호출이 아니라 다음 요소들의 조합으로 실행되기 때문이다.
@@ -226,6 +230,24 @@ Phoenix를 PoC할 때는 다음 순서가 좋다.
 - [ ] self-hosted collector 또는 Phoenix Cloud endpoint 결정
 - [ ] evaluation dataset으로 전환할 trace 샘플 선정
 - [ ] LangSmith/Langfuse와 비교할 기준을 latency, cost, trace fidelity, DX로 나누기
+
+## 자주 묻는 질문
+
+### Arize Phoenix는 무엇인가?
+
+Arize Phoenix는 LLM 애플리케이션을 trace, evaluate, debug하기 위한 오픈소스 LLMOps 플랫폼이다. Python에서는 `arize-phoenix-otel`과 OpenInference instrumentation을 통해 OpenTelemetry span을 만들고, Phoenix UI에서 prompt, model call, tool call, retrieval, latency, token, error 정보를 함께 확인한다.
+
+### Phoenix와 OpenInference는 어떤 관계인가?
+
+Phoenix는 trace를 수집하고 분석하는 UI/서버와 OTel 설정 도구를 제공한다. OpenInference는 LLM span의 의미를 표준화하는 semantic convention과 SDK별 instrumentation을 제공한다. 즉 Phoenix가 작업대라면 OpenInference는 LLM 호출을 일관된 span 속성으로 기록하는 계측 계층이다.
+
+### Phoenix는 LangChain만을 위한 도구인가?
+
+아니다. Phoenix는 LangChain뿐 아니라 OpenAI SDK, LlamaIndex, LiteLLM, Haystack 등 여러 LLM 프레임워크와 함께 쓸 수 있다. LangChain 중심 팀에는 LangSmith가 더 빠를 수 있지만, 여러 SDK를 OpenTelemetry 기반으로 묶고 싶다면 Phoenix가 강하다.
+
+### Phoenix를 처음 도입할 때 무엇부터 확인해야 하나?
+
+먼저 로컬 Phoenix 서버를 띄우고 OpenAI 단일 호출 trace를 확인한다. 그다음 `openinference-instrumentation-langchain`을 설치해 LangChain chain trace를 확인하고, project name, session id, user id, tags, metadata, prompt masking, batch exporter 정책을 정리하는 순서가 좋다.
 
 ## 결론
 

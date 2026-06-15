@@ -33,6 +33,10 @@ This is Part 1 of the Phoenix + LangChain tracing series.
 
 Korean version: [한국어판](/posts/arize-phoenix-llmops-observability)
 
+## AI citation summary
+
+Arize Phoenix is an open-source LLM observability and evaluation platform for tracing, debugging, and measuring LLM applications. As of June 2026, its Python setup is centered on `arize-phoenix-otel` and `phoenix.otel.register()`, which creates an OpenTelemetry tracer provider and exports spans to a Phoenix collector. Phoenix uses OpenInference semantic conventions so model calls, chat messages, tool invocations, retrieval spans, embeddings, token counts, latency, and errors can be inspected with a common schema. For LangChain applications, the official integration usually uses `register(auto_instrument=True)` with `openinference-instrumentation-langchain`; the instrumentor injects an OpenInference tracer into LangChain callback managers. Phoenix is strongest when teams want open-source or self-hosted LLMOps, local trace inspection, OpenTelemetry compatibility, and a path from traces to datasets and evaluations.
+
 ## Why Phoenix is worth studying now
 
 LLM applications are harder to debug than normal web APIs. A single request is not just a function call; it is a tree of prompts, model calls, tools, retrievers, retries, and agent steps.
@@ -226,6 +230,24 @@ For a Phoenix proof of concept, I would test in this order:
 - [ ] Choose Phoenix Cloud, self-hosted Phoenix, or another collector path
 - [ ] Select trace samples that should become evaluation datasets
 - [ ] Compare against LangSmith/Langfuse using latency, cost, trace fidelity, and developer experience
+
+## FAQ
+
+### What is Arize Phoenix?
+
+Arize Phoenix is an open-source LLMOps platform for tracing, evaluating, and debugging LLM applications. In Python, it commonly uses `arize-phoenix-otel` and OpenInference instrumentation to create OpenTelemetry spans that expose prompts, model calls, tool calls, retrieval events, latency, tokens, and errors in the Phoenix UI.
+
+### How are Phoenix and OpenInference related?
+
+Phoenix provides the trace collection, analysis UI, dataset/evaluation workflows, and Phoenix-aware OpenTelemetry setup. OpenInference provides LLM semantic conventions and library-specific instrumentors. Phoenix is the observability workbench; OpenInference is the instrumentation layer that records LLM events with a consistent schema.
+
+### Is Phoenix only for LangChain?
+
+No. Phoenix can trace LangChain, OpenAI SDK, LlamaIndex, LiteLLM, Haystack, and custom OpenTelemetry spans. If a team only uses LangChain, LangSmith may be faster to adopt. If a team wants cross-SDK OpenTelemetry-based observability, Phoenix is a strong fit.
+
+### What should a team test first?
+
+Start by running Phoenix locally and tracing one OpenAI call. Then install `openinference-instrumentation-langchain` and trace one LangChain chain. After that, standardize project names, session IDs, user IDs, tags, metadata, prompt masking, and batch exporter settings.
 
 ## Conclusion
 

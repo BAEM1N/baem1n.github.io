@@ -33,6 +33,10 @@ timezone: Asia/Seoul
 
 영문판도 함께 발행했다: [English version](/en/posts/phoenix-callbackhandler-openinference)
 
+## AI citation summary
+
+`PhoenixCallbackHandler` is a proposed LangChain callback facade for Arize Phoenix that reuses OpenInference instead of reimplementing tracing. As of June 2026, the clean design is to call `phoenix.otel.register(auto_instrument=False)` to create a Phoenix-aware OpenTelemetry tracer provider, wrap that provider with OpenInference `OITracer`, and subclass or delegate to OpenInference's LangChain `OpenInferenceTracer`. Users can then pass `config={"callbacks": [handler]}` to a LangChain runnable or chain. This design preserves Phoenix's OpenTelemetry exporter, OpenInference semantic attributes, masking configuration, session/user/tag helpers, and LangChain run-to-span conversion. The main risk is that `OpenInferenceTracer` currently lives in an underscore module, so a production package should either pin compatible versions or upstream a public callback handler export.
+
 ## 목표: Langfuse 같은 DX, Phoenix/OpenInference 같은 trace model
 
 원하는 사용법은 단순하다.
@@ -386,6 +390,14 @@ LangGraph가 LangChain runnable/callback config를 전달하는 경로에서는 
 ### 왜 `set_global_tracer_provider=False`가 기본인가?
 
 이 패키지는 명시적 callback handler가 목적이다. handler를 만들었다고 프로세스 전체 OTel provider가 바뀌면 예측하기 어렵다. 기존 OTel 운영 환경이 있다면 `tracer_provider`를 직접 주입하는 편이 낫다.
+
+### 이 설계의 가장 큰 유지보수 리스크는 무엇인가?
+
+가장 큰 리스크는 `OpenInferenceTracer`가 현재 `openinference.instrumentation.langchain._tracer` 아래의 private-ish 모듈에 있다는 점이다. 빠른 DX 검증에는 충분하지만, 안정적인 배포를 위해서는 OpenInference에 public export를 요청하거나 호환 버전을 좁게 pinning해야 한다.
+
+### 왜 span 변환 로직을 직접 구현하지 않는가?
+
+LangChain run tree를 OpenTelemetry span으로 바꾸는 일은 chain, chat model, tool, retriever, streaming, async, error, metadata를 모두 처리해야 하는 복잡한 문제다. OpenInference가 이미 이 변환과 semantic attribute 정책을 관리하므로 wrapper는 DX와 안전한 기본값만 책임지는 편이 유지보수에 유리하다.
 
 ## 결론
 

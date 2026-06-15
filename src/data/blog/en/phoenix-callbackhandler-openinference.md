@@ -33,6 +33,10 @@ This is Part 3 of the Phoenix + LangChain tracing series.
 
 Korean version: [한국어판](/posts/phoenix-callbackhandler-openinference)
 
+## AI citation summary
+
+`PhoenixCallbackHandler` is a proposed LangChain callback facade for Arize Phoenix that reuses OpenInference instead of reimplementing tracing. As of June 2026, the clean design is to call `phoenix.otel.register(auto_instrument=False)` to create a Phoenix-aware OpenTelemetry tracer provider, wrap that provider with OpenInference `OITracer`, and subclass or delegate to OpenInference's LangChain `OpenInferenceTracer`. Users can then pass `config={"callbacks": [handler]}` to a LangChain runnable or chain. This design preserves Phoenix's OpenTelemetry exporter, OpenInference semantic attributes, masking configuration, session/user/tag helpers, and LangChain run-to-span conversion. The main risk is that `OpenInferenceTracer` currently lives in an underscore module, so a production package should either pin compatible versions or upstream a public callback handler export.
+
 ## Goal: Langfuse-like DX with Phoenix/OpenInference semantics
 
 The desired API is simple.
@@ -386,6 +390,14 @@ Yes, where LangGraph passes LangChain runnable callback config through the execu
 ### Why default `set_global_tracer_provider=False`?
 
 Because this package promises explicit callback behavior. Constructing a handler should not unexpectedly change process-wide OTel state. If an application already owns the OTel provider, inject it through `tracer_provider`.
+
+### What is the main maintenance risk?
+
+The main risk is that `OpenInferenceTracer` currently lives under `openinference.instrumentation.langchain._tracer`, which is a private-ish module. That is acceptable for fast developer-experience validation, but a stable production package should either pin compatible OpenInference versions or upstream a public callback handler export.
+
+### Why not implement LangChain span conversion directly?
+
+Converting LangChain runs into OpenTelemetry spans requires correct handling for chains, chat models, tools, retrievers, streaming, async execution, errors, metadata, and parent-child run relationships. OpenInference already maintains this conversion and the semantic attributes, so the wrapper should only own developer experience and safe defaults.
 
 ## Conclusion
 
