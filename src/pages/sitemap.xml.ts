@@ -1,7 +1,11 @@
 import type { APIRoute } from "astro";
 import { SITE } from "@/config";
 
-const sitemapEntries = ["sitemap-priority.xml", "sitemap-index.xml"] as const;
+// A <sitemapindex> must reference url-set sitemaps, NOT another index.
+// sitemap-index.xml is itself a <sitemapindex> (→ sitemap-0.xml), so referencing
+// it here produced an illegal nested index that crawlers silently drop. Point
+// straight at the url-set (sitemap-0.xml) instead. 116 URLs < 50k → single file.
+const sitemapEntries = ["sitemap-priority.xml", "sitemap-0.xml"] as const;
 
 const xmlEscape = (value: string) =>
   value

@@ -57,3 +57,41 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+  # Notify IndexNow-participating engines (Bing, Yandex, Naver, Seznam) of the
+  # live URL set after each deploy. Google and Brave do NOT consume IndexNow.
+  # Key file already published at /44a38c633114094946dea4c844cbe6f5.txt.
+  indexnow:
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping IndexNow with sitemap URLs
+        run: |
+          python3 - <<'EOF'
+          import json, re, urllib.request, urllib.error
+          HOST = "baem1n.dev"
+          KEY = "44a38c633114094946dea4c844cbe6f5"
+          try:
+              sm = urllib.request.urlopen(f"https://{HOST}/sitemap-0.xml", timeout=30).read().decode()
+              urls = re.findall(r"<loc>(.*?)</loc>", sm)
+              if not urls:
+                  print("No URLs found in sitemap; skipping."); raise SystemExit(0)
+              body = json.dumps({
+                  "host": HOST,
+                  "key": KEY,
+                  "keyLocation": f"https://{HOST}/{KEY}.txt",
+                  "urlList": urls,
+              }).encode()
+              req = urllib.request.Request(
+                  "https://api.indexnow.org/indexnow",
+                  data=body,
+                  headers={"Content-Type": "application/json; charset=utf-8"},
+              )
+              resp = urllib.request.urlopen(req, timeout=30)
+              print(f"IndexNow accepted {len(urls)} URLs (HTTP {resp.status})")
+          except urllib.error.HTTPError as e:
+              # 200/202 = ok; other codes are informational only — never fail deploy.
+              print(f"IndexNow HTTP {e.code}: {e.read().decode(errors='ignore')[:200]}")
+          except Exception as e:
+              print(f"IndexNow ping skipped: {e}")
+          EOF
