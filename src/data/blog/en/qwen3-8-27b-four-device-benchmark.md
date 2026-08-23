@@ -10,7 +10,8 @@ tags:
   - vllm
   - qwen
   - local-llm
-featured: false
+featured: true
+featuredOrder: 3
 aiAssisted: true
 articleType: TechArticle
 proficiencyLevel: "intermediate"
@@ -256,6 +257,16 @@ Not during GGUF loading, not during Metal init — it blew up in **`getcwd()` in
 - [MLX LM](https://github.com/ml-explore/mlx-lm) — Apple Silicon inference framework
 - [llama.cpp](https://github.com/ggml-org/llama.cpp) — CUDA / Metal / Vulkan backends
 - [vLLM](https://github.com/vllm-project/vllm) — NVFP4 and MTP support
+
+## Related posts
+
+This post follows an earlier series that measured the same four machines with **Qwen3.5**. That series compared five engines; this one moves to Qwen3.8 and focuses on a controlled setup with checksum-identical GGUF files.
+
+- [Local LLM Inference Benchmark: 4 Machines × 5 Engines Experiment Design](/en/posts/llm-bench-01-methodology) — Part 1: design
+- [Qwen3.5 Cross-Platform Benchmark](/en/posts/llm-bench-02-results-analysis) — Part 2: analysis
+- [Qwen3.5 Local Inference Benchmark Result Tables](/en/posts/llm-bench-03-results-tables) — Part 3: full tables
+
+> The desktop differs between the two. The earlier series used a 5950X with two RTX 3090s; this one uses a 9600X with a single 3090. Under single-user, no-concurrency conditions the second card goes unused, so decode comparisons are unaffected.
 
 ## Key takeaways
 

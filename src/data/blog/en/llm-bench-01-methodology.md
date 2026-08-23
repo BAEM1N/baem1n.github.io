@@ -214,3 +214,8 @@ The full benchmark code and raw CSVs are open source:
 - **Runner**: `src/runner.py` (orchestrator, v3)
 - **Raw CSV (consolidated per device)**: [results/consolidated/](https://github.com/baem1n/llm-bench/tree/main/results/consolidated)
 - **Reproduce**: `uv run python -m src.runner --config config.yaml`
+
+## Follow-up
+
+- [One Model, Four Machines — Benchmarking Qwen3.8-27B Inference](/en/posts/qwen3-8-27b-four-device-benchmark) — moves to Qwen3.8 and isolates the CUDA, Metal, and Vulkan backends using checksum-identical GGUF files.
+

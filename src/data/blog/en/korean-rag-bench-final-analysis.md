@@ -13,6 +13,7 @@ tags:
   - reranker
   - retrieval
 featured: true
+featuredOrder: 4
 aiAssisted: true
 articleType: TechArticle
 proficiencyLevel: Advanced

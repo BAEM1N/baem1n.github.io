@@ -152,3 +152,8 @@ Each combination: 1 warmup + 5 measured runs, median reported. Outliers and dupl
 ---
 
 > Code: [baem1n/llm-bench](https://github.com/baem1n/llm-bench) | Methodology: [Part 1](/en/posts/llm-bench-01-methodology)
+
+## Follow-up
+
+- [One Model, Four Machines — Benchmarking Qwen3.8-27B Inference](/en/posts/qwen3-8-27b-four-device-benchmark) — moves to Qwen3.8 and isolates the CUDA, Metal, and Vulkan backends using checksum-identical GGUF files.
+

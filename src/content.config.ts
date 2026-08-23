@@ -12,6 +12,9 @@ const blogSchema = ({ image }: { image: () => any }) =>
     modDatetime: z.date().optional().nullable(),
     title: z.string(),
     featured: z.boolean().optional(),
+    // featured 섹션 내 표시 순서(작을수록 위). 미지정 시 날짜 내림차순으로 뒤에 붙는다.
+    // 발행일(pubDatetime)을 순서용으로 조작하지 않기 위한 별도 필드.
+    featuredOrder: z.number().optional(),
     draft: z.boolean().optional(),
     tags: z.array(z.string()).default(["others"]),
     ogImage: image().or(z.string()).optional(),

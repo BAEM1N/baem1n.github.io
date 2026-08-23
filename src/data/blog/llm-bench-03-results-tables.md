@@ -13,7 +13,7 @@ tags:
   - qwen
   - inference
   - local-llm
-featured: true
+featured: false
 aiAssisted: true
 articleType: TechArticle
 proficiencyLevel: advanced
@@ -230,6 +230,10 @@ _**35B-A3B MoE(3B active)가 9B Dense보다 빠르다 — 전 플랫폼 예외 �
 - **Raw CSV**: [results/consolidated/](https://github.com/baem1n/llm-bench/tree/main/results/consolidated) — 디바이스별 CSV + 전체 통합 파일
 
 > 실험 코드 + raw data: [baem1n/llm-bench](https://github.com/baem1n/llm-bench)
+
+## 후속 글
+
+- [같은 모델, 4개 하드웨어 — Qwen3.8-27B 추론 속도 실측](/posts/qwen3-8-27b-four-device-benchmark) — 모델을 Qwen3.8로 올리고, GGUF 체크섬을 맞춘 통제 실험으로 CUDA·Metal·Vulkan 백엔드를 분리해 비교했다.
 
 <script type="application/ld+json">
 {

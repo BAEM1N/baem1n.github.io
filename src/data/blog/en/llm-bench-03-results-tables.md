@@ -13,7 +13,7 @@ tags:
   - qwen
   - inference
   - local-llm
-featured: true
+featured: false
 aiAssisted: true
 articleType: TechArticle
 proficiencyLevel: advanced
@@ -230,6 +230,10 @@ This benchmark controls for prompt-cache contamination by using cold prefill, `-
 - **Raw CSV**: [results/consolidated/](https://github.com/baem1n/llm-bench/tree/main/results/consolidated) — per-device CSVs + a full unified file
 
 > Experiment code + raw data: [baem1n/llm-bench](https://github.com/baem1n/llm-bench)
+
+## Follow-up
+
+- [One Model, Four Machines — Benchmarking Qwen3.8-27B Inference](/en/posts/qwen3-8-27b-four-device-benchmark) — moves to Qwen3.8 and isolates the CUDA, Metal, and Vulkan backends using checksum-identical GGUF files.
 
 <script type="application/ld+json">
 {

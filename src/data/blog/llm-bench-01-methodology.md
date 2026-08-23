@@ -214,3 +214,8 @@ backend, model, track 순서를 매 실행마다 랜덤화한다. 고정 순서�
 - **Runner**: `src/runner.py` (오케스트레이터, v3)
 - **Raw CSV (디바이스별 통합)**: [results/consolidated/](https://github.com/baem1n/llm-bench/tree/main/results/consolidated)
 - **재현 명령**: `uv run python -m src.runner --config config.yaml`
+
+## 후속 글
+
+- [같은 모델, 4개 하드웨어 — Qwen3.8-27B 추론 속도 실측](/posts/qwen3-8-27b-four-device-benchmark) — 모델을 Qwen3.8로 올리고, GGUF 체크섬을 맞춘 통제 실험으로 CUDA·Metal·Vulkan 백엔드를 분리해 비교했다.
+

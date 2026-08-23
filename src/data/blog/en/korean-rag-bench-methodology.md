@@ -12,7 +12,7 @@ tags:
   - benchmark
   - retrieval
   - reranker
-featured: true
+featured: false
 aiAssisted: true
 articleType: TechArticle
 proficiencyLevel: Intermediate

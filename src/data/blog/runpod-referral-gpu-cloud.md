@@ -10,6 +10,7 @@ tags:
   - ai-inference
   - devops
 featured: true
+featuredOrder: 2
 aiAssisted: true
 articleType: TechArticle
 proficiencyLevel: beginner

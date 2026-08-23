@@ -10,6 +10,7 @@ tags:
   - devops
   - infrastructure
 featured: true
+featuredOrder: 1
 aiAssisted: true
 articleType: TechArticle
 proficiencyLevel: beginner

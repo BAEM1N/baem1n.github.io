@@ -15,7 +15,10 @@ import { SOCIALS } from "@/constants";
 const posts = await getCollection("blog-en");
 
 const sortedPosts = getSortedPosts(posts as any);
-const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
+const featuredPosts = sortedPosts
+  .filter(({ data }) => data.featured)
+  // featuredOrder 가 있으면 그 순서를, 없으면 기존 날짜 내림차순을 유지한다.
+  .sort((a, b) => (a.data.featuredOrder ?? Infinity) - (b.data.featuredOrder ?? Infinity));
 const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
 
 const aiCitationSummaryText =

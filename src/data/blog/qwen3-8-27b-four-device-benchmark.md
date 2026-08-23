@@ -10,7 +10,8 @@ tags:
   - vllm
   - qwen
   - local-llm
-featured: false
+featured: true
+featuredOrder: 3
 aiAssisted: true
 articleType: TechArticle
 proficiencyLevel: "intermediate"
@@ -256,6 +257,16 @@ GGUF 로드도 Metal 초기화도 아닌 **백엔드 탐색의 `getcwd()`** 에�
 - [MLX LM](https://github.com/ml-explore/mlx-lm) — Apple Silicon 추론 프레임워크
 - [llama.cpp](https://github.com/ggml-org/llama.cpp) — CUDA / Metal / Vulkan 백엔드
 - [vLLM](https://github.com/vllm-project/vllm) — NVFP4·MTP 지원
+
+## 관련 포스트
+
+이 글은 같은 4대 장비를 **Qwen3.5**로 측정한 선행 시리즈의 후속이다. 직전 시리즈는 5개 엔진을 비교했고, 이 글은 모델을 Qwen3.8로 올리면서 GGUF 체크섬 일치까지 맞춘 통제 실험에 집중했다.
+
+- [로컬 LLM 추론 벤치마크: 4대 하드웨어 × 5개 엔진 실험 설계](/posts/llm-bench-01-methodology) — 1편: 실험 설계
+- [Qwen3.5 크로스 플랫폼 벤치마크](/posts/llm-bench-02-results-analysis) — 2편: 결과 분석
+- [Qwen3.5 로컬 추론 벤치마크 결과표](/posts/llm-bench-03-results-tables) — 3편: 전체 수치표
+
+> 데스크톱 구성이 다르다. 선행 시리즈는 5950X + RTX 3090 ×2였고, 이 글은 9600X + RTX 3090 단일이다. 단일 사용자·동시성 없음 조건에서는 두 번째 카드가 쓰이지 않으므로 decode 비교에는 영향이 없다.
 
 ## 핵심 정리
 

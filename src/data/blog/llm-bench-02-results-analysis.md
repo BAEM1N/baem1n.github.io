@@ -152,3 +152,8 @@ aiAssisted: true
 ---
 
 > 실험 코드: [baem1n/llm-bench](https://github.com/baem1n/llm-bench) | 방법론: [1편](/posts/llm-bench-01-methodology)
+
+## 후속 글
+
+- [같은 모델, 4개 하드웨어 — Qwen3.8-27B 추론 속도 실측](/posts/qwen3-8-27b-four-device-benchmark) — 모델을 Qwen3.8로 올리고, GGUF 체크섬을 맞춘 통제 실험으로 CUDA·Metal·Vulkan 백엔드를 분리해 비교했다.
+

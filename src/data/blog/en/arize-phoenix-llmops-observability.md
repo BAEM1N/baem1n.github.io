@@ -11,7 +11,7 @@ tags:
   - opentelemetry
   - langchain
   - ai-agent
-featured: true
+featured: false
 aiAssisted: true
 articleType: TechArticle
 proficiencyLevel: "intermediate"
