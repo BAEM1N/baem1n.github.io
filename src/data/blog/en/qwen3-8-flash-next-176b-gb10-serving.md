@@ -202,7 +202,9 @@ n_blocks = ⌈n_kv / 4⌉ ≤ 65,535
 → n_kv ≤ 262,140
 ```
 
-**Four below the trained limit of 262,144.** This model's full context is structurally unreachable on the CUDA path.
+That sits below the trained limit of 262,144, which means this model's full context is structurally unreachable on the CUDA path.
+
+> The 262,140 figure is an **upper bound derived** from the inequality above. I did not probe 262,140 and 262,141 individually to measure the exact transition, so what is empirically established is the **boundary region** indicated by the four points below.
 
 ### The prediction held at four points
 
@@ -236,13 +238,15 @@ RMS_NORM(type=f32,ne=[64,5,4,3],...): OK      ← last existing case
 CUDA error: invalid argument
 ```
 
-**The same case fails on Vulkan too.** On a Radeon 8060S (gfx1151, RADV, x86_64) — different vendor, different architecture:
+**The same test case also fails on Vulkan.** On a Radeon 8060S (gfx1151, RADV, x86_64) — different vendor, different architecture:
 
 ```
 ggml-vulkan.cpp:8230: GGML_ASSERT(wg0 <= maxComputeWorkGroupCount[0] && ...) failed
 ```
 
 Vulkan at least catches it with an assert. **CUDA just fails the launch silently.**
+
+These two should not be filed as one bug, though. Vulkan trips `maxComputeWorkGroupCount`, a **separate dispatch limit in a separate backend**, and the CUDA patch below **does not fix it.** The accurate reading is that the same tensor layout breaks on two backends — putting a huge dimension in `ne[2]` while `ne[1]` is 1 is itself a **portability hazard.**
 
 ### Why it survived this long
 
@@ -279,15 +283,15 @@ for (int channel = blockIdx.y; channel < nchannels; channel += gridDim.y) { ... 
 |---|---|
 | Crashing cases | `RMS_NORM` and `RMS_NORM_MUL_ADD` both `OK` |
 | Numerical accuracy vs CPU | matches (`2/2 backends passed`) |
-| Regression suite, **21,099 cases** | **0 failures** |
+| Regression suite, **21,099 cases** (`d807f04`, CUDA, GB10) | **0 failures** |
 | Real model at `-d 262144` (the original crash) | completes |
-| Performance impact | within measurement noise |
+| Performance impact | no obvious regression observed (preliminary, `-r 2`) |
 
 When `ne[2] ≤ 65,535` the loop runs exactly once, so the workload is unchanged — no performance change is the expected result.
 
 ### Someone hit this crash first
 
-Digging through the PR discussion, there was a report from **identical hardware**: an ASUS Ascent GX10 (GB10, 128GB), the same UD-IQ4_XS, the same error, the same `common.cuh:1668`.
+Digging through the PR discussion, there was a report from **identical hardware**: an ASUS Ascent GX10 (GB10, 128GB), the same UD-IQ4_XS, the same error string, the same `common.cuh:1668`. Neither tensor shapes nor launch geometry were recorded there, so **treating it as the same root cause is an inference from matching symptoms.**
 
 But the conclusion differed. That report extended context to 524,288 via YaRN and crashed, concluding **"it breaks when crossing the native trained context of 262,144."**
 
@@ -383,7 +387,7 @@ Running several depths in one process **depresses the later tests.** Sweeping se
 
 - **The patch is partial.** Only the `rms_norm_f32` family is fixed. `norm_f32` and `l2_norm_f32` in the same file carry the identical flaw; no model has triggered them yet.
 - **Vulkan was reproduced but not fixed.** SYCL, HIP, and Metal were not checked at all. HIP may not break, since AMD's grid limits differ.
-- **The performance comparison used `-r 2`.** That supports "no significant regression" and nothing more precise.
+- **The performance comparison used `-r 2`.** That is too few repetitions to account for warm-up, clock drift, or outliers, and the modified kernel was never timed in isolation. It supports "no obvious regression was observed" and nothing stronger.
 - **Long-context output quality was not evaluated.** Whether the model reasons correctly at 260K tokens is a separate question from speed.
 - **The decode regression is unexplained.** I do not know why deep-context decode dropped between commits.
 - **Commit causation is circumstantial**, because the rebase made a per-commit A/B impossible.
@@ -407,7 +411,7 @@ In that post, GB10 served Qwen3.8-**27B** NVFP4 through vLLM at 16.90 t/s decode
 - **Hybrid attention makes context cheap.** With only 12 of 48 layers doing full attention, 260K tokens of KV is 6 GiB. An 8x context increase cost 4 GiB.
 - **The usable context ceiling is 261,888**, 256 below the trained 262,144, and the reason is neither context nor memory but the **CUDA grid.y limit of 65,535**.
 - The root cause is an **upstream ggml bug**: four sites in `norm.cu` never clamp grid dimensions. The same class was fixed three times in `convert.cu`, `im2col.cu`, and `get_rows` — `norm.cu` was missed, and the tests never covered it because their largest `ne[2]` is 5.
-- **Two lines reproduce it without the model**, on both CUDA and Vulkan.
+- **Two lines reproduce it without the model.** The same case also fails on Vulkan, but that is a separate limit in a separate backend that the CUDA patch does not address — a signal that the layout itself is a portability hazard.
 - **A single commit changed long-context performance by 2x.** Always publish the commit hash with unmerged-PR benchmarks.
 
 ---
