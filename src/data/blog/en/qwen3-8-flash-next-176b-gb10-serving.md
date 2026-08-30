@@ -289,6 +289,61 @@ for (int channel = blockIdx.y; channel < nchannels; channel += gridDim.y) { ... 
 
 When `ne[2] ≤ 65,535` the loop runs exactly once, so the workload is unchanged — no performance change is the expected result.
 
+### Six more sites have the same flaw — but most are unreachable
+
+Suspecting `norm.cu` was not alone, I swept every `dim3` grid construction in the CUDA backend (79 of them). Controlled test, giving `ne[2]` as 65,536 and then 65,535:
+
+| op | Source site | ne[2]=65,535 | ne[2]=65,536 |
+|---|---|---|---|
+| SOFT_MAX | `softmax.cu:340` | OK | ❌ CUDA error |
+| NORM | `norm.cu:294` | OK | ❌ CUDA error |
+| L2_NORM | `norm.cu:434` | OK | ❌ CUDA error |
+| CUMSUM | `cumsum.cu:240` | OK | ❌ CUDA error |
+| TRI | `tri.cu:53` | OK | ❌ CUDA error |
+| ADD_ID | `add-id.cu:50` | OK | ❌ CUDA error |
+| RMS_NORM_MUL_ROPE | `rope.cu:809` | ⚠️ numeric FAIL | ❌ CUDA error |
+| RMS_NORM (+MUL_ADD) | `norm.cu:318,364` | OK | OK (patched) |
+| ADD | `binbcast.cu:309` | OK | OK — **already guarded** |
+
+The boundary lands exactly between 65,535 and 65,536. And **all six files are unclamped on upstream master.**
+
+I checked the limit itself too. Two generations, two CUDA versions, identical:
+
+```
+GB10    (Blackwell, cc 12.1), CUDA 13.0/13.0 → maxGridSize = [2147483647, 65535, 65535]
+RTX 3090 (Ampere,   cc 8.6 ), CUDA 13.2/13.3 → maxGridSize = [2147483647, 65535, 65535]
+```
+
+**This is where honesty is required.** Crashing in a synthetic test and *actually being reachable* are different claims. Following the tensor shapes at the call sites:
+
+```c
+llama-graph.cpp:2641  ggml_soft_max_ext(ctx0, kq, ...);  // [n_kv, n_tokens, n_head, n_seq]
+add-id.cu:50          dim3 blocks(ne01, ne02);           // n_experts_used, n_tokens
+```
+
+- **SOFT_MAX** puts `n_head` on grid.y. Crashing would require more than 65,000 attention heads — **unreachable by any real model.**
+- **NORM and L2_NORM** operate on `[n_embd, n_tokens]` in LLMs, so `ne[2] = 1`. Unreachable unless a model reshapes unusually, as qwen4exp does.
+- **ADD_ID** is the one with inverted dimensions: small `n_experts_used` goes to grid.x (limit 2.1 billion) while large `n_tokens` goes to grid.y (limit 65,535). It sits on the MoE expert-bias path, so `-ub 65536` or higher would crash it — but **a physical microbatch that large is not a realistic deployment setting.**
+- **CUMSUM and TRI** — I could not identify which models use them.
+
+So the only path with demonstrated reachability is the qwen4exp one described above; the rest are **latent defects** reproducible only through synthetic tests. Do not read "six more ops break" as "six more workloads break."
+
+### Which is why I did not open a PR
+
+I read the motivation behind all three precedent fixes. Every one was **reactive, driven by a real failure.**
+
+| PR | Trigger |
+|---|---|
+| #19999 | `llama-server` + GLM-4.7-Flash + FA + quantized KV + multiple slots + long context, putting KV length on grid.y. Closed two issues |
+| #22944 | conv1d audio encoder (SEANet, 11 s @ 16 kHz → `OW = 176,000`), verified on T4 / Jetson Orin |
+| #25103 | embedding/vocab gradients with more than 65,535 rows |
+
+**This repository's convention is fixes for reproducible real failures, not blanket hardening of latent defects.** Bundling six synthetic-only sites into a large PR does not fit that convention.
+
+What is striking is that **#19999 is structurally identical to our case** — long context puts KV length on grid.y — and it was merged. So the `norm.cu` RMS family does fit the precedent exactly; the problem is that **the PR enabling the model that triggers it is not merged yet.** A fix with no in-tree consumer does not earn review priority.
+
+The patch and its verification are kept locally. When #27742 lands, that is the moment to submit.
+
 ### Someone hit this crash first
 
 Digging through the PR discussion, there was a report from **identical hardware**: an ASUS Ascent GX10 (GB10, 128GB), the same UD-IQ4_XS, the same error string, the same `common.cuh:1668`. Neither tensor shapes nor launch geometry were recorded there, so **treating it as the same root cause is an inference from matching symptoms.**
@@ -385,7 +440,8 @@ Running several depths in one process **depresses the later tests.** Sweeping se
 
 ## Limits and open questions
 
-- **The patch is partial.** Only the `rms_norm_f32` family is fixed. `norm_f32` and `l2_norm_f32` in the same file carry the identical flaw; no model has triggered them yet.
+- **The patch is partial.** Only the `rms_norm_f32` family is fixed. The other six sites the sweep found (`norm_f32`, `l2_norm_f32`, softmax, cumsum, tri, add-id) are untouched.
+- **Those six were reproduced only synthetically.** I did not establish that any real model produces those shapes, and most appear unreachable. For `CUMSUM` and `TRI` I could not even identify the consumers.
 - **Vulkan was reproduced but not fixed.** SYCL, HIP, and Metal were not checked at all. HIP may not break, since AMD's grid limits differ.
 - **The performance comparison used `-r 2`.** That is too few repetitions to account for warm-up, clock drift, or outliers, and the modified kernel was never timed in isolation. It supports "no obvious regression was observed" and nothing stronger.
 - **Long-context output quality was not evaluated.** Whether the model reasons correctly at 260K tokens is a separate question from speed.
@@ -410,7 +466,7 @@ In that post, GB10 served Qwen3.8-**27B** NVFP4 through vLLM at 16.90 t/s decode
 - **176B (3B active) fits on a single 128GB box** — but no official quant fits, so unsloth GGUF plus an unmerged PR build is the only route.
 - **Hybrid attention makes context cheap.** With only 12 of 48 layers doing full attention, 260K tokens of KV is 6 GiB. An 8x context increase cost 4 GiB.
 - **The usable context ceiling is 261,888**, 256 below the trained 262,144, and the reason is neither context nor memory but the **CUDA grid.y limit of 65,535**.
-- The root cause is an **upstream ggml bug**: four sites in `norm.cu` never clamp grid dimensions. The same class was fixed three times in `convert.cu`, `im2col.cu`, and `get_rows` — `norm.cu` was missed, and the tests never covered it because their largest `ne[2]` is 5.
+- The root cause is an **upstream ggml bug**: four sites in `norm.cu` never clamp grid dimensions, and a full sweep found **six more sites with the same flaw** (softmax, cumsum, tri, add-id among them). But **only the path in this post has demonstrated reachability**; the rest are latent. The same class was fixed three times in `convert.cu`, `im2col.cu`, and `get_rows` — `norm.cu` was missed, and the tests never covered it because their largest `ne[2]` is 5.
 - **Two lines reproduce it without the model.** The same case also fails on Vulkan, but that is a separate limit in a separate backend that the CUDA patch does not address — a signal that the layout itself is a portability hazard.
 - **A single commit changed long-context performance by 2x.** Always publish the commit hash with unmerged-PR benchmarks.
 
